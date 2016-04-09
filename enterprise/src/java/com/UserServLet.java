@@ -73,9 +73,14 @@ public class UserServLet extends HttpServlet {
                   request.getRequestDispatcher("/WEB-INF/passwdChange.jsp").forward(request, response);    
                   break;
             }
+            case "Register": {
+                request.getRequestDispatcher("/WEB-INF/userRegConf.jsp").forward(request, response);    
+                  break;
+            }
             default: {
                   request.setAttribute("msg", "del");
-            request.getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response); 
+                  request.getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response); 
+                  break;
             }
             
         }
