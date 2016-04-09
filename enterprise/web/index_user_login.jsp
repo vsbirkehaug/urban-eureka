@@ -16,7 +16,7 @@
            <script language="javascript">
                 function checkReg(){   
                  <% boolean doReg = false; 
-                 if(request.getAttribute("message")!=null && ((String)request.getAttribute("message")).length() > 0) { 
+                 if(request.getAttribute("message")!=null && ((String)request.getAttribute("message")).length() > 0 && !((String)request.getAttribute("message")).equals("Incorrect username or password.")) { 
                      doReg=true;
                     } else { 
                      doReg=false;
@@ -47,10 +47,11 @@
             </br>         
             <p class="message">Already registered? <a href="#">Sign In</a></p>
           </form>
-          <form class="login-form">
-            <input type="text" placeholder="username"/>
-            <input type="password" placeholder="password"/>
-            <button>login</button>
+          <form class="login-form" method="POST" action="Login.do">
+            <input type="text" name="username" placeholder="username"/>
+            <input type="password" name="password" placeholder="password"/>
+             <input class="button" type="submit" name="tbl" value="Log in"/>
+            </br>       
             <p class="message">Not registered? <a href="#">Create an account</a></p>
           </form>
         </div>
