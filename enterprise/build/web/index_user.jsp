@@ -15,10 +15,10 @@
     <body>
         <div class="login-page">
         <div class="form">
-          <form class="register-form" method="POST" action="UserService.do">
-            <input type="text" placeholder="name"/>
-            <input type="text" placeholder="address"/>
-            <input type="date" placeholder="date of birth"/>
+          <form class="register-form" method="POST" action="NewUser.do">
+            <input type="text" name="username" placeholder="username"/>
+            <input type="text" name="address" placeholder="address"/>
+            <input type="date" name="dob" placeholder="date of birth"/>
             <input class="button" type="submit" name="tbl" value="Register"/>
             </br>         
             <p class="message">Already registered? <a href="#">Sign In</a></p>

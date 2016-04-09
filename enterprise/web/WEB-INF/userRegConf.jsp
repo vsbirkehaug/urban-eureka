@@ -14,6 +14,7 @@
     </head>
     <body>
         <h1>Congratulations, you have registered!</h1>
-        <p>Your password is: </p>
+        <p><%= (String)request.getAttribute("message") %></p>
+        <p>Your password is: <%= (String)request.getAttribute("password") %></p>
     </body>
 </html>

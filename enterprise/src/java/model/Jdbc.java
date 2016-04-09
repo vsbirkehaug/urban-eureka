@@ -116,12 +116,14 @@ public class Jdbc {
         }
         return bool;
     }
-    public void insert(String[] str){
+    public void insertUser(String[] str){
         PreparedStatement ps = null;
         try {
-            ps = connection.prepareStatement("INSERT INTO Users VALUES (?,?)",PreparedStatement.RETURN_GENERATED_KEYS);
+            ps = connection.prepareStatement("INSERT INTO users (`username`, `password`, `address`, `dob`) VALUES (?,?,?,?)");
             ps.setString(1, str[0].trim()); 
-            ps.setString(2, str[1]);
+            ps.setString(2, str[1].trim());
+            ps.setString(3, str[2].trim());
+            ps.setString(4, str[3].trim());
             ps.executeUpdate();
         
             ps.close();
@@ -169,35 +171,5 @@ public class Jdbc {
             System.out.println(e);
         }
     }
-    public static void main(String[] args) throws SQLException {
-        String str = "select * from users";
-        String insert = "INSERT INTO `Users` (`username`, `password`) VALUES ('meaydin', 'meaydin')";
-        String update = "UPDATE `Users` SET `password`='eaydin' WHERE `username`='eaydin' ";
-        String db = "xyz_assoc";
-        
-        Jdbc jdbc = new Jdbc(str);
-        Connection conn = null;
-                try {
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+db.trim(), "root", "root");
-        }
-        catch(ClassNotFoundException e){
-            
-        } catch (SQLException e) {
-            
-        }
-        jdbc.connect(conn);
-        String [] users = {"birgul12","han","han"};
-        System.out.println(jdbc.retrieve(str));
-        if (!jdbc.exists(users[0]))
-            jdbc.insert(users);            
-        else {
-                jdbc.update(users);
-                System.out.println("user name exists, change to another");
-        }
-        jdbc.delete("aydinme");
-        
-        System.out.println(jdbc.retrieve(str));
-        jdbc.closeAll();
-    }            
+      
 }

@@ -5,13 +5,16 @@
  */
 package pages;
 
+import com.mysql.jdbc.PreparedStatement;
 import java.io.IOException;
+import java.sql.Connection;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Jdbc;
+import utils.RandomPasswordGen;
 
 /**
  *
@@ -32,14 +35,25 @@ public class NewUser extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
         
-        String [] query = new String[2];
+        String [] query = new String[4];
         query[0] = (String)request.getParameter("username");
-        query[1] = (String)request.getParameter("password");
-        //String insert = "INSERT INTO `Users` (`username`, `password`) VALUES ('";
-      
+        query[1] = RandomPasswordGen.generateRandomPassword();
+        query[2] = (String)request.getParameter("address");
+        query[3] = (String)request.getParameter("dob");
+        
+//        java.util.Date dt = new java.util.Date();
+//        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        String currentTime = sdf.format(dt);
+       
         Jdbc jdbc = (Jdbc)session.getAttribute("dbbean"); 
+        if(jdbc == null) {                   
+            jdbc = new Jdbc();    
+            session.setAttribute("dbbean", jdbc);
+        }
+        Connection connection = (Connection)request.getServletContext().getAttribute("connection");
+        jdbc.connect(connection);
         
         if (jdbc == null)
             request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
@@ -51,11 +65,12 @@ public class NewUser extends HttpServlet {
             request.setAttribute("message", query[0]+" is already taken as username");
         }
         else {
-            jdbc.insert(query);
+            jdbc.insertUser(query);
             request.setAttribute("message", query[0]+" is added");
-        }
-         
-        request.getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response);
+            request.setAttribute("password", query[1]);
+        }    
+        
+        request.getRequestDispatcher("/WEB-INF/userRegConf.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

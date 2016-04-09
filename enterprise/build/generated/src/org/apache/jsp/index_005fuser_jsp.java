@@ -54,10 +54,10 @@ public final class index_005fuser_jsp extends org.apache.jasper.runtime.HttpJspB
       out.write("    <body>\n");
       out.write("        <div class=\"login-page\">\n");
       out.write("        <div class=\"form\">\n");
-      out.write("          <form class=\"register-form\" method=\"POST\" action=\"UserService.do\">\n");
-      out.write("            <input type=\"text\" placeholder=\"name\"/>\n");
-      out.write("            <input type=\"text\" placeholder=\"address\"/>\n");
-      out.write("            <input type=\"date\" placeholder=\"date of birth\"/>\n");
+      out.write("          <form class=\"register-form\" method=\"POST\" action=\"NewUser.do\">\n");
+      out.write("            <input type=\"text\" name=\"username\" placeholder=\"username\"/>\n");
+      out.write("            <input type=\"text\" name=\"address\" placeholder=\"address\"/>\n");
+      out.write("            <input type=\"date\" name=\"dob\" placeholder=\"date of birth\"/>\n");
       out.write("            <input class=\"button\" type=\"submit\" name=\"tbl\" value=\"Register\"/>\n");
       out.write("            </br>         \n");
       out.write("            <p class=\"message\">Already registered? <a href=\"#\">Sign In</a></p>\n");
