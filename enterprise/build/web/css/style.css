@@ -1,6 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
-/* http://codepen.io/colorlib/pen/rxddKy */
+/* Adapted from http://codepen.io/colorlib/pen/rxddKy */
 
 .login-page {
   width: 360px;
@@ -13,6 +13,7 @@
   padding: 8% 0 0;
   margin: auto;
 }
+
 .form {
   position: relative;
   z-index: 1;
@@ -94,9 +95,9 @@ input[type=submit]:hover,.button:active,.button:focus {
   font-size: 12px;
 }
 .error {
-    margin: 15px 0 0;
+    margin: 15px 10px 10px 10px;
     color: #C4576E;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .form .message a {

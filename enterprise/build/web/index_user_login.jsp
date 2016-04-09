@@ -11,19 +11,34 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>User login</title>
         <link rel="stylesheet" href="css/style.css">
+  
+           <script src="js/toggleReg.js"></script>
+           <script language="javascript">
+                function checkReg(){   
+                 <% boolean doReg = false; 
+                 if(request.getAttribute("message")!=null && ((String)request.getAttribute("message")).length() > 0) { 
+                     doReg=true;
+                    } else { 
+                     doReg=false;
+                    }%>
+                    var s=<%=doReg%>;           
+                    toggling(s);
+                 }
+            </script> 
+           
     </head>
-    <body>
+    <body onload="checkReg()">
         <div class="login-page">
         <div class="form">
-            
-            <p class="error"
+    
+            <p class="error">
             <% if(request.getAttribute("message") != null) {
-                out.println(request.getAttribute("message")); 
-                out.println("");} 
-                
+                    out.println(request.getAttribute("message")); 
+                    out.println("");   
+                }        
             %>
-            </p>
-            
+            </p>         
+             
           <form class="register-form" method="POST" action="NewUser.do">
             <input type="text" name="username" placeholder="username"/>
             <input type="text" name="address" placeholder="address"/>
