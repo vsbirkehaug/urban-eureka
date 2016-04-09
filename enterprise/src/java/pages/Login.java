@@ -32,10 +32,11 @@ public class Login extends HttpServlet {
         PrintWriter out = response.getWriter();
         
         String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        String password = request.getParameter("password");    
         
-        if(Validate.checkUser(username, password, connection))
-        {           
+        if(Validate.checkUser(username, password, connection)) 
+        {            
+            session.setAttribute("username", username);
             request.setAttribute("message", "Welcome, " + username + ".");    
             request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
         }
