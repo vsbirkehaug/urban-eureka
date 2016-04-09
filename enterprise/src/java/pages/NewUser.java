@@ -60,17 +60,20 @@ public class NewUser extends HttpServlet {
         
         if(query[0]==null) {
             request.setAttribute("message", "Username cannot be NULL");
+            request.getRequestDispatcher("index_user_login.jsp").forward(request, response);         
         } 
         else if(jdbc.exists(query[0])){
             request.setAttribute("message", query[0]+" is already taken as username");
+            request.getRequestDispatcher("index_user_login.jsp").forward(request, response);    
         }
         else {
             jdbc.insertUser(query);
             request.setAttribute("message", query[0]+" is added");
             request.setAttribute("password", query[1]);
+            request.getRequestDispatcher("/WEB-INF/userRegConf.jsp").forward(request, response);
         }    
         
-        request.getRequestDispatcher("/WEB-INF/userRegConf.jsp").forward(request, response);
+       
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

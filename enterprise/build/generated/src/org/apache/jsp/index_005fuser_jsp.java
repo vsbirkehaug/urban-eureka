@@ -49,7 +49,7 @@ public final class index_005fuser_jsp extends org.apache.jasper.runtime.HttpJspB
       out.write("    <head>\n");
       out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
       out.write("        <title>User login</title>\n");
-      out.write("        <link rel=\"stylesheet\" href=\"css/login.css\">\n");
+      out.write("        <link rel=\"stylesheet\" href=\"css/style.css\">\n");
       out.write("    </head>\n");
       out.write("    <body>\n");
       out.write("        <div class=\"login-page\">\n");

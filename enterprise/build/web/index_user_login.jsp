@@ -10,11 +10,20 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>User login</title>
-        <link rel="stylesheet" href="css/login.css">
+        <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
         <div class="login-page">
         <div class="form">
+            
+            <p class="error"
+            <% if(request.getAttribute("message") != null) {
+                out.println(request.getAttribute("message")); 
+                out.println("");} 
+                
+            %>
+            </p>
+            
           <form class="register-form" method="POST" action="NewUser.do">
             <input type="text" name="username" placeholder="username"/>
             <input type="text" name="address" placeholder="address"/>
@@ -31,7 +40,7 @@
           </form>
         </div>
       </div>
-            <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-            <script src="javascript/login.js"></script>
+            <script src="js/login_helper.js"></script>
+            <script src="js/login.js"></script>
     </body>
 </html>

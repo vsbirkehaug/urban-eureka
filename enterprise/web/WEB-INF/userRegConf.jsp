@@ -10,11 +10,19 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>User login</title>
-        <link rel="stylesheet" href="css/login.css">
+        <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <h1>Congratulations, you have registered!</h1>
-        <p><%= (String)request.getAttribute("message") %></p>
-        <p>Your password is: <%= (String)request.getAttribute("password") %></p>
+        <div class="login-page">
+        <div class="centered-content">
+            <h1>Congratulations, you have registered!</h1>
+
+            </br>
+                <div class="centered-content-body"
+                    <p><%= (String)request.getAttribute("message") %></p>
+                    <p>Your password is: <%= (String)request.getAttribute("password") %></p>
+                </div>
+        </div>
+        </div>  
     </body>
 </html>
