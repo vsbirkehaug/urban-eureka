@@ -11,21 +11,34 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Dashboard</title>
         <link rel="stylesheet" href="css/style.css">
+        
+        <%  response.addHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0"); 
+            response.addHeader("Pragma", "no-cache"); 
+            response.addDateHeader ("Expires", 0);
+            %>
     </head>
     <body>
-        
-        <h1>XYZ Drivers Association</h1>
-        
+
             <% if(request.getSession().getAttribute("username") == null) {
                     request.setAttribute("message", "Timed out. Please log in again.");     
                     request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
                 }        
             %>
+            
+        <div class="wrapper">
+        <h1>XYZ Drivers Association</h1>
         
         <div class="user-dashboard-container">    
-            
-            <h2><%= (String)request.getSession().getAttribute("message") %></h2>
-
+               
+            <div>
+              
+                <form class="logout" method="POST" action="Logout.do">
+                    <input class="logout" type="submit" name="action" value="logout"</input>
+                </form>
+                <p class="helloname"><%= "Hello, " + (String)request.getSession().getAttribute("name") + "!" %></p>  
+                </div>
+                <div style="clear:both"></div>
+ 
             <div class="user-dashboard">
                 <form id="routerform" method="POST" action="PageRouter.do">
                     <ul>                      
@@ -39,6 +52,6 @@
                 </form>
             </div>
         </div>
-            
+        </div> 
     </body>
 </html>

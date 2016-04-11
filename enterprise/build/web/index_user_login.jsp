@@ -11,6 +11,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>User login</title>
         <link rel="stylesheet" href="css/style.css">
+        
+        <%  response.addHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0"); 
+            response.addHeader("Pragma", "no-cache"); 
+            response.addDateHeader ("Expires", 0);
+            %>
   
            <script src="js/toggleReg.js"></script>
            <script language="javascript">
@@ -29,6 +34,7 @@
     </head>
     <body onload="checkReg()">
         
+        <div class="wrapper">
         <h1>XYZ Drivers Association</h1>
         
         <div class="login-page">
@@ -59,6 +65,7 @@
             <p class="message">Not registered? <a href="#">Create an account</a></p>
           </form>
         </div>
+      </div>
       </div>
             <script src="js/login_helper.js"></script>
             <script src="js/login.js"></script>

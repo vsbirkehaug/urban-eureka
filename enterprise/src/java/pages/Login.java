@@ -38,7 +38,7 @@ public class Login extends HttpServlet {
         if(name != null) 
         {            
             session.setAttribute("username", username);
-            session.setAttribute("message", "Welcome, " + name + "!");    
+            session.setAttribute("name", name);
             request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
         }
         else
