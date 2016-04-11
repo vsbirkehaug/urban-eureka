@@ -9,6 +9,7 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
+import model.Claim;
 import model.Jdbc;
 
 /**
@@ -31,7 +32,9 @@ public class MakeClaim extends HttpServlet {
                 break;
             }
             case "submitclaim": {
-                String[] userResponse = addClaim(request);                 
+                Claim responseClaim = addClaim(request);   
+                request.setAttribute("username", responseClaim.getUsername());
+                request.setAttribute("id", String.valueOf(responseClaim.getId()));
                 request.getRequestDispatcher("/WEB-INF/makeClaimConf.jsp").forward(request, response);
                 break;
             }
@@ -42,7 +45,7 @@ public class MakeClaim extends HttpServlet {
         } 
     }  
        
-    private String[] addClaim(HttpServletRequest request) {
+    private Claim addClaim(HttpServletRequest request) {
         
         HttpSession session = request.getSession();
         Jdbc jdbc = (Jdbc)session.getAttribute("dbbean"); 
@@ -58,9 +61,8 @@ public class MakeClaim extends HttpServlet {
         java.sql.Date date = java.sql.Date.valueOf((String)request.getParameter("date"));
         String rationale = (String)request.getParameter(((String)"rationale").trim());
         
-        Object[] queryStrings = new Object[]{member_id, amount, date, rationale};
-              
-        return jdbc.insertClaim(queryStrings);
+        Claim claim = new Claim(member_id, amount, date, rationale);      
+        return jdbc.insertClaim(claim);
         
     }   
 }

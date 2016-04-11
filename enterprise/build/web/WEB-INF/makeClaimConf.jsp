@@ -24,8 +24,11 @@
         <div class="make-claim-page">
         <div class="form">      
             
-            <h1>Claim response</h1>
+            <h2>Claim response</h2>
             </br>
+            
+               <p>Your username is: <%= (String)request.getAttribute("username") %></p>
+               <p>Your response is: <%= (String)request.getAttribute("id") %></p>
   
           
         </div>

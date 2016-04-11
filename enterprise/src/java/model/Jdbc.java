@@ -207,35 +207,38 @@ public class Jdbc {
         return new String[]{username, password};
     }
     
-    public String[] insertClaim(Object[] str){
+    public Claim insertClaim(Claim claim){
         PreparedStatement ps = null;
         
-        String member_id = (String)str[0];
-        float amount = (Float)str[1];
-        java.sql.Date date = (java.sql.Date)str[2];
-        String rationale = (String)str[3];
-   
-        int result = 0;
+        String member_id = claim.getUsername();
+        float amount = claim.getAmount();
+        java.sql.Date date = claim.getDate();
+        String rationale = claim.getRationale();
+        Claim newClaim = null;
+
         try {
             ps = connection.prepareStatement("INSERT INTO claims (`mem_id`, `amount`, `date`, `rationale`) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, member_id);    
             ps.setFloat(2, amount); 
             ps.setDate(3, date);
             ps.setString(4, rationale);
-            result = ps.executeUpdate();          
+            ps.executeUpdate();  
+            ResultSet key = ps.getGeneratedKeys();    
+            key.next();  
+            int result = key.getInt(1);
             ps.close();
             
-            if (result == 1) {
-                 System.out.println("1 row added.");
-            } else {
-                return null;
-            }
+            ps = connection.prepareStatement("SELECT * FROM claims WHERE id = ?");
+            ps.setInt(1, result);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            newClaim = new Claim(rs.getInt("id"), rs.getString("mem_id"), rs.getFloat("amount"), rs.getDate("date"), rs.getString("rationale"), rs.getString("status"));         
             
         } catch (SQLException ex) {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
          
-        return new String[]{member_id, String.valueOf(result)};
+        return newClaim;
     }
         
     public void update(String[] str) {

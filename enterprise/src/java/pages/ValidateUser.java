@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Vilde
  */
-public class Validate {
+public class ValidateUser {
       public static String getUser(String username, String password, Connection conn) 
      {
       String name = null;
