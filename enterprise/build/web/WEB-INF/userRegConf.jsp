@@ -22,6 +22,12 @@
                     <p>Your username is: <%= (String)request.getAttribute("username") %></p>
                     <p>Your password is: <%= (String)request.getAttribute("password") %></p>
                     <p>You will need to remember these details to log in.</p>
+                    
+                    <form id="routerform" method="POST" action="PageRouter.do">
+                    <ul>                      
+                        <li onclick="document.getElementById('routerform').submit();" class="user-button">Go to login <input type="hidden" name="action" value="login" /></li>                                          
+                    </ul>
+                    </form>
                 </div>
         </div>
         </div>  

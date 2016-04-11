@@ -8,6 +8,11 @@ package pages;
 import com.mysql.jdbc.PreparedStatement;
 import java.io.IOException;
 import java.sql.Connection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,13 +41,16 @@ public class NewUser extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         HttpSession session = request.getSession();
+             
         
         String [] query = new String[4];
         query[0] = (String)request.getParameter("name");
-        query[1] = RandomPasswordGen.generateRandomPassword();
-        query[2] = (String)request.getParameter("address");
-        query[3] = (String)request.getParameter("dob");
-       
+        //query[1] = RandomPasswordGen.generateRandomPassword();
+        query[1] = (String)request.getParameter("address");
+        query[2] = (String)request.getParameter("dob");
+        query[3] = (String)request.getParameter("registrationdate");
+           
+        
         Jdbc jdbc = (Jdbc)session.getAttribute("dbbean"); 
         if(jdbc == null) {                   
             jdbc = new Jdbc();    
@@ -68,10 +76,10 @@ public class NewUser extends HttpServlet {
             request.getRequestDispatcher("index_user_login.jsp").forward(request, response);         
         } 
         else {
-            String username = jdbc.insertUser(query);
-            if(username != null) {
-                request.setAttribute("username", username);
-                request.setAttribute("password", query[1]);
+            String[] userDetails = jdbc.insertUser(query);
+            if(userDetails != null) {
+                request.setAttribute("username", userDetails[0]);
+                request.setAttribute("password", userDetails[1]);
                 request.getRequestDispatcher("/WEB-INF/userRegConf.jsp").forward(request, response);
             } else {
                 request.setAttribute("registrationState", "true");

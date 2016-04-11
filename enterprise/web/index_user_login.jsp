@@ -43,6 +43,7 @@
             <input type="text" name="name" placeholder="name"/>
             <input type="text" name="address" placeholder="address"/>
             <input type="date" name="dob" placeholder="date of birth"/>
+            <input type="date" name="registrationdate" placeholder="registration date"/>
             <input class="button" type="submit" name="tbl" value="Register"/>
             </br>         
             <p class="message">Already registered? <a href="#">Sign In</a></p>

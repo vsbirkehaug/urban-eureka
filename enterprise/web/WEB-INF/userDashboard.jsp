@@ -21,7 +21,7 @@
             %>
         
         <div class="user-dashboard-container">    
-            <h1><%= (String)request.getAttribute("message") %></h1>
+            <h1><%= (String)request.getSession().getAttribute("message") %></h1>
 
             <div class="user-dashboard">
                 <form id="routerform" method="POST" action="PageRouter.do">

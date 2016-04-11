@@ -53,6 +53,10 @@ public class PageRouter extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/makeClaim.jsp").forward(request, response);
                 break;
             }
+             case "login": {
+                request.getRequestDispatcher("index_user_login.jsp").forward(request, response);
+                break;
+            }
             default: {
                  request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);  
                  break;

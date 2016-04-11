@@ -15,7 +15,7 @@ import model.Jdbc;
  *
  * @author Vilde
  */
-public class Login extends HttpServlet {
+public class MakeClaim extends HttpServlet {
        protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -31,20 +31,22 @@ public class Login extends HttpServlet {
           
         PrintWriter out = response.getWriter();
         
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");    
+        String action = request.getParameter("action");
         
-        String name = Validate.getUser(username, password, connection);
-        if(name != null) 
-        {            
-            session.setAttribute("username", username);
-            session.setAttribute("message", "Welcome, " + name + "!");    
-            request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
+        switch(action) {
+            case "cancel": {
+                request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
+                break;
+            }
+            case "submitclaim": {
+                request.getRequestDispatcher("/WEB-INF/makeClaimConf.jsp").forward(request, response);
+                break;
+            }
+            
+            default: {
+                //ERROR
+            }
         }
-        else
-        {
-            request.setAttribute("message", "Incorrect username or password.");     
-            request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
-        }
+ 
     }  
 }

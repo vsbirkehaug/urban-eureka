@@ -12,9 +12,9 @@ import javax.servlet.http.HttpSession;
  * @author Vilde
  */
 public class Validate {
-      public static boolean checkUser(String username, String password, Connection conn) 
+      public static String getUser(String username, String password, Connection conn) 
      {
-      boolean st =false;
+      String name = null;
       try{
 
 	 //loading drivers for mysql
@@ -24,13 +24,19 @@ public class Validate {
          ps.setString(1, username);
          ps.setString(2, password);
          ResultSet rs = ps.executeQuery(); 
-         st = rs.next();
+         
+         if(rs.next()) {
+            name = rs.getString("name");
+         } else {
+            return null;
+         }
 
       }
       catch(Exception e)
       {
           e.printStackTrace();
-      }
-      return st;                 
+      }           
+      
+      return name;
   }   
 }

@@ -24,6 +24,14 @@
         <servlet-name>PageRouter</servlet-name>
         <servlet-class>com.PageRouter</servlet-class>
     </servlet>
+     <servlet>
+        <servlet-name>MakeClaim</servlet-name>
+        <servlet-class>pages.MakeClaim</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MakeClaim</servlet-name>
+        <url-pattern>/MakeClaim.do</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>PageRouter</servlet-name>
         <url-pattern>/PageRouter.do</url-pattern>

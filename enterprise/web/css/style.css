@@ -207,15 +207,48 @@ li {
     padding: 20px 30px;
     margin: 10px;
     width: 40%;
-    border-radius: 5px;
-    background: #76b852;
+    background: #4CAF50;
     text-align: center;
+}
+
+.make-claim-page {
+  width: 600px;
+  padding: 8% 0 0;
+  margin: auto;
+}
+
+.choice ul {
+    list-style:none;
+    margin: 0 auto;
+    display: block;
+}
+
+.choice li {
+    list-style:none;
+    margin: 0 auto;
+}
+
+.choice .button {
+    cursor: pointer;
+    color: #FFFFFF;
+    font-weight: bold;
+    display: inline-block;
+    padding: 15px;
+    margin: 10px;
+    width: 30%;
+    background: #4CAF50;
+    text-align: center;
+}
+
+.choice .button .cancel {
+    background: #C4576E;
 }
 
 .user-button:hover {
     opacity: 0.7;
     box-shadow: 0 0 10px 0 #c1c1c1;
 }
+
 
 /* Use these if you want to style individual buttons */
 .make-claim { background: #284E72;}
@@ -227,3 +260,9 @@ li {
 .payment-history { background: #AF7D35;}
 .payment-history:hover {}
 
+.label {
+  margin: 5px;
+  color: #b3b3b3;
+  font-size: 12px;
+  text-align: left;
+}

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pages.NewUser;
 
 /**
  *
@@ -134,26 +135,63 @@ public class Jdbc {
         }
         return counter;
     }
-       
-    public String insertUser(String[] str){
-        PreparedStatement ps = null;
-        String concatname = str[0].replace(" ", "").trim().toLowerCase();
-        int existingUsers = usernameExists(concatname);       
-        while(exists(concatname + String.valueOf(existingUsers))) {
+    
+    
+    private String getUsernameFromName(String name) {
+        String[] names = name.split(" ");
+        String username = "";
+        
+        for(int i = 0; i < names.length; i++) {
+            if(i == names.length-1) {
+                username +=  "-" + names[i];
+            } else {
+                username += names[i].substring(0,1);
+            }        
+        }
+        
+        int existingUsers = usernameExists(username);       
+        while(exists(username + String.valueOf(existingUsers))) {
             existingUsers++;
         }
         if(existingUsers > 0) {
-            concatname = concatname + String.valueOf(existingUsers); 
+            username = username + String.valueOf(existingUsers); 
         }
-      
+        
+        return username;
+    }
+    
+    private String getPasswordFromDob(String date) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsed = format.parse(date);
+            SimpleDateFormat pwformat = new SimpleDateFormat("ddMMyy");
+            
+            return pwformat.format(parsed);
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(NewUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+       
+    public String[] insertUser(String[] str){
+        PreparedStatement ps = null;
+        String username = getUsernameFromName(str[0].trim().toLowerCase());
+        String name = str[0].trim();
+        String password = getPasswordFromDob(str[2]);    
+        String address = str[1].trim();
+        java.sql.Date dob = java.sql.Date.valueOf(str[2]);
+        java.sql.Date dor = java.sql.Date.valueOf(str[3]);
+        
         int result = 0;
         try {
-            ps = connection.prepareStatement("INSERT INTO members (`username`, `name`, `password`, `address`, `dob`) VALUES (?,?,?,?,?)", Statement.SUCCESS_NO_INFO);
-            ps.setString(1, concatname);    
-            ps.setString(2, str[0].trim()); 
-            ps.setString(3, str[1].trim());
-            ps.setString(4, str[2].trim());
-            ps.setDate(5, java.sql.Date.valueOf(str[3])); 
+            ps = connection.prepareStatement("INSERT INTO members (`username`, `name`, `password`, `address`, `dob`, `dor`) VALUES (?,?,?,?,?, ?)", Statement.SUCCESS_NO_INFO);
+            ps.setString(1, username);    
+            ps.setString(2, name); 
+            ps.setString(3, password);
+            ps.setString(4, address);
+            ps.setDate(5, dob); 
+            ps.setDate(6, dor); 
             result = ps.executeUpdate();          
             ps.close();
             
@@ -167,7 +205,7 @@ public class Jdbc {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
          
-        return concatname;
+        return new String[]{username, password};
     }
     public void update(String[] str) {
         PreparedStatement ps = null;
