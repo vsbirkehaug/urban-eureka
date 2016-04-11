@@ -1,3 +1,15 @@
 enterprise/build/generated/classes/
 enterprise/build/generated/
 enterprise/build/generated/
+.idea/artifacts/Enterprise_ear_exploded.xml
+.idea/artifacts/Enterprise_ejb_exploded.xml
+.idea/artifacts/Enterprise_war_exploded.xml
+.idea/compiler.xml
+.idea/copyright/profiles_settings.xml
+.idea/encodings.xml
+.idea/Enterprise.iml
+.idea/libraries/ejb_3_2.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
