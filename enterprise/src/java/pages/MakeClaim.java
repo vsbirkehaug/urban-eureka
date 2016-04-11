@@ -20,14 +20,6 @@ public class MakeClaim extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        HttpSession session = request.getSession();
-        Jdbc jdbc = (Jdbc)session.getAttribute("dbbean"); 
-        if(jdbc == null) {                   
-            jdbc = new Jdbc();    
-            session.setAttribute("dbbean", jdbc);
-        }
-        Connection connection = (Connection)request.getServletContext().getAttribute("connection");
-        jdbc.connect(connection);
           
         PrintWriter out = response.getWriter();
         
@@ -39,6 +31,7 @@ public class MakeClaim extends HttpServlet {
                 break;
             }
             case "submitclaim": {
+                String[] userResponse = addClaim(request);                 
                 request.getRequestDispatcher("/WEB-INF/makeClaimConf.jsp").forward(request, response);
                 break;
             }
@@ -46,7 +39,28 @@ public class MakeClaim extends HttpServlet {
             default: {
                 //ERROR
             }
-        }
- 
+        } 
     }  
+       
+    private String[] addClaim(HttpServletRequest request) {
+        
+        HttpSession session = request.getSession();
+        Jdbc jdbc = (Jdbc)session.getAttribute("dbbean"); 
+        if(jdbc == null) {                   
+            jdbc = new Jdbc();    
+            session.setAttribute("dbbean", jdbc);
+        }
+        Connection connection = (Connection)request.getServletContext().getAttribute("connection");
+        jdbc.connect(connection);
+        
+        String member_id = ((String)request.getSession().getAttribute("username")).trim();
+        float amount = Float.valueOf((String)request.getParameter("amount"));
+        java.sql.Date date = java.sql.Date.valueOf((String)request.getParameter("date"));
+        String rationale = (String)request.getParameter(((String)"rationale").trim());
+        
+        Object[] queryStrings = new Object[]{member_id, amount, date, rationale};
+              
+        return jdbc.insertClaim(queryStrings);
+        
+    }   
 }

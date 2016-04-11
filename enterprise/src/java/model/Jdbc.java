@@ -203,10 +203,41 @@ public class Jdbc {
             
         } catch (SQLException ex) {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         
+        }        
         return new String[]{username, password};
     }
+    
+    public String[] insertClaim(Object[] str){
+        PreparedStatement ps = null;
+        
+        String member_id = (String)str[0];
+        float amount = (Float)str[1];
+        java.sql.Date date = (java.sql.Date)str[2];
+        String rationale = (String)str[3];
+   
+        int result = 0;
+        try {
+            ps = connection.prepareStatement("INSERT INTO claims (`mem_id`, `amount`, `date`, `rationale`) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, member_id);    
+            ps.setFloat(2, amount); 
+            ps.setDate(3, date);
+            ps.setString(4, rationale);
+            result = ps.executeUpdate();          
+            ps.close();
+            
+            if (result == 1) {
+                 System.out.println("1 row added.");
+            } else {
+                return null;
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+        return new String[]{member_id, String.valueOf(result)};
+    }
+        
     public void update(String[] str) {
         PreparedStatement ps = null;
         try {
@@ -221,6 +252,7 @@ public class Jdbc {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     public void delete(String user){
        
       String query = "DELETE FROM members " +

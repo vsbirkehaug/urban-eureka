@@ -16,20 +16,21 @@
 
 .user-dashboard {
     height: 80%;
-    width: 100%;
+    max-width: 100%;
     margin: 0 auto;
     z-index: 1;
     background: #FFFFFF;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-    padding-top: 40px;
-    padding-right: 20px;
-    padding-bottom: 30px;
-    padding-left: 40px;
+    padding: 40px;
+}
+
+.make-claim-page h1 {
+   margin-bottom: 40px;
 }
 
 h1 { 
-    color: #fff; 
-    width: 60%;
+    color: #fff;
+    max-width: 100%;
     font-family: "Roboto", sans-serif;
     font-size: 60px; 
     font-weight: normal; 
@@ -39,7 +40,6 @@ h1 {
     padding: 10px;
     border: 5px solid;
     border-color: #fff;
-    margin: 10px 0 24px; 
     text-align: center; 
     margin: 0 auto;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
@@ -50,7 +50,7 @@ h1 {
     font-size: 16px; 
     max-width: 100%;
     margin: 0 auto 20px;
-    padding-top: 30px;
+    padding-top: 15px;
     padding-bottom: 0px;
     padding-left: 20px;
     padding-right: 20px;
@@ -150,6 +150,13 @@ input[type=submit]:hover,.button:active,.button:focus {
   color: #b3b3b3;
   font-size: 12px;
 }
+
+.form h2{
+  margin: 10px 0 0;
+  color: #000;
+  font-size: 24px;
+}
+
 .error {
     margin: 15px 10px 10px 10px;
     color: #C4576E;
@@ -219,30 +226,13 @@ ul {
     -webkit-margin-end: 0;
     -webkit-padding-start: 0;
 }
-​
+
 li {
     list-style:none;
     margin: 0 auto;
     padding: 0;
 }
 
-.choice ul {
-    list-style:none;
-    margin: 0 auto;
-    padding: 0;
-    display: block;
-    -webkit-margin-before: 0;
-    -webkit-margin-after: 0;
-    -webkit-margin-start: 0;
-    -webkit-margin-end: 0;
-    -webkit-padding-start: 0;
-}
-​
-.choice li {
-    list-style:none;
-    margin: 0 auto;
-    padding: 0;
-}
 
 .user-button {
     cursor: pointer;
@@ -251,7 +241,7 @@ li {
     display: inline-block;
     padding: 20px 30px;
     margin: 10px 0px;
-    width: 40%;
+    width: calc(50% - 65px);
     background: #4CAF50;
     text-align: center;
 }
@@ -287,7 +277,6 @@ li {
     width: calc(40% - 30px);
     float: right;
 }
-​
 
 .label {
   margin: 5px;

@@ -13,8 +13,10 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <h1>XYZ Drivers Association</h1>
+      
         <div class="make-claim-page">
+              <h1>XYZ Drivers Association</h1>
+            
         <div class="form">      
             
             <h2>New claim</h2>
@@ -24,7 +26,6 @@
               <input type="date" name="date" placeholder="date"/>
               <input type="text" name="rationale" placeholder="rationale"/>
               <input type="number" step="0.01" min=0 name="amount" placeholder="amount"/>
-              <input type="hidden" name="status" placeholder="pending"/>
               <input type="hidden" name="action" value="submitclaim" />  
               </br>         
 
