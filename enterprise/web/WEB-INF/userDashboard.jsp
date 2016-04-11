@@ -14,6 +14,8 @@
     </head>
     <body>
         
+        <h1>XYZ Drivers Association</h1>
+        
             <% if(request.getSession().getAttribute("username") == null) {
                     request.setAttribute("message", "Timed out. Please log in again.");     
                     request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
@@ -21,7 +23,8 @@
             %>
         
         <div class="user-dashboard-container">    
-            <h1><%= (String)request.getSession().getAttribute("message") %></h1>
+            
+            <h2><%= (String)request.getSession().getAttribute("message") %></h2>
 
             <div class="user-dashboard">
                 <form id="routerform" method="POST" action="PageRouter.do">

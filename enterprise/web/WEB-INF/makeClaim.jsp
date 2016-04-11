@@ -13,10 +13,11 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
+        <h1>XYZ Drivers Association</h1>
         <div class="make-claim-page">
         <div class="form">      
             
-            <h1>New claim</h1>
+            <h2>New claim</h2>
             </br>
             <form id="make-claim-form" method="POST" action="MakeClaim.do">
               <p class="label">Claim date</p>
@@ -33,8 +34,9 @@
             </form>
             
             <ul class="choice">
-                <li onclick="document.getElementById('cancel-make-claim-form').submit();" class="choice button cancel first">Cancel</li>  
-                <li onclick="document.getElementById('make-claim-form').submit();" class="choice button last">Submit Claim</li>             
+                <li onclick="document.getElementById('cancel-make-claim-form').submit();" class="user-button cancel">Cancel</li>  
+                <li onclick="document.getElementById('make-claim-form').submit();" class="user-button submit">Submit Claim</li>
+                <div style="clear:both"></div>
             </ul>
           
         </div>

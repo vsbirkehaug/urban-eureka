@@ -28,6 +28,9 @@
            
     </head>
     <body onload="checkReg()">
+        
+        <h1>XYZ Drivers Association</h1>
+        
         <div class="login-page">
         <div class="form">
     

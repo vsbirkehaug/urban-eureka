@@ -27,17 +27,39 @@
     padding-left: 40px;
 }
 
-.user-dashboard-container h1 {
+h1 { 
+    color: #fff; 
+    width: 60%;
+    font-family: "Roboto", sans-serif;
+    font-size: 60px; 
+    font-weight: normal; 
+    line-height: 60px; 
+    margin: 20px 0 20px; 
+    text-transform: uppercase; 
+    padding: 10px;
+    border: 5px solid;
+    border-color: #fff;
+    margin: 10px 0 24px; 
+    text-align: center; 
+    margin: 0 auto;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.user-dashboard-container h2 {
+    color: #fff; 
+    font-size: 16px; 
     max-width: 100%;
     margin: 0 auto 20px;
     padding-top: 30px;
-    padding-bottom: 20px;
+    padding-bottom: 0px;
     padding-left: 20px;
+    padding-right: 20px;
+    text-align: right;
 }
 
 .user-dashboard-container {
     max-width: 60%;
-    margin: 0 auto 40px;
+    margin: 0 auto;
 }
 
 .user-dashboard p{
@@ -156,7 +178,7 @@ input[type=submit]:hover,.button:active,.button:focus {
   margin: 50px auto;
   text-align: center;
 }
-.container .info h1 {
+.container .info h2 {
   margin: 0 0 15px;
   padding: 0;
   font-size: 36px;
@@ -189,14 +211,37 @@ body {
 ul {
     list-style:none;
     margin: 0 auto;
-    padding: 10px;
+    padding: 0;
     display: block;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    -webkit-padding-start: 0;
 }
-
+​
 li {
     list-style:none;
     margin: 0 auto;
-    padding: 10px;
+    padding: 0;
+}
+
+.choice ul {
+    list-style:none;
+    margin: 0 auto;
+    padding: 0;
+    display: block;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    -webkit-padding-start: 0;
+}
+​
+.choice li {
+    list-style:none;
+    margin: 0 auto;
+    padding: 0;
 }
 
 .user-button {
@@ -205,7 +250,7 @@ li {
     font-weight: bold;
     display: inline-block;
     padding: 20px 30px;
-    margin: 10px;
+    margin: 10px 0px;
     width: 40%;
     background: #4CAF50;
     text-align: center;
@@ -217,58 +262,32 @@ li {
   margin: auto;
 }
 
-.choice ul {
-    list-style:none;
-    margin: 0 auto;
-    display: block;
-    padding: 0px;
-}
-
-.choice li {
-    list-style:none;
-    margin: 0 auto;
-    padding: 0px;
-}
-
-.choice.button {
-    cursor: pointer;
-    color: #FFFFFF;
-    font-weight: bold;
-    display: inline-block;
-    padding: 20px;
-    margin: 10px;
-    width: 30%;
-    background: #4CAF50;
-    text-align: center;
-    position: relative;
-}
-
-.choice.button.cancel {
-    background: #C4576E;
-}
-
 .user-button:hover {
     opacity: 0.7;
     box-shadow: 0 0 10px 0 #c1c1c1;
 }
 
 /* Use these if you want to style individual buttons */
-.make-claim { background: #284E72;}
+.make-claim { background: #284E72; }
 .make-claim:hover {}
-.claim-history { background: #AF7D35;}
-.claim-history:hover {}
 .make-payment { background: #284E72;}
 .make-payment:hover {}
-.payment-history { background: #AF7D35;}
+
+.claim-history { background: #AF7D35;}
+.claim-history:hover {}
+.payment-history { background: #AF7D35; }
 .payment-history:hover {}
 
-.first {
-   left: 0;
+.cancel {
+    background: #C4576E;
+    width: calc(40% - 30px);
+    float: left;
 }
-
-.last {
-   right: 0;
+.submit {
+    width: calc(40% - 30px);
+    float: right;
 }
+​
 
 .label {
   margin: 5px;
