@@ -6,7 +6,6 @@
 package model;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,7 +14,10 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Time;
 import static java.sql.Types.NULL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -104,39 +106,73 @@ public class Jdbc {
     }
     
     public boolean exists(String user) {
-        boolean bool = false;
+        boolean exists = false;
         try  {
-            select("select username from users where username='"+user+"'");
-            if(rs.next()) {
-                System.out.println("TRUE");         
-                bool = true;
+            PreparedStatement ps = connection.prepareStatement("SELECT (`username`) FROM members WHERE `username` = ? ");
+            ps.setString(1, user);  
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {  
+                exists = true;
             }
         } catch (SQLException ex) {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return bool;
+        return exists;
     }
-    public void insertUser(String[] str){
+    
+    public int usernameExists(String user) {
+        int counter = 0;
+        try  {
+            PreparedStatement ps = connection.prepareStatement("SELECT COUNT(`username`) FROM members WHERE `username` LIKE ?");
+            ps.setString(1, user + '%');  
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {  
+                counter = rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return counter;
+    }
+       
+    public String insertUser(String[] str){
         PreparedStatement ps = null;
+        String concatname = str[0].replace(" ", "").trim().toLowerCase();
+        int existingUsers = usernameExists(concatname);       
+        while(exists(concatname + String.valueOf(existingUsers))) {
+            existingUsers++;
+        }
+        if(existingUsers > 0) {
+            concatname = concatname + String.valueOf(existingUsers); 
+        }
+      
+        int result = 0;
         try {
-            ps = connection.prepareStatement("INSERT INTO users (`username`, `password`, `address`, `dob`) VALUES (?,?,?,?)");
-            ps.setString(1, str[0].trim()); 
-            ps.setString(2, str[1].trim());
-            ps.setString(3, str[2].trim());
-            ps.setString(4, str[3].trim());
-            ps.executeUpdate();
-        
+            ps = connection.prepareStatement("INSERT INTO members (`username`, `name`, `password`, `address`, `dob`) VALUES (?,?,?,?,?)", Statement.SUCCESS_NO_INFO);
+            ps.setString(1, concatname);    
+            ps.setString(2, str[0].trim()); 
+            ps.setString(3, str[1].trim());
+            ps.setString(4, str[2].trim());
+            ps.setDate(5, java.sql.Date.valueOf(str[3])); 
+            result = ps.executeUpdate();          
             ps.close();
-            System.out.println("1 row added.");
+            
+            if (result == 1) {
+                 System.out.println("1 row added.");
+            } else {
+                return null;
+            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
          
+        return concatname;
     }
     public void update(String[] str) {
         PreparedStatement ps = null;
         try {
-            ps = connection.prepareStatement("Update Users Set password=? where username=?",PreparedStatement.RETURN_GENERATED_KEYS);
+            ps = connection.prepareStatement("Update members Set password=? where username=?",PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, str[1].trim()); 
             ps.setString(2, str[0].trim());
             ps.executeUpdate();
@@ -149,7 +185,7 @@ public class Jdbc {
     }
     public void delete(String user){
        
-      String query = "DELETE FROM Users " +
+      String query = "DELETE FROM members " +
                    "WHERE username = '"+user.trim()+"'";
       
         try {

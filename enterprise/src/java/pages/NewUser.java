@@ -38,7 +38,7 @@ public class NewUser extends HttpServlet {
         HttpSession session = request.getSession();
         
         String [] query = new String[4];
-        query[0] = (String)request.getParameter("username");
+        query[0] = (String)request.getParameter("name");
         query[1] = RandomPasswordGen.generateRandomPassword();
         query[2] = (String)request.getParameter("address");
         query[3] = (String)request.getParameter("dob");
@@ -54,21 +54,30 @@ public class NewUser extends HttpServlet {
         if (jdbc == null)
             request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
         
+        for(String q : query) {
+            if(q.length()==0) {
+                request.setAttribute("registrationState", "true");
+                request.setAttribute("message", "Fields cannot be empty");
+                request.getRequestDispatcher("index_user_login.jsp").forward(request, response);         
+            }
+        }
+        
         if(query[0]==null) {
             request.setAttribute("registrationState", "true");
-            request.setAttribute("message", "Username cannot be NULL");
+            request.setAttribute("message", "Name cannot be empty");
             request.getRequestDispatcher("index_user_login.jsp").forward(request, response);         
         } 
-        else if(jdbc.exists(query[0])){
-            request.setAttribute("registrationState", "true");
-            request.setAttribute("message", query[0]+" is already taken as username");
-            request.getRequestDispatcher("index_user_login.jsp").forward(request, response);    
-        }
         else {
-            jdbc.insertUser(query);
-            request.setAttribute("message", query[0]+" is added");
-            request.setAttribute("password", query[1]);
-            request.getRequestDispatcher("/WEB-INF/userRegConf.jsp").forward(request, response);
+            String username = jdbc.insertUser(query);
+            if(username != null) {
+                request.setAttribute("username", username);
+                request.setAttribute("password", query[1]);
+                request.getRequestDispatcher("/WEB-INF/userRegConf.jsp").forward(request, response);
+            } else {
+                request.setAttribute("registrationState", "true");
+                request.setAttribute("message", "An error occured whilst creating user, please try register again.");
+                request.getRequestDispatcher("index_user_login.jsp").forward(request, response);  
+            }
         }    
         
        

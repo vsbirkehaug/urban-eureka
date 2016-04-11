@@ -16,15 +16,28 @@
 
 .user-dashboard {
     height: 80%;
-    width: 68%;
+    width: 100%;
     margin: 0 auto;
     z-index: 1;
     background: #FFFFFF;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-    padding-top: 50px;
-    padding-right: 30px;
-    padding-bottom: 50px;
-    padding-left: 80px;
+    padding-top: 40px;
+    padding-right: 20px;
+    padding-bottom: 30px;
+    padding-left: 40px;
+}
+
+.user-dashboard-container h1 {
+    max-width: 100%;
+    margin: 0 auto 20px;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+}
+
+.user-dashboard-container {
+    max-width: 60%;
+    margin: 0 auto 40px;
 }
 
 .user-dashboard p{
@@ -161,6 +174,7 @@ input[type=submit]:hover,.button:active,.button:focus {
 .container .info span .fa {
   color: #EF3B3A;
 }
+
 body {
   background: #76b852; /* fallback for old browsers */
   background: -webkit-linear-gradient(right, #76b852, #8DC26F);
@@ -171,3 +185,45 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;      
 }
+
+ul {
+    list-style:none;
+    margin: 0 auto;
+    padding: 10px;
+    display: block;
+}
+
+li {
+    list-style:none;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.user-button {
+    cursor: pointer;
+    color: #FFFFFF;
+    font-weight: bold;
+    display: inline-block;
+    padding: 20px 30px;
+    margin: 10px;
+    width: 40%;
+    border-radius: 5px;
+    background: #76b852;
+    text-align: center;
+}
+
+.user-button:hover {
+    opacity: 0.7;
+    box-shadow: 0 0 10px 0 #c1c1c1;
+}
+
+/* Use these if you want to style individual buttons */
+.make-claim { background: #284E72;}
+.make-claim:hover {}
+.claim-history { background: #AF7D35;}
+.claim-history:hover {}
+.make-payment { background: #284E72;}
+.make-payment:hover {}
+.payment-history { background: #AF7D35;}
+.payment-history:hover {}
+

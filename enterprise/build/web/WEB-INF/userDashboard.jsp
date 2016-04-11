@@ -24,7 +24,15 @@
             <h1><%= (String)request.getAttribute("message") %></h1>
 
             <div class="user-dashboard">
-                <p> Hello </p>        
+                <ul>
+                    <li class="user-button make-claim">Make Claim</li>
+                    <li class="user-button make-payment">Make Payment</li>
+                     
+                </ul>
+                <ul>
+                    <li class="user-button claim-history">Claim History</li>                
+                    <li class="user-button payment-history">Payment History</li>
+                </ul>
             </div>
         </div>
     </body>

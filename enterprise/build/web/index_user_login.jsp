@@ -40,7 +40,7 @@
             </p>         
              
           <form class="register-form" method="POST" action="NewUser.do">
-            <input type="text" name="username" placeholder="username"/>
+            <input type="text" name="name" placeholder="name"/>
             <input type="text" name="address" placeholder="address"/>
             <input type="date" name="dob" placeholder="date of birth"/>
             <input class="button" type="submit" name="tbl" value="Register"/>

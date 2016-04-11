@@ -20,7 +20,7 @@ public class Validate {
 	 //loading drivers for mysql
          Class.forName("com.mysql.jdbc.Driver");
 
-         PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE username = ? and password = ?");
+         PreparedStatement ps = conn.prepareStatement("SELECT * FROM members WHERE username = ? AND password = ?"); 
          ps.setString(1, username);
          ps.setString(2, password);
          ResultSet rs = ps.executeQuery(); 
