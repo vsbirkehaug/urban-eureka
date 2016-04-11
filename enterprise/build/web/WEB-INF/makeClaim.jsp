@@ -16,22 +16,26 @@
         <div class="make-claim-page">
         <div class="form">      
             
-            <h1>Make a claim</h1>
+            <h1>New claim</h1>
             </br>
-          <form id="make-claim-form" class="make-claim-form" method="POST" action="MakeClaim.do">
-            <p class="label">Claim date</p>
-            <input type="date" name="date" placeholder="date"/>
-            <input type="text" name="rationale" placeholder="rationale"/>
-            <input type="number" step="0.01" min=0 name="amount" placeholder="amount"/>
-            <input type="hidden" name="status" placeholder="pending"/>
-            <ul class="choice">
-                <li onclick="document.getElementById('make-claim-form').submit();" class="choice button cancel">Cancel<input type="hidden" name="action" value="cancel" /></li>  
-                <li onclick="document.getElementById('make-claim-form').submit();" class="choice button">Submit Claim<input type="hidden" name="action" value="submitclaim" /></li>             
-            </ul>
+            <form id="make-claim-form" method="POST" action="MakeClaim.do">
+              <p class="label">Claim date</p>
+              <input type="date" name="date" placeholder="date"/>
+              <input type="text" name="rationale" placeholder="rationale"/>
+              <input type="number" step="0.01" min=0 name="amount" placeholder="amount"/>
+              <input type="hidden" name="status" placeholder="pending"/>
+              <input type="hidden" name="action" value="submitclaim" />  
+              </br>         
+
+            </form>
+            <form id="cancel-make-claim-form" method="POST" action="MakeClaim.do">
+                <input type="hidden" name="action" value="cancel" />
+            </form>
             
-            </br>         
-          
-          </form>
+            <ul class="choice">
+                <li onclick="document.getElementById('cancel-make-claim-form').submit();" class="choice button cancel first">Cancel</li>  
+                <li onclick="document.getElementById('make-claim-form').submit();" class="choice button last">Submit Claim</li>             
+            </ul>
           
         </div>
       </div>

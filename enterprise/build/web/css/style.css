@@ -221,26 +221,29 @@ li {
     list-style:none;
     margin: 0 auto;
     display: block;
+    padding: 0px;
 }
 
 .choice li {
     list-style:none;
     margin: 0 auto;
+    padding: 0px;
 }
 
-.choice .button {
+.choice.button {
     cursor: pointer;
     color: #FFFFFF;
     font-weight: bold;
     display: inline-block;
-    padding: 15px;
+    padding: 20px;
     margin: 10px;
     width: 30%;
     background: #4CAF50;
     text-align: center;
+    position: relative;
 }
 
-.choice .button .cancel {
+.choice.button.cancel {
     background: #C4576E;
 }
 
@@ -248,7 +251,6 @@ li {
     opacity: 0.7;
     box-shadow: 0 0 10px 0 #c1c1c1;
 }
-
 
 /* Use these if you want to style individual buttons */
 .make-claim { background: #284E72;}
@@ -259,6 +261,14 @@ li {
 .make-payment:hover {}
 .payment-history { background: #AF7D35;}
 .payment-history:hover {}
+
+.first {
+   left: 0;
+}
+
+.last {
+   right: 0;
+}
 
 .label {
   margin: 5px;
