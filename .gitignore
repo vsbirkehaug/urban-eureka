@@ -13,3 +13,5 @@ enterprise/build/generated/
 .idea/modules.xml
 .idea/vcs.xml
 .idea/workspace.xml
+lib/javax.ejb-api.jar
+web/index.jsp
