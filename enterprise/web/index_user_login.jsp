@@ -16,7 +16,7 @@
            <script language="javascript">
                 function checkReg(){   
                  <% boolean doReg = false; 
-                 if(request.getAttribute("message")!=null && ((String)request.getAttribute("message")).length() > 0 && !((String)request.getAttribute("message")).equals("Incorrect username or password.")) { 
+                 if(request.getAttribute("registrationState") != null && request.getAttribute("registrationState") == "true") { 
                      doReg=true;
                     } else { 
                      doReg=false;

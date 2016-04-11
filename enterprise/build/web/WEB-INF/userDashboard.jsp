@@ -9,19 +9,23 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>User login</title>
+        <title>Dashboard</title>
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <div class="login-page">
-        <div class="centered-content">
+        
+            <% if(request.getSession().getAttribute("username") == null) {
+                    request.setAttribute("message", "Timed out. Please log in again.");     
+                    request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
+                }        
+            %>
+        
+        <div class="user-dashboard-container">    
             <h1><%= (String)request.getAttribute("message") %></h1>
 
-            </br>
-                <div class="centered-content-body"            
- 
-                </div>
+            <div class="user-dashboard">
+                <p> Hello </p>        
+            </div>
         </div>
-        </div>  
     </body>
 </html>

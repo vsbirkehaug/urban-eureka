@@ -21,6 +21,7 @@
                 <div class="centered-content-body"
                     <p><%= (String)request.getAttribute("message") %></p>
                     <p>Your password is: <%= (String)request.getAttribute("password") %></p>
+                    <p>You will need to remember this the first time you log in, but it may then be changed on the user dashboard.</p>
                 </div>
         </div>
         </div>  

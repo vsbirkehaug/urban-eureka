@@ -42,10 +42,6 @@ public class NewUser extends HttpServlet {
         query[1] = RandomPasswordGen.generateRandomPassword();
         query[2] = (String)request.getParameter("address");
         query[3] = (String)request.getParameter("dob");
-        
-//        java.util.Date dt = new java.util.Date();
-//        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        String currentTime = sdf.format(dt);
        
         Jdbc jdbc = (Jdbc)session.getAttribute("dbbean"); 
         if(jdbc == null) {                   
@@ -59,10 +55,12 @@ public class NewUser extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
         
         if(query[0]==null) {
+            request.setAttribute("registrationState", "true");
             request.setAttribute("message", "Username cannot be NULL");
             request.getRequestDispatcher("index_user_login.jsp").forward(request, response);         
         } 
         else if(jdbc.exists(query[0])){
+            request.setAttribute("registrationState", "true");
             request.setAttribute("message", query[0]+" is already taken as username");
             request.getRequestDispatcher("index_user_login.jsp").forward(request, response);    
         }
