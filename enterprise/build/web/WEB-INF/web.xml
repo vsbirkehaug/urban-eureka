@@ -16,10 +16,18 @@
         <servlet-name>Update</servlet-name>
         <servlet-class>pages.Update</servlet-class>
     </servlet>
-        <servlet>
+    <servlet>
         <servlet-name>Login</servlet-name>
         <servlet-class>pages.Login</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PageRouter</servlet-name>
+        <servlet-class>com.PageRouter</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PageRouter</servlet-name>
+        <url-pattern>/PageRouter.do</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UserServLet</servlet-name>
         <url-pattern>/UserService.do</url-pattern>

@@ -24,16 +24,18 @@
             <h1><%= (String)request.getAttribute("message") %></h1>
 
             <div class="user-dashboard">
-                <ul>
-                    <li class="user-button make-claim">Make Claim</li>
-                    <li class="user-button make-payment">Make Payment</li>
-                     
-                </ul>
-                <ul>
-                    <li class="user-button claim-history">Claim History</li>                
-                    <li class="user-button payment-history">Payment History</li>
-                </ul>
+                <form id="routerform" method="POST" action="PageRouter.do">
+                    <ul>                      
+                        <li onclick="document.getElementById('routerform').submit();" class="user-button make-claim">Make Claim <input type="hidden" name="action" value="makeclaim" /></li>              
+                        <li value="makepayment" class="user-button make-payment">Make Payment</li>                    
+                    </ul>
+                    <ul>
+                        <li class="user-button claim-history">Claim History</li>                
+                        <li class="user-button payment-history">Payment History</li>
+                    </ul>
+                </form>
             </div>
         </div>
+            
     </body>
 </html>
