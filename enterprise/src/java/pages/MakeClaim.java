@@ -5,12 +5,12 @@
  */
 package pages;
 
+import services.ClaimChecker;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 import model.Claim;
-import model.ClaimChecker;
 import model.ClaimResponse;
 import model.Jdbc;
 
@@ -62,7 +62,7 @@ public class MakeClaim extends HttpServlet {
         String rationale = (String)request.getParameter(((String)"rationale").trim());       
         Claim claim = new Claim(userId, amount, date, rationale);    
         
-        ClaimChecker cc = new ClaimChecker(session, claim);
+        ClaimChecker cc = new ClaimChecker((Jdbc)session.getAttribute("dbbean"), (int)session.getAttribute("id"), claim);
         ClaimResponse cr = cc.isValid();
         
         Claim responseClaim = null;
@@ -71,6 +71,7 @@ public class MakeClaim extends HttpServlet {
         } 
         responseClaim = jdbc.insertClaim(claim);
         
+        session.setAttribute("claimamount", String.valueOf(responseClaim.getAmount()));
         session.setAttribute("claimid", String.valueOf(responseClaim.getId()));
         session.setAttribute("claimstatus", String.valueOf(responseClaim.getStatus()));
         session.setAttribute("claimmessage", cr.getReason());

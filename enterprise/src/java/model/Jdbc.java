@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.sql.Timestamp;
 import static java.sql.Types.NULL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,22 +26,15 @@ import pages.NewUser;
 
 /**
  *
- * @author me-aydin
+ * @author me-aydin, vilde
  */
 public class Jdbc {
     
     Connection connection = null;
     Statement statement = null;
     ResultSet rs = null;
-    //String query = null;
-    
-    
-    public Jdbc(String query){
-        //this.query = query;
-    }
 
     public Jdbc() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     public void connect(Connection con){
@@ -267,6 +261,38 @@ public class Jdbc {
             ps.setInt(1, memberId);
             ps.setTimestamp(2, aYearAgo);
             ps.setTimestamp(3, currentTimestamp);
+            ps.setString(4, "APPROVED");
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            result = rs.getInt(1);
+            rs.close();
+            ps.close();
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+        return result;
+    }
+     
+    
+     public int getApprovedClaimsYearOfDate(int memberId, java.sql.Date claimdate){
+        PreparedStatement ps = null;
+        int result = -1;
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(claimdate);
+        cal.set(Calendar.DAY_OF_YEAR, 1);    
+        java.sql.Date start = new java.sql.Date(cal.getTimeInMillis());
+        cal.set(Calendar.MONTH, 11); // 11 = december
+        cal.set(Calendar.DAY_OF_MONTH, 31); // new years eve
+        java.sql.Date end = new java.sql.Date(cal.getTimeInMillis());
+
+        try {
+            ps = connection.prepareStatement("SELECT COUNT(`mem_id`) FROM claims WHERE `mem_id` = ? AND (`date` BETWEEN ? AND ?) AND `status` = ?");
+            ps.setInt(1, memberId);
+            ps.setDate(2, start);
+            ps.setDate(3, end);
             ps.setString(4, "APPROVED");
             ResultSet rs = ps.executeQuery();
             rs.next();

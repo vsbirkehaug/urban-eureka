@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pages;
+package services;
 import java.sql.*;
 import javax.servlet.http.HttpSession;
 
@@ -39,6 +39,6 @@ public class ValidateUser {
           e.printStackTrace();
       }           
       
-      return new String[]{name, String.valueOf(userId)};
+      return new String[]{String.valueOf(userId), name};
   }   
 }

@@ -5,6 +5,7 @@
  */
 package pages;
 
+import services.ValidateUser;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -39,9 +40,9 @@ public class Login extends HttpServlet {
             String [] details = ValidateUser.getUser(username, password, connection);
             String name = null;
             int id = 0;
-            if(details != null) {              
-                name = details[0];
-                id = Integer.valueOf(details[1]);
+            if(details != null) {    
+                id = Integer.valueOf(details[0]);
+                name = details[1];           
             } 
             
             if(name != null) 

@@ -51,7 +51,9 @@
           <form class="register-form" method="POST" action="NewUser.do">
             <input type="text" name="name" placeholder="name"/>
             <input type="text" name="address" placeholder="address"/>
+             <p class="label">Date of birth</p>
             <input type="date" name="dob" placeholder="date of birth"/>
+             <p class="label">Registration date</p>
             <input type="date" name="registrationdate" placeholder="registration date"/>
             <input class="button" type="submit" name="tbl" value="Register"/>
             </br>         
@@ -60,7 +62,7 @@
           <form class="login-form" method="POST" action="Login.do">
             <input type="text" name="username" placeholder="username"/>
             <input type="password" name="password" placeholder="password"/>
-             <input class="button" type="submit" name="tbl" value="Log in"/>
+            <input class="button" type="submit" name="tbl" value="Log in"/>
             </br>       
             <p class="message">Not registered? <a href="#">Create an account</a></p>
           </form>

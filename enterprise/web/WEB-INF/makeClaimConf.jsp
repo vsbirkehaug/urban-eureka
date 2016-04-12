@@ -28,8 +28,25 @@
             </br>
             
                <p>Your claim id: <%= session.getAttribute("claimid") %></p>
+               <p>Claim amount: £<%= session.getAttribute("claimamount") %></p>
                <p>Claim status: <%= session.getAttribute("claimstatus") %></p>
-               <p>Explanation: <%= session.getAttribute("claimmessage") %></p>
+               <p><%= session.getAttribute("claimmessage") %></p>
+               
+               </br>
+               
+            <form id="cancel-make-claim-form" method="POST" action="MakeClaim.do">
+                <input type="hidden" name="action" value="cancel" />
+            </form>
+               
+            <form id="routerform" method="POST" action="PageRouter.do">  
+                 <input type="hidden" name="action" value="makeclaim" />
+            </form>
+            
+            <ul class="choice">
+                <li onclick="document.getElementById('cancel-make-claim-form').submit();" class="user-button cancel">Dashboard</li>  
+                <li onclick="document.getElementById('routerform').submit();" class="user-button submit">Make claim</li>
+                <div style="clear:both"></div>
+            </ul>
           
         </div>
       </div>

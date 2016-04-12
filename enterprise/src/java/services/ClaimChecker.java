@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package services;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import javax.servlet.http.HttpSession;
+import model.Claim;
+import model.ClaimResponse;
+import model.Jdbc;
 
 /**
  *
@@ -17,19 +20,27 @@ import javax.servlet.http.HttpSession;
 public class ClaimChecker {
 
     private final Claim claim;
-    private final HttpSession session;
+    private final Jdbc jdbc;
+    private final int userId;
+    private final int claimsAllowedPerYear = 2;
     
-    public ClaimChecker(HttpSession session, Claim claim) {
-          this.session = session;
+    public ClaimChecker(Jdbc jdbc, int userId, Claim claim) {
+          this.jdbc = jdbc;
           this.claim = claim;
+          this.userId = userId;
     }
     
     public ClaimResponse isValid() {  
         
-        int claimsThisYear = ((Jdbc)session.getAttribute("dbbean")).getApprovedClaimsLast12Months((int)session.getAttribute("id"));
-        java.sql.Timestamp dor = ((Jdbc)session.getAttribute("dbbean")).getDOR((int)session.getAttribute("id"));
-        if(claimsThisYear >= 2) {
-            return new ClaimResponse(false, "You have reached the claim limit(2) for this year. Your claim was automatically rejected.");
+        int approvedClaimsThisYear = jdbc.getApprovedClaimsYearOfDate(userId, claim.getDate());
+        java.sql.Timestamp dor =jdbc.getDOR(userId);
+        
+        if(approvedClaimsThisYear >= claimsAllowedPerYear) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new java.util.Date(claim.getDate().getTime()));         
+            return new ClaimResponse(false, ("You have reached the claim limit(2) for the year " + cal.get(Calendar.YEAR)) + ". Your claim was automatically rejected.");
+        } else if (approvedClaimsThisYear < 0){
+            return new ClaimResponse(true, "The system has encountered an error, but your claim has been registered and will be handled by an administrator.");    //LETS THE ADMIN HANDLE THIS ERROR
         } else if (differenceInMonths(dor, claim.getDate())<6){
             return new ClaimResponse(false, "You cannot make a claim untill 6 months after registration. Your claim was automatically rejected.");    
         } else {
