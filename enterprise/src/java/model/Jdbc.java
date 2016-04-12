@@ -17,6 +17,7 @@ import static java.sql.Types.NULL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -210,15 +211,24 @@ public class Jdbc {
     public Claim insertClaim(Claim claim){
         PreparedStatement ps = null;
         
-        String member_id = claim.getUsername();
+        int member_id = claim.getUserId();
         float amount = claim.getAmount();
         java.sql.Date date = claim.getDate();
         String rationale = claim.getRationale();
         Claim newClaim = null;
+        String status = null;
+        if(claim.getStatus().length() > 0) {
+            status = claim.getStatus();
+        }
 
         try {
-            ps = connection.prepareStatement("INSERT INTO claims (`mem_id`, `amount`, `date`, `rationale`) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, member_id);    
+            if(status != null) {
+                ps = connection.prepareStatement("INSERT INTO claims (`mem_id`, `amount`, `date`, `rationale`, `status`) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                ps.setString(5, status);
+            } else {
+                ps = connection.prepareStatement("INSERT INTO claims (`mem_id`, `amount`, `date`, `rationale`) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            }        
+            ps.setInt(1, member_id);    
             ps.setFloat(2, amount); 
             ps.setDate(3, date);
             ps.setString(4, rationale);
@@ -232,13 +242,59 @@ public class Jdbc {
             ps.setInt(1, result);
             ResultSet rs = ps.executeQuery();
             rs.next();
-            newClaim = new Claim(rs.getInt("id"), rs.getString("mem_id"), rs.getFloat("amount"), rs.getDate("date"), rs.getString("rationale"), rs.getString("status"));         
+            newClaim = new Claim(rs.getInt("id"), rs.getInt("mem_id"), rs.getFloat("amount"), rs.getDate("date"), rs.getString("rationale"), rs.getString("status"));         
             
         } catch (SQLException ex) {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
          
         return newClaim;
+    }
+    
+     public int getApprovedClaimsLast12Months(int memberId){
+        PreparedStatement ps = null;
+        int result = -1;
+
+        Calendar calendar = Calendar.getInstance();
+        java.util.Date now = calendar.getTime();
+        java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(now.getTime());
+        calendar.add(Calendar.YEAR, -1);
+        java.util.Date oneYearAgo = calendar.getTime();
+        java.sql.Timestamp aYearAgo = new java.sql.Timestamp(oneYearAgo.getTime());
+
+        try {
+            ps = connection.prepareStatement("SELECT COUNT(`mem_id`) FROM claims WHERE `mem_id` = ? AND `date` WHERE (`date` BETWEEN ? AND ?) AND WHERE `status' = ?");
+            ps.setInt(1, memberId);
+            ps.setTimestamp(2, aYearAgo);
+            ps.setTimestamp(3, currentTimestamp);
+            ps.setString(4, "APPROVED");
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            result = rs.getInt(1);
+            rs.close();
+            ps.close();
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+        return result;
+    }
+       
+    public java.sql.Timestamp getDOR(int userId) {
+        PreparedStatement ps = null;
+        java.sql.Timestamp dor;
+        try {
+            ps = connection.prepareStatement("SELECT `dor` FROM members WHERE id = ?");
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            dor = rs.getTimestamp("dor");
+            return dor;
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
         
     public void update(String[] str) {

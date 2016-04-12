@@ -12,9 +12,10 @@ import javax.servlet.http.HttpSession;
  * @author Vilde
  */
 public class ValidateUser {
-      public static String getUser(String username, String password, Connection conn) 
+      public static String[] getUser(String username, String password, Connection conn) 
      {
       String name = null;
+      int userId = 0;
       try{
 
 	 //loading drivers for mysql
@@ -27,6 +28,7 @@ public class ValidateUser {
          
          if(rs.next()) {
             name = rs.getString("name");
+            userId = rs.getInt("id");
          } else {
             return null;
          }
@@ -37,6 +39,6 @@ public class ValidateUser {
           e.printStackTrace();
       }           
       
-      return name;
+      return new String[]{name, String.valueOf(userId)};
   }   
 }

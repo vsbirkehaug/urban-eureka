@@ -10,6 +10,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 import model.Jdbc;
+import model.Member;
 
 /**
  *
@@ -34,17 +35,31 @@ public class Login extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");    
         
-        String name = ValidateUser.getUser(username, password, connection);
-        if(name != null) 
-        {            
-            session.setAttribute("username", username);
-            session.setAttribute("name", name);
-            request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
+        try {
+            String [] details = ValidateUser.getUser(username, password, connection);
+            String name = null;
+            int id = 0;
+            if(details != null) {              
+                name = details[0];
+                id = Integer.valueOf(details[1]);
+            } 
+            
+            if(name != null) 
+            {            
+                session.setAttribute("username", username);
+                session.setAttribute("name", name);
+                session.setAttribute("id", id);
+                request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
+            }
+            else
+            {
+                request.setAttribute("message", "Incorrect username or password.");     
+                request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        else
-        {
-            request.setAttribute("message", "Incorrect username or password.");     
-            request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
-        }
+        
+
     }  
 }

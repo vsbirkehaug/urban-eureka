@@ -10,6 +10,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 import model.Claim;
+import model.ClaimChecker;
+import model.ClaimResponse;
 import model.Jdbc;
 
 /**
@@ -19,8 +21,7 @@ import model.Jdbc;
 public class MakeClaim extends HttpServlet {
        protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        
+        response.setContentType("text/html;charset=UTF-8");       
           
         PrintWriter out = response.getWriter();
         
@@ -32,9 +33,8 @@ public class MakeClaim extends HttpServlet {
                 break;
             }
             case "submitclaim": {
-                Claim responseClaim = addClaim(request);   
-                request.setAttribute("username", responseClaim.getUsername());
-                request.setAttribute("id", String.valueOf(responseClaim.getId()));
+               addClaim(request);   
+              
                 request.getRequestDispatcher("/WEB-INF/makeClaimConf.jsp").forward(request, response);
                 break;
             }
@@ -45,7 +45,7 @@ public class MakeClaim extends HttpServlet {
         } 
     }  
        
-    private Claim addClaim(HttpServletRequest request) {
+    private void addClaim(HttpServletRequest request) {
         
         HttpSession session = request.getSession();
         Jdbc jdbc = (Jdbc)session.getAttribute("dbbean"); 
@@ -56,13 +56,24 @@ public class MakeClaim extends HttpServlet {
         Connection connection = (Connection)request.getServletContext().getAttribute("connection");
         jdbc.connect(connection);
         
-        String member_id = ((String)request.getSession().getAttribute("username")).trim();
+        int userId = ((int)request.getSession().getAttribute("id"));
         float amount = Float.valueOf((String)request.getParameter("amount"));
         java.sql.Date date = java.sql.Date.valueOf((String)request.getParameter("date"));
-        String rationale = (String)request.getParameter(((String)"rationale").trim());
+        String rationale = (String)request.getParameter(((String)"rationale").trim());       
+        Claim claim = new Claim(userId, amount, date, rationale);    
         
-        Claim claim = new Claim(member_id, amount, date, rationale);      
-        return jdbc.insertClaim(claim);
+        ClaimChecker cc = new ClaimChecker(session, claim);
+        ClaimResponse cr = cc.isValid();
+        
+        Claim responseClaim = null;
+        if(!cr.isValid()) {
+            claim.setStatus("DECLINED");       
+        } 
+        responseClaim = jdbc.insertClaim(claim);
+        
+        session.setAttribute("claimid", String.valueOf(responseClaim.getId()));
+        session.setAttribute("claimstatus", String.valueOf(responseClaim.getStatus()));
+        session.setAttribute("claimmessage", cr.getReason());
         
     }   
 }

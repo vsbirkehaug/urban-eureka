@@ -3,17 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/pages/Login.java</file>
-            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/web/index.jsp</file>
+            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/model/Claim.java</file>
+            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/web/WEB-INF/makeClaimConf.jsp</file>
             <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/web/WEB-INF/userDashboard.jsp</file>
             <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/web/WEB-INF/userRegConf.jsp</file>
-            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/web/css/style.css</file>
             <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/pages/NewUser.java</file>
             <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/model/Jdbc.java</file>
-            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/web/index_user_login.jsp</file>
-            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/pages/Validate.java</file>
-            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/com/UserServLet.java</file>
+            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/pages/Delete.java</file>
+            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/com/PageRouter.java</file>
             <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/pages/Login.java</file>
+            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/web/WEB-INF/makeClaim.jsp</file>
+            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/pages/ValidateUser.java</file>
+            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/pages/Logout.java</file>
+            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/pages/MakeClaim.java</file>
+            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/web/css/style.css</file>
+            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/web/index_user_login.jsp</file>
+            <file>file:/C:/Users/Vilde/Desktop/Enterprise/enterprise/src/java/com/UserServLet.java</file>
         </group>
     </open-files>
 </project-private>

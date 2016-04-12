@@ -27,9 +27,9 @@
             <h2>Claim response</h2>
             </br>
             
-               <p>Your username is: <%= (String)request.getAttribute("username") %></p>
-               <p>Your response is: <%= (String)request.getAttribute("id") %></p>
-  
+               <p>Your claim id: <%= session.getAttribute("claimid") %></p>
+               <p>Claim status: <%= session.getAttribute("claimstatus") %></p>
+               <p>Explanation: <%= session.getAttribute("claimmessage") %></p>
           
         </div>
       </div>
