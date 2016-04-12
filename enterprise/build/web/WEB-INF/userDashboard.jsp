@@ -40,16 +40,16 @@
                 <div style="clear:both"></div>
  
             <div class="user-dashboard">
-                <form id="routerform" method="POST" action="PageRouter.do">
+                <form id="paymentform" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="makepayment" /></form>
+                <form id="routerform" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="makeclaim" /></form>
                     <ul>                      
-                        <li onclick="document.getElementById('routerform').submit();" class="user-button make-claim">Make Claim <input type="hidden" name="action" value="makeclaim" /></li>              
-                        <li value="makepayment" class="user-button make-payment">Make Payment</li>                    
+                        <li onclick="document.getElementById('routerform').submit();" class="user-button make-claim">Make Claim </li>              
+                        <li onclick="document.getElementById('paymentform').submit();" class="user-button make-payment">Make Payment </li>                    
                     </ul>
                     <ul>
                         <li class="user-button claim-history">Claim History</li>                
                         <li class="user-button payment-history">Payment History</li>
                     </ul>
-                </form>
             </div>
         </div>
         </div> 

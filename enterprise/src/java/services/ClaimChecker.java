@@ -11,7 +11,7 @@ import java.util.Date;
 import javax.servlet.http.HttpSession;
 import model.Claim;
 import model.ClaimResponse;
-import model.Jdbc;
+import com.Jdbc;
 
 /**
  *

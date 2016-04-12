@@ -10,7 +10,7 @@
     </servlet>
     <servlet>
         <servlet-name>Register</servlet-name>
-        <servlet-class>pages.Register</servlet-class>
+        <servlet-class>controllers.Register</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Update</servlet-name>
@@ -18,7 +18,7 @@
     </servlet>
     <servlet>
         <servlet-name>Login</servlet-name>
-        <servlet-class>pages.Login</servlet-class>
+        <servlet-class>controllers.Login</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>PageRouter</servlet-name>
@@ -26,11 +26,11 @@
     </servlet>
     <servlet>
         <servlet-name>MakeClaim</servlet-name>
-        <servlet-class>pages.MakeClaim</servlet-class>
+        <servlet-class>controllers.MakeClaim</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Logout</servlet-name>
-        <servlet-class>pages.Logout</servlet-class>
+        <servlet-class>controllers.Logout</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>

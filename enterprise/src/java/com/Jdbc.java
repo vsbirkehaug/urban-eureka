@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package com;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -22,7 +22,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pages.Register;
+import model.Claim;
+import controllers.Register;
+import java.util.List;
+import model.Charge;
+import model.Payment;
 
 /**
  *
@@ -243,6 +247,62 @@ public class Jdbc {
         }
          
         return newClaim;
+    }
+    
+    public Payment insertPayment(Payment payment){
+        PreparedStatement ps = null;
+        
+        int member_id = payment.getUserId();
+        int charge_id = payment.getChargeId();
+        float amount = payment.getAmount();
+        java.sql.Timestamp date = payment.getDate();
+        
+        Payment responsePayment = null;
+
+        try {
+            ps = connection.prepareStatement("INSERT INTO payments (`mem_id`, `charge_id`, `amount`, `date`) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                   
+            ps.setInt(1, member_id);    
+            ps.setInt(2, charge_id); 
+            ps.setFloat(3, amount);
+            ps.setTimestamp(4, date);
+            ps.executeUpdate();  
+            
+            ResultSet key = ps.getGeneratedKeys();    
+            key.next();  
+            int result = key.getInt(1);
+            ps.close();
+            
+            ps = connection.prepareStatement("SELECT * FROM payments WHERE id = ?");
+            ps.setInt(1, result);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            responsePayment = new Payment(rs.getInt("id"), rs.getInt("mem_id"), rs.getInt("charge_id"), rs.getFloat("amount"), rs.getString("payment_type"), rs.getTimestamp("date"));         
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+        return responsePayment;
+    }
+    
+    public List<Charge> getChargesForUser(int userId) {
+          
+        List<Charge> resultList = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM charges WHERE user_id = ?");
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            resultList = new ArrayList<>();
+            while(rs.next()) {
+                resultList.add(new Charge(rs.getInt("id"), rs.getInt("user_id"), rs.getFloat("amount"), rs.getString("status"), rs.getString("note")));                    
+            }
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+          
+        return resultList;
     }
     
      public int getApprovedClaimsLast12Months(int memberId){

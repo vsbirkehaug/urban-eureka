@@ -9,6 +9,7 @@ import java.io.IOException;
 //import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.Jdbc;
+import model.Charge;
 
 /**
  *
@@ -56,7 +57,15 @@ public class PageRouter extends HttpServlet {
              case "login": {
                 request.getRequestDispatcher("index_user_login.jsp").forward(request, response);
                 break;
-            }       
+            }  
+             
+             case "makepayment": {
+                 List<Charge> charges = dbBean.getChargesForUser((int)session.getAttribute("id"));
+                 request.setAttribute("list", charges);
+                 request.setAttribute("listcount", charges.size());
+                 request.getRequestDispatcher("/WEB-INF/makePayment.jsp").forward(request, response);  
+                 break;
+             }
             default: {
                  request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);  
                  break;

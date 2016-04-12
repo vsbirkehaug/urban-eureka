@@ -3,22 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pages;
+package controllers;
 
-import services.ClaimChecker;
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import com.Jdbc;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Claim;
 import model.ClaimResponse;
-import model.Jdbc;
+import model.Payment;
+import services.ClaimChecker;
 
 /**
  *
  * @author Vilde
  */
-public class MakeClaim extends HttpServlet {
+public class MakePayment extends HttpServlet {
        protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");       
@@ -32,10 +37,10 @@ public class MakeClaim extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
                 break;
             }
-            case "submitclaim": {
-               addClaim(request);   
+            case "submitpayment": {
+               addPayment(request);   
               
-                request.getRequestDispatcher("/WEB-INF/makeClaimConf.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/makePaymentConf.jsp").forward(request, response);
                 break;
             }
             
@@ -45,7 +50,7 @@ public class MakeClaim extends HttpServlet {
         } 
     }  
        
-    private void addClaim(HttpServletRequest request) {
+    private void addPayment(HttpServletRequest request) {
         
         HttpSession session = request.getSession();
         Jdbc jdbc = (Jdbc)session.getAttribute("dbbean"); 
@@ -55,26 +60,19 @@ public class MakeClaim extends HttpServlet {
         }
         Connection connection = (Connection)request.getServletContext().getAttribute("connection");
         jdbc.connect(connection);
-        
+            
         int userId = ((int)request.getSession().getAttribute("id"));
+        int chargeId = Integer.valueOf(request.getParameter("chargeId"));
         float amount = Float.valueOf((String)request.getParameter("amount"));
-        java.sql.Date date = java.sql.Date.valueOf((String)request.getParameter("date"));
-        String rationale = (String)request.getParameter(((String)"rationale").trim());       
-        Claim claim = new Claim(userId, amount, date, rationale);    
+        String paymentType = (String)request.getParameter("type");
+
+        Payment payment = new Payment(userId, chargeId, amount, paymentType);
         
-        ClaimChecker cc = new ClaimChecker((Jdbc)session.getAttribute("dbbean"), (int)session.getAttribute("id"), claim);
-        ClaimResponse cr = cc.isValid();
-        
-        Claim responseClaim = null;
-        if(!cr.isValid()) {
-            claim.setStatus("DECLINED");       
-        } 
-        responseClaim = jdbc.insertClaim(claim);
-        
-        session.setAttribute("claimamount", String.valueOf(responseClaim.getAmount()));
-        session.setAttribute("claimid", String.valueOf(responseClaim.getId()));
-        session.setAttribute("claimstatus", String.valueOf(responseClaim.getStatus()));
-        session.setAttribute("claimmessage", cr.getReason());
+        Payment responsePayment = jdbc.insertPayment(payment);
+
+        session.setAttribute("paymentamount", String.valueOf(responsePayment.getAmount()));
+        session.setAttribute("paymentid", String.valueOf(responsePayment.getId()));
+        session.setAttribute("paymentmessage", "Payment added successfully");
         
     }   
 }
