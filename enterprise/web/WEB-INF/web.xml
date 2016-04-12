@@ -9,8 +9,8 @@
         <servlet-class>com.UserServLet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>NewUser</servlet-name>
-        <servlet-class>pages.NewUser</servlet-class>
+        <servlet-name>Register</servlet-name>
+        <servlet-class>pages.Register</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Update</servlet-name>
@@ -49,14 +49,14 @@
         <url-pattern>/UserService.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>NewUser</servlet-name>
-        <url-pattern>/NewUser.do</url-pattern>
+        <servlet-name>Register</servlet-name>
+        <url-pattern>/Register.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Update</servlet-name>
         <url-pattern>/Update.do</url-pattern>
     </servlet-mapping>
-        <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login.do</url-pattern>
     </servlet-mapping>

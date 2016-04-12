@@ -48,7 +48,7 @@
             %>
             </p>         
              
-          <form class="register-form" method="POST" action="NewUser.do">
+          <form class="register-form" method="POST" action="Register.do">
             <input type="text" name="name" placeholder="name"/>
             <input type="text" name="address" placeholder="address"/>
              <p class="label">Date of birth</p>

@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pages.NewUser;
+import pages.Register;
 
 /**
  *
@@ -164,7 +164,7 @@ public class Jdbc {
             return pwformat.format(parsed);
             
         } catch (ParseException ex) {
-            Logger.getLogger(NewUser.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

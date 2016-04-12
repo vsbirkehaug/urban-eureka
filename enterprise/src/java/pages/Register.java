@@ -5,8 +5,14 @@
  */
 package pages;
 
+import com.mysql.jdbc.PreparedStatement;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +24,7 @@ import model.Jdbc;
  *
  * @author me-aydin
  */
-public class Update extends HttpServlet {
+public class Register extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,30 +38,55 @@ public class Update extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       
-         HttpSession session = request.getSession(false);
+        
+        HttpSession session = request.getSession();
+             
+        
+        String [] query = new String[4];
+        query[0] = (String)request.getParameter("name");
+        query[1] = (String)request.getParameter("address");
+        query[2] = (String)request.getParameter("dob");
+        query[3] = (String)request.getParameter("registrationdate");
+           
         
         Jdbc jdbc = (Jdbc)session.getAttribute("dbbean"); 
+        if(jdbc == null) {                   
+            jdbc = new Jdbc();    
+            session.setAttribute("dbbean", jdbc);
+        }
+        Connection connection = (Connection)request.getServletContext().getAttribute("connection");
+        jdbc.connect(connection);
+        
         if (jdbc == null)
             request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
-        else {
-            String [] query = new String[3];
         
-            query[0] = (String)request.getParameter("username");
-            query[1] = (String)request.getParameter("password");
-            query[2] = (String)request.getParameter("newpasswd");  
-            
-            if(!query[1].trim().equals(query[2].trim())) {
-                request.setAttribute("msg", "Your two passwords are not the same. </br> Please make sure you confirm the password</br>");
-                request.getRequestDispatcher("/WEB-INF/passwdChange.jsp").forward(request, response); 
-            }
-             else {
-                jdbc.update(query);
-                
-                request.setAttribute("msg", ""+query[0]+"'s passwd is changed</br>");
-                request.getRequestDispatcher("/WEB-INF/passwdChange.jsp").forward(request, response);
+        for(String q : query) {
+            if(q.length()==0) {
+                request.setAttribute("registrationState", "true");
+                request.setAttribute("message", "Fields cannot be empty");
+                request.getRequestDispatcher("index_user_login.jsp").forward(request, response);         
             }
         }
+        
+        if(query[0]==null) {
+            request.setAttribute("registrationState", "true");
+            request.setAttribute("message", "Name cannot be empty");
+            request.getRequestDispatcher("index_user_login.jsp").forward(request, response);         
+        } 
+        else {
+            String[] userDetails = jdbc.insertUser(query);
+            if(userDetails != null) {
+                request.setAttribute("username", userDetails[0]);
+                request.setAttribute("password", userDetails[1]);
+                request.getRequestDispatcher("/WEB-INF/userRegConf.jsp").forward(request, response);
+            } else {
+                request.setAttribute("registrationState", "true");
+                request.setAttribute("message", "An error occured whilst creating user, please try register again.");
+                request.getRequestDispatcher("index_user_login.jsp").forward(request, response);  
+            }
+        }    
+        
+       
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

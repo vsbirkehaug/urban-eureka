@@ -22,7 +22,7 @@
                                                               
         <div class="login-page">
         <div class="centered-content">
-            <h1>Congratulations, you have registered!</h1>
+            <h2>Congratulations, you have registered!</h2>
 
             </br>
                 <div class="centered-content-body"
