@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import model.Claim;
 import controllers.Register;
 import java.util.List;
+import model.AdminClaim;
 import model.Charge;
 import model.ChargeStatus;
 import model.ClaimStatus;
@@ -303,7 +304,7 @@ public class Jdbc {
             int result = key.getInt(1);
             ps.close();
 
-            changeChargeStatus(charge_id, ChargeStatus.PENDING_APPROVAL);
+            changeChargeStatus(charge_id, ChargeStatus.PENDING);
 
             //get inserted payment        
             ps = connection.prepareStatement("SELECT * FROM payments WHERE id = ?");
@@ -350,6 +351,37 @@ public class Jdbc {
             resultList = new ArrayList<>();
             while (rs.next()) {
                 resultList.add(new Charge(rs.getInt("id"), rs.getString("name"), rs.getInt("payment_id"), rs.getString("payment_type"), rs.getTimestamp("payment_date"), rs.getFloat("amount"), rs.getString("status"), rs.getString("note")));
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return resultList;
+    }
+
+    public List<AdminClaim> getAllClaimsWhereStatus(ClaimStatus status) {
+
+//SELECT claims.id, members.name, claims.amount, claims.date as record_date, claims.rationale, claims.status, 
+//(SELECT COUNT(*) FROM claims c WHERE claims.mem_id = 8 AND claims.status = "PENDING" AND YEAR(c.date) = YEAR(record_date)) as userPendingClaims,
+//(SELECT COUNT(*) FROM claims c WHERE claims.mem_id = 8 AND claims.status = "DECLINED" AND YEAR(c.date) = YEAR(record_date)) as userDeclinedClaims,
+//(SELECT COUNT(*) FROM claims c WHERE claims.mem_id = 8 AND claims.status = "APPROVED" AND YEAR(c.date) = YEAR(record_date)) as userApprovedClaims
+//FROM claims JOIN members ON claims.mem_id = members.id WHERE claims.status = "PENDING"
+        List<AdminClaim> resultList = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT claims.id, members.name, members.id, claims.amount, claims.date as record_date, claims.rationale, claims.status, "
+                    + " (SELECT COUNT(*) FROM claims c WHERE c.mem_id = members.id AND c.status = ? AND YEAR(c.date) = YEAR(record_date)) as userPendingClaims,"
+                    + " (SELECT COUNT(*) FROM claims c WHERE c.mem_id = members.id AND c.status = ? AND YEAR(c.date) = YEAR(record_date)) as userDeclinedClaims,"
+                    + " (SELECT COUNT(*) FROM claims c WHERE c.mem_id = members.id AND c.status = ? AND YEAR(c.date) = YEAR(record_date)) as userApprovedClaims"
+                    + " FROM claims JOIN members ON claims.mem_id = members.id WHERE claims.status = ?");
+            ps.setString(1, ClaimStatus.PENDING.toString());
+            ps.setString(2, ClaimStatus.DECLINED.toString());
+            ps.setString(3, ClaimStatus.APPROVED.toString());
+            ps.setString(4, status.toString());
+            ResultSet rs = ps.executeQuery();
+            resultList = new ArrayList<>();
+            while (rs.next()) {
+                resultList.add(new AdminClaim(rs.getInt("id"), rs.getString("name"), rs.getFloat("amount"), rs.getDate("record_date"), rs.getString("rationale"), rs.getString("status"), rs.getInt("userPendingClaims"), rs.getInt("userDeclinedClaims"), rs.getInt("userApprovedClaims")));
             }
 
         } catch (SQLException ex) {

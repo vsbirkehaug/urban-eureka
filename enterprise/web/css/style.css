@@ -46,8 +46,8 @@
 }
 .chargerow {
     width: 100%;
-        border-bottom: 1px solid #b3b3b3 !important;
-    
+    border-bottom: 1px solid #b3b3b3 !important;
+      height: 35px;
 }
 
 .chargerowheader {

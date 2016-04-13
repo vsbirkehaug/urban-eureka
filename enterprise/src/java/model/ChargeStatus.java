@@ -10,7 +10,7 @@ package model;
  * @author Vilde
  */
 public enum ChargeStatus {
-    DUE("DUE"), DECLINED ("DECLINED"), APPROVED ("APPROVED"), PENDING_APPROVAL ("PENDING_APPROVAL");
+    DUE("DUE"), DECLINED ("DECLINED"), APPROVED ("APPROVED"), PENDING ("PENDING");
     
     private final String name;  
     private ChargeStatus(String s) {

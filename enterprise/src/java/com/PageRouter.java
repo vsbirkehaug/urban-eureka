@@ -17,9 +17,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.AdminClaim;
 import model.Charge;
 import model.ChargeStatus;
 import model.Claim;
+import model.ClaimStatus;
 import model.MemberStatus;
 import model.Payment;
 
@@ -81,8 +83,8 @@ public class PageRouter extends HttpServlet {
                 break;
             }
             case "handleclaims": {
-                loadPendingCharges(dbBean, request);
-                request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
+                loadPendingClaims(dbBean, request);
+                request.getRequestDispatcher("/WEB-INF/handleClaims.jsp").forward(request, response);
                 break;
             }
             case "submitchargechange": {
@@ -133,12 +135,22 @@ public class PageRouter extends HttpServlet {
     }
 
     private void loadPendingCharges(Jdbc dbBean, HttpServletRequest request) {
-        List<Charge> charges = dbBean.getAllChargesWhereStatus(ChargeStatus.PENDING_APPROVAL);
+        List<Charge> charges = dbBean.getAllChargesWhereStatus(ChargeStatus.PENDING);
         request.setAttribute("list", charges);
         if (charges != null) {
             request.setAttribute("listcount", charges.size());
         } else {
             request.setAttribute("listcount", 0);
+        }
+    }
+    
+    private void loadPendingClaims(Jdbc dbBean, HttpServletRequest request) {
+        List<AdminClaim> claims = dbBean.getAllClaimsWhereStatus(ClaimStatus.PENDING);
+        request.setAttribute("list", claims);
+        if (claims != null) {
+            request.setAttribute("listcount", String.valueOf(claims.size()));
+        } else {
+            request.setAttribute("listcount", String.valueOf(0));
         }
     }
 

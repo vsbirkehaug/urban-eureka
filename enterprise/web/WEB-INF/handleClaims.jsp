@@ -37,27 +37,29 @@
 
                 <form id="claim-status-form" method="POST" action="PageRouter.do">
                     <table class="responsetable">
-                        <tr class="chargerowheader">
-                            <th class="chargetd">&lt;select&gt;</th>                               
-                            <th class="chargetd">  Member  </th>
-                            <th class="chargetd">  Amount  </th>
-                            <th class="chargetd">  Rationale  </th>    
-                            <th class="chargetd">  Approved claims this year  </th>
-                            <th class="chargetd">  Declined claims this year </th>
-                            <th class="chargetd">  Pending claims this year </th>
-                   
+                        <tr class="claimtr">
+                            <th class="claimtd">&lt;select&gt;</th>                               
+                            <th class="claimtd">  Member  </th>
+                            <th class="claimtd">  Amount  </th>
+                            <th class="claimtd">  Rationale  </th>    
+                            <th class="claimtd">  Date  </th>   
+                            <th class="claimtd">  Approved claims this year  </th>
+                            <th class="claimtd">  Declined claims this year </th>
+                            <th class="claimtd">  Pending claims this year </th>
+
                         </tr>
 
 
                         <c:forEach var="claim" items="${list}">
-                            <tr class="chargerow">
-                                <td class="chargetd"><div display="inline"><input onclick="check()" display="inline" type="radio" name="claimId" value="${claim.id}" required="true"></div></td>
-                                <td class="chargetd">${claim.name}</td>
-                                <td class="chargetd">${claim.amount}</td>
-                                <td class="chargetd">${claim.rationale}</td>         
-                                <td class="chargetd">${claim.approved}</td>
-                                <td class="chargetd">${claim.declined}</td>
-                                <td class="chargetd">${claim.pending}</td>             
+                            <tr class="claimtr">
+                                <td class="claimtd"><div display="inline"><input onclick="check()" display="inline" type="radio" name="claimId" value="${claim.id}" required="true"></div></td>
+                                <td class="claimtd">${claim.name}</td>
+                                <td class="claimtd">${claim.amount}</td>
+                                <td class="claimtd">${claim.rationale}</td>   
+                                <td class="claimtd">${claim.date}</td>     
+                                <td class="claimtd">${claim.userApprovedClaims}</td>
+                                <td class="claimtd">${claim.userDeclinedClaims}</td>
+                                <td class="claimtd">${claim.userPendingClaims}</td>             
                             </tr>
                         </c:forEach>
 
@@ -74,6 +76,7 @@
                 <form id="cancel-form" method="POST" action="PageRouter.do">
                     <input type="hidden" name="action" value="admindashboard" />
                 </form>
+
                 <p class="greentext">
                     <% if (request.getAttribute("rowschanged") != null) {
                     %>

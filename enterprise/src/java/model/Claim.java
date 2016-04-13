@@ -13,10 +13,20 @@ import java.sql.Date;
  */
 public class Claim {
     
-    private int id;
-
+    protected int userId;
+    protected float amount;
+    protected java.sql.Date date;
+    protected String rationale;
+    protected String status;  
+    protected int id;
+    protected String name;
+    
     public int getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getUserId() {
@@ -38,11 +48,7 @@ public class Claim {
     public String getStatus() {
         return status;
     }
-    private int userId;
-    private float amount;
-    private java.sql.Date date;
-    private String rationale;
-    private String status;
+
     
     public Claim(int userId, float amount, java.sql.Date date, String rationale) {
         this.userId = userId;
@@ -61,6 +67,15 @@ public class Claim {
         this.id = id;
         this.status = status;        
     }   
+    
+        public Claim(int id, String name, float amount, java.sql.Date date, String rationale, String status) {
+        this.name = name;
+        this.amount = amount;
+        this.date = date;
+        this.rationale = rationale;
+        this.id = id;
+        this.status = status;        
+    } 
 
     public void setStatus(String status) {
         this.status = status;

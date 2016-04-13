@@ -10,7 +10,7 @@ package model;
  * @author Vilde
  */
 public enum ClaimStatus {
-    DECLINED ("DECLINED"), APPROVED ("APPROVED"), PENDING_APPROVAL ("PENDING_APPROVAL");
+    DECLINED ("DECLINED"), APPROVED ("APPROVED"), PENDING ("PENDING");
     
     private final String name;  
     private ClaimStatus(String s) {
