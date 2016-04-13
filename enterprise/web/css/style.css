@@ -103,6 +103,12 @@
     border-bottom: 1px solid #b3b3b3 !important;
 }
 
+.claimth {
+    width: 100%;
+    height: 35px;
+    border-bottom: 1px solid #b3b3b3 !important;
+}
+
 .user-dashboard {
     height: 80%;
     max-width: 100%;

@@ -37,7 +37,7 @@
 
                 <form id="claim-status-form" method="POST" action="PageRouter.do">
                     <table class="responsetable">
-                        <tr class="claimtr">
+                        <tr class="claimth">
                             <th class="claimtd">&lt;select&gt;</th>                               
                             <th class="claimtd">  Member  </th>
                             <th class="claimtd">  Amount  </th>
@@ -51,7 +51,15 @@
 
 
                         <c:forEach var="claim" items="${list}">
-                            <tr class="claimtr">
+                            <script type="text/javascript">
+                                var claims = ${claim.userApprovedClaims};
+                                var mycolour;
+                                if (claims >= 2) mycolour = "#F3B9C5";
+                                if (claims < 2) mycolour = "#C6EBB2";
+                                                              
+                                document.writeln("<tr id=\"claimrow\" class=\"claimtr\" bgcolor=\""+mycolour+"\"\/tr>");
+                            </script>
+                                                     
                                 <td class="claimtd"><div display="inline"><input onclick="check()" display="inline" type="radio" name="claimId" value="${claim.id}" required="true"></div></td>
                                 <td class="claimtd">${claim.name}</td>
                                 <td class="claimtd">${claim.amount}</td>
@@ -61,6 +69,8 @@
                                 <td class="claimtd">${claim.userDeclinedClaims}</td>
                                 <td class="claimtd">${claim.userPendingClaims}</td>             
                             </tr>
+
+
                         </c:forEach>
 
                     </table>
