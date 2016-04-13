@@ -12,13 +12,34 @@ import java.sql.Timestamp;
  * @author Vilde
  */
 public class Payment {
-    
+
     private int id;
     private int userId;
     private int chargeId;
     private String paymentType;
     private float amount;
     private Timestamp date;
+    private String note;
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public Payment(int id, int userId, int chargeId, float amount, String paymentType, Timestamp date, String note, String status) {
+        this.id = id;
+        this.chargeId = id;
+        this.userId = userId;
+        this.paymentType = paymentType;
+        this.amount = amount;
+        this.date = date;
+        this.note = note;
+        this.status = status;
+    }
 
     public Payment(int id, int userId, int chargeId, float amount, String paymentType, Timestamp date) {
         this.id = id;
@@ -28,12 +49,12 @@ public class Payment {
         this.amount = amount;
         this.date = date;
     }
-    
+
     public Payment(int userId, int chargeId, float amount, String paymentType) {
         this.userId = userId;
         this.chargeId = chargeId;
         this.amount = amount;
-        this.paymentType = paymentType;    
+        this.paymentType = paymentType;
     }
 
     public int getId() {
@@ -59,7 +80,5 @@ public class Payment {
     public Timestamp getDate() {
         return date;
     }
-    
-    
-    
+
 }

@@ -26,6 +26,8 @@ import model.Claim;
 import controllers.Register;
 import java.util.List;
 import model.Charge;
+import model.ChargeStatus;
+import model.ClaimStatus;
 import model.Payment;
 
 /**
@@ -215,7 +217,7 @@ public class Jdbc {
             ps = connection.prepareStatement("INSERT INTO charges (`user_id`, `amount`, `status`, `note`) VALUES (?,?,?,?)", Statement.SUCCESS_NO_INFO);
             ps.setInt(1, userId);
             ps.setFloat(2, 7.0f);
-            ps.setString(3, "DUE");
+            ps.setString(3, ChargeStatus.DUE.toString());
             ps.setString(4, "REGISTRATION FEE");
             result = ps.executeUpdate();
             ps.close();
@@ -302,7 +304,7 @@ public class Jdbc {
 
             //update charge
             ps = connection.prepareStatement("UPDATE charges SET status = ? WHERE id = ?");
-            ps.setString(1, "PENDING APPROVAL");
+            ps.setString(1, ChargeStatus.PENDING_APPROVAL.toString());
             ps.setInt(2, charge_id);
             ps.executeUpdate();
             ps.close();
@@ -327,11 +329,49 @@ public class Jdbc {
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM charges WHERE user_id = ? AND status = ?");
             ps.setInt(1, userId);
-            ps.setString(2, "DUE");
+            ps.setString(2, ChargeStatus.DUE.toString());
             ResultSet rs = ps.executeQuery();
             resultList = new ArrayList<>();
             while (rs.next()) {
                 resultList.add(new Charge(rs.getInt("id"), rs.getInt("user_id"), rs.getFloat("amount"), rs.getString("status"), rs.getString("note")));
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return resultList;
+    }
+
+    public List<Payment> getAllPaymentsForUser(int userId) {
+
+        List<Payment> resultList = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT payments.id,payments.mem_id,payments.charge_id,payments.payment_type,payments.amount,payments.date,charges.note,charges.status FROM payments JOIN charges ON payments.charge_id = charges.id WHERE mem_id = ?");
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            resultList = new ArrayList<>();
+            while (rs.next()) {
+                resultList.add(new Payment(rs.getInt("id"), rs.getInt("mem_id"), rs.getInt("charge_id"), rs.getFloat("amount"), rs.getString("payment_type"), rs.getTimestamp("date"), rs.getString("note"), rs.getString("status")));
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return resultList;
+    }
+    
+     public List<Claim> getAllClaimsForUser(int userId) {
+
+        List<Claim> resultList = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM claims WHERE id = ?");
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            resultList = new ArrayList<>();
+            while (rs.next()) {
+                resultList.add(new Claim(rs.getInt("id"), rs.getInt("mem_id"), rs.getFloat("amount"), rs.getDate("date"), rs.getString("rationale"), rs.getString("status")));
             }
 
         } catch (SQLException ex) {
@@ -374,7 +414,7 @@ public class Jdbc {
             ps.setInt(1, memberId);
             ps.setTimestamp(2, aYearAgo);
             ps.setTimestamp(3, currentTimestamp);
-            ps.setString(4, "APPROVED");
+            ps.setString(4, ClaimStatus.APPROVED.toString());
             ResultSet rs = ps.executeQuery();
             rs.next();
             result = rs.getInt(1);
@@ -405,7 +445,7 @@ public class Jdbc {
             ps.setInt(1, memberId);
             ps.setDate(2, start);
             ps.setDate(3, end);
-            ps.setString(4, "APPROVED");
+            ps.setString(4, ClaimStatus.APPROVED.toString());
             ResultSet rs = ps.executeQuery();
             rs.next();
             result = rs.getInt(1);

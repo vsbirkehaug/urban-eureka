@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Charge;
+import model.Claim;
+import model.Payment;
 
 /**
  *
@@ -36,45 +38,62 @@ public class PageRouter extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-   
+
         HttpSession session = request.getSession();
-        
+
         response.setContentType("text/html;charset=UTF-8");
-        
+
         Jdbc dbBean = new Jdbc();
-        Connection connection = (Connection)request.getServletContext().getAttribute("connection");
+        Connection connection = (Connection) request.getServletContext().getAttribute("connection");
         dbBean.connect(connection);
         session.setAttribute("dbbean", dbBean);
-       
-        if(connection == null)
-            request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);  
-        
-        switch(request.getParameter("action")) {
+
+        if (connection == null) {
+            request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
+        }
+
+        switch (request.getParameter("action")) {
+            case "dashboard": {
+                request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
+                break;
+            }
             case "makeclaim": {
                 request.getRequestDispatcher("/WEB-INF/makeClaim.jsp").forward(request, response);
                 break;
             }
-             case "login": {
+            case "login": {
                 request.getRequestDispatcher("index_user_login.jsp").forward(request, response);
                 break;
-            }  
-             
-             case "makepayment": {
-                 List<Charge> charges = dbBean.getDueChargesForUser((int)session.getAttribute("id"));
-                 request.setAttribute("list", charges);
-                 request.setAttribute("listcount", charges.size());
-                 request.getRequestDispatcher("/WEB-INF/makePayment.jsp").forward(request, response);  
-                 break;
-             }
-            default: {
-                 request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);  
-                 break;
             }
-            
+            case "makepayment": {
+                List<Charge> charges = dbBean.getDueChargesForUser((int) session.getAttribute("id"));
+                request.setAttribute("list", charges);
+                request.setAttribute("listcount", charges.size());
+                request.getRequestDispatcher("/WEB-INF/makePayment.jsp").forward(request, response);
+                break;
+            }
+            case "paymenthistory": {
+                List<Payment> payments = dbBean.getAllPaymentsForUser((int) session.getAttribute("id"));
+                request.setAttribute("list", payments);
+                request.setAttribute("listcount", payments.size());
+                request.getRequestDispatcher("/WEB-INF/paymentHistory.jsp").forward(request, response);
+                break;
+            }
+            case "claimhistory": {
+                List<Claim> claims = dbBean.getAllClaimsForUser((int) session.getAttribute("id"));
+                request.setAttribute("list", claims);
+                request.setAttribute("listcount", claims.size());
+                request.getRequestDispatcher("/WEB-INF/claimHistory.jsp").forward(request, response);
+                break;
+            }
+            default: {
+                request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
+                break;
+            }
+
         }
-        
+
     }
-      
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

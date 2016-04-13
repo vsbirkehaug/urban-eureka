@@ -11,56 +11,72 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 import com.Jdbc;
-import model.Member;
+import services.ValidateAdmin;
 
 /**
  *
  * @author Vilde
  */
 public class Login extends HttpServlet {
-       protected void doPost(HttpServletRequest request, HttpServletResponse response)
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         HttpSession session = request.getSession();
-        Jdbc jdbc = (Jdbc)session.getAttribute("dbbean"); 
-        if(jdbc == null) {                   
-            jdbc = new Jdbc();    
+        Jdbc jdbc = (Jdbc) session.getAttribute("dbbean");
+        if (jdbc == null) {
+            jdbc = new Jdbc();
             session.setAttribute("dbbean", jdbc);
         }
-        Connection connection = (Connection)request.getServletContext().getAttribute("connection");
+        Connection connection = (Connection) request.getServletContext().getAttribute("connection");
         jdbc.connect(connection);
-          
+
         PrintWriter out = response.getWriter();
-        
+
         String username = request.getParameter("username");
-        String password = request.getParameter("password");    
-        
+        String password = request.getParameter("password");
+        String admin = "no";
         try {
-            String [] details = ValidateUser.getUser(username, password, connection);
-            String name = null;
-            int id = 0;
-            if(details != null) {    
-                id = Integer.valueOf(details[0]);
-                name = details[1];           
-            } 
+            admin = request.getParameter("admin");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        try {
             
-            if(name != null) 
-            {            
+            int id = -1;
+            String name = "";
+            
+            if (admin != null && admin.equals("yes")) {
+                id = ValidateAdmin.getAdmin(username, password, connection);
+            } else {
+                String[] details = ValidateUser.getUser(username, password, connection);
+                name = null;
+                id = 0;
+                if (details != null) {
+                    id = Integer.valueOf(details[0]);
+                    name = details[1];
+                }
+            }
+            
+            if(id >= 0 && admin != null && admin.equals("yes")) {
+                session.setAttribute("username", username);
+                session.setAttribute("id", id);
+                request.getRequestDispatcher("/WEB-INF/adminDashboard.jsp").forward(request, response);
+            }
+            else if (id >= 0) {
                 session.setAttribute("username", username);
                 session.setAttribute("name", name);
                 session.setAttribute("id", id);
                 request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
-            }
-            else
-            {
-                request.setAttribute("message", "Incorrect username or password.");     
+            } else {
+                request.setAttribute("message", "Incorrect username or password.");
                 request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        
 
-    }  
+    }
 }
