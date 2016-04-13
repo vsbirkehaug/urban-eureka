@@ -28,23 +28,23 @@
                 <h2>Claim history</h2>
                 </br>
 
-                <table class="paymenttable">
-                    <tr class="paymenttr">
-                        <th class="paymenttd">  Claim id  </th>
-                        <th class="paymenttd">  Rationale  </th>
-                        <th class="paymenttd">  Amount  </th>
-                        <th class="paymenttd">  Status  </th>
-                        <th class="paymenttd">  Date  </th>
+                <table class="claimtable">
+                    <tr class="claimtr">
+                        <th class="claimtdsmall">  Claim id  </th>
+                        <th class="claimtdsmall">  Amount  </th>
+                        <th class="claimtd">  Rationale  </th>
+                        <th class="claimtd">  Status  </th>
+                        <th class="claimtd">  Date  </th>
 
                     </tr>
 
                     <c:forEach var="claim" items="${list}">
-                        <tr class="paymenttr">
-                            <td class="paymenttd">${claim.id}</td>
-                            <td class="paymenttd">${claim.rationale}</td>
-                            <td class="paymenttd">${claim.amount}</td>
-                            <td class="paymenttd">${claim.status}</td>p
-                            <td class="paymenttd">${claim.date}</td>
+                        <tr class="claimtr">
+                            <td class="claimtdsmall">${claim.id}</td>
+                            <td class="claimtdsmall">${claim.amount}</td>
+                            <td class="claimtd">${claim.rationale}</td>
+                            <td class="claimtd">${claim.status}</td>
+                            <td class="claimtd">${claim.date}</td>
                         </tr>
                     </c:forEach>
                 </table>

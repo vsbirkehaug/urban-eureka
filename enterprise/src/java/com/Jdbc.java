@@ -366,7 +366,7 @@ public class Jdbc {
 
         List<Claim> resultList = null;
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM claims WHERE id = ?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM claims WHERE mem_id = ?");
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             resultList = new ArrayList<>();
