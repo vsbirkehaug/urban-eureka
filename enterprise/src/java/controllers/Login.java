@@ -53,7 +53,6 @@ public class Login extends HttpServlet {
             } else {
                 String[] details = ValidateUser.getUser(username, password, connection);
                 name = null;
-                id = 0;
                 if (details != null) {
                     id = Integer.valueOf(details[0]);
                     name = details[1];

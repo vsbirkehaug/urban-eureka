@@ -302,12 +302,7 @@ public class Jdbc {
             int result = key.getInt(1);
             ps.close();
 
-            //update charge
-            ps = connection.prepareStatement("UPDATE charges SET status = ? WHERE id = ?");
-            ps.setString(1, ChargeStatus.PENDING_APPROVAL.toString());
-            ps.setInt(2, charge_id);
-            ps.executeUpdate();
-            ps.close();
+            changeChargeStatus(charge_id, ChargeStatus.PENDING_APPROVAL);
 
             //get inserted payment        
             ps = connection.prepareStatement("SELECT * FROM payments WHERE id = ?");
@@ -334,6 +329,24 @@ public class Jdbc {
             resultList = new ArrayList<>();
             while (rs.next()) {
                 resultList.add(new Charge(rs.getInt("id"), rs.getInt("user_id"), rs.getFloat("amount"), rs.getString("status"), rs.getString("note")));
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return resultList;
+    }
+    public List<Charge> getAllChargesWhereStatus(ChargeStatus status) {
+
+        List<Charge> resultList = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT charges.id,members.name,charges.amount, payments.id as payment_id, payments.payment_type, payments.date as payment_date, charges.status,charges.note FROM charges LEFT JOIN members ON charges.user_id = members.id JOIN payments on charges.id = payments.charge_id WHERE charges.status = ?");
+            ps.setString(1, status.toString());
+            ResultSet rs = ps.executeQuery();
+            resultList = new ArrayList<>();
+            while (rs.next()) {
+                resultList.add(new Charge(rs.getInt("id"), rs.getString("name"), rs.getInt("payment_id"), rs.getString("payment_type"),  rs.getTimestamp("payment_date"), rs.getFloat("amount"), rs.getString("status"), rs.getString("note")));
             }
 
         } catch (SQLException ex) {
@@ -511,6 +524,20 @@ public class Jdbc {
             //connection.close();                                         
         } catch (SQLException e) {
             System.out.println(e);
+        }
+    }
+
+    void changeChargeStatus(int chargeId, ChargeStatus status) {
+        PreparedStatement ps;
+        try {
+            
+            ps = connection.prepareStatement("UPDATE charges SET status = ? WHERE id = ?");
+            ps.setString(1, status.toString());
+            ps.setInt(2, chargeId);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

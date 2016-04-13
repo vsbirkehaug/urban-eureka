@@ -5,6 +5,8 @@
  */
 package model;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author Vilde
@@ -16,7 +18,39 @@ public class Charge {
     private float amount;
     private String status;
     private String note;
+    private String name;
+    private int paymentId;
+    private String paymentType;
+    private Timestamp paymentDate;
 
+    public Timestamp getPaymentDate() {
+        return paymentDate;
+    }
+
+    public int getPaymentId() {
+        return paymentId;
+    }
+
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Charge(int id, String name, int paymentId, String paymentType, Timestamp paymentDate, float amount, String status, String note) {
+        this.id = id;
+        this.name = name;
+        this.amount = amount;
+        this.status = status;
+        this.note = note;
+        this.paymentId = paymentId;
+        this.paymentType = paymentType;
+        this.paymentDate = paymentDate;
+    }
+
+    
     public Charge(int id, int userId, float amount, String status, String note) {
         this.id = id;
         this.userId = userId;

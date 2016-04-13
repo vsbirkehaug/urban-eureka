@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Charge;
+import model.ChargeStatus;
 import model.Claim;
 import model.Payment;
 
@@ -72,6 +73,27 @@ public class PageRouter extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/makePayment.jsp").forward(request, response);
                 break;
             }
+
+            case "handlecharges": {
+                List<Charge> charges = dbBean.getAllChargesWhereStatus(ChargeStatus.PENDING_APPROVAL);
+                request.setAttribute("list", charges);
+                if (charges != null) {
+                    request.setAttribute("listcount", charges.size());
+                } else {
+                    request.setAttribute("listcount", 0);
+                }
+                request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
+                break;
+            }           
+            case "submitchargechange": {
+                int chargeId =  Integer.valueOf(request.getParameter("chargeId"));
+                ChargeStatus status = ChargeStatus.valueOf((String)request.getParameter("status"));
+                
+                dbBean.changeChargeStatus(chargeId, status);
+                request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
+                break;
+                
+            }                     
             case "paymenthistory": {
                 List<Payment> payments = dbBean.getAllPaymentsForUser((int) session.getAttribute("id"));
                 request.setAttribute("list", payments);
