@@ -32,7 +32,7 @@
             <div class="list-page">
 
 
-                <h2>Handle charges</h2>
+                <h2>Handle pending charges</h2>
                 </br>
 
                 <form id="make-status-change-form" method="POST" action="PageRouter.do">
@@ -66,8 +66,7 @@
                     </br>
 
                     <input type="hidden" name="action" value="submitchargechange" />
-                    <input type="hidden" name="status" value="APPROVED" />
-        
+                    <input id="chargestatus" type="hidden" name="status" value="APPROVED" />        
 
 
                 </form>
@@ -77,14 +76,15 @@
                 <p class="greentext">
                     <% if (request.getAttribute("rowschanged") != null) {
                     %>
-                    <%=("Rows changed: " + (String)request.getAttribute("rowschanged"))%> </br></br>
+                    <%=("Rows changed: " + (String) request.getAttribute("rowschanged"))%> </br></br>
                     <%
-                        
                         }%>
                 </p>
                 <ul class="choice">
-                    <li onclick="document.getElementById('cancel-form').submit();" class="user-button cancel">Dashboard</li>
-                    <li id="submitbutton" onclick="submitform();" class="user-button submit">Set status APPROVED</li>
+                    <li onclick="document.getElementById('cancel-form').submit();" class="user-button dashboard">Dashboard</li>
+                    <li id="submitbutton" onclick="submitformDeclined();" class="user-button cancel">Set status DECLINED</li>
+                    <li id="submitbutton2" onclick="submitformApproved();" class="user-button submit">Set status APPROVED</li>
+
                     <div style="clear:both"></div>
                 </ul>
 
@@ -95,8 +95,17 @@
         <script> function check() {
                 flag = 1;
             }</script>
-        <script> function submitform() {
+
+        <script> function submitformApproved() {
                 if (flag === 1) {
+                    document.getElementById('chargestatus').value = "APPROVED";
+                    document.getElementById('make-status-change-form').submit();
+                }
+            }</script>
+
+        <script> function submitformDeclined() {
+                if (flag === 1) {
+                    document.getElementById('chargestatus').value = "DECLINED";
                     document.getElementById('make-status-change-form').submit();
                 }
             }</script>

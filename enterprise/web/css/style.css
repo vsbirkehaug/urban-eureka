@@ -406,20 +406,27 @@ select option {
 .payment-history { background: #AF7D35; }
 .payment-history:hover {}
 
+.dashboard {
+    background: #D4A45E;
+    width: calc(18% - 30px);
+    float: left;
+    margin-right: 12px;
+}
+
 .cancel {
     background: #C4576E;
-    width: calc(40% - 30px);
+    width: calc(35% - 30px);
     float: left;
 }
 
-.cancel.fullwidth {
+.fullwidth {
     background: #C4576E;
     width: calc(100% - 65px);
     position:relative;
     margin: 20px 0 0 0;
 }
 .submit {
-    width: calc(40% - 30px);
+    width: calc(35% - 30px);
     float: right;
 }
 
