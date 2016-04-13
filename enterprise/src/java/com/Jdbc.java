@@ -181,20 +181,22 @@ public class Jdbc {
         java.sql.Date dob = java.sql.Date.valueOf(str[2]);
         java.sql.Date dor = java.sql.Date.valueOf(str[3]);
 
-        int result = 0;
+        int result = -1;
         try {
-            ps = connection.prepareStatement("INSERT INTO members (`username`, `name`, `password`, `address`, `dob`, `dor`) VALUES (?,?,?,?,?, ?)", Statement.SUCCESS_NO_INFO);
+            ps = connection.prepareStatement("INSERT INTO members (`username`, `name`, `password`, `address`, `dob`, `dor`) VALUES (?,?,?,?,?, ?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, username);
             ps.setString(2, name);
             ps.setString(3, password);
             ps.setString(4, address);
             ps.setDate(5, dob);
             ps.setDate(6, dor);
-            result = ps.executeUpdate();
-            ps.close();
+            ps.executeUpdate();
+            ResultSet key = ps.getGeneratedKeys();
+            if (key != null) {
+                key.next();
+                result = key.getInt(1);
 
-            if (result == 1) {
-                System.out.println("1 row added.");
+                insertMembershipFeeCharge(result);
             } else {
                 return null;
             }
@@ -203,6 +205,31 @@ public class Jdbc {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new String[]{username, password};
+    }
+
+    private boolean insertMembershipFeeCharge(int userId) {
+        PreparedStatement ps = null;
+
+        int result = -1;
+        try {
+            ps = connection.prepareStatement("INSERT INTO charges (`user_id`, `amount`, `status`, `note`) VALUES (?,?,?,?)", Statement.SUCCESS_NO_INFO);
+            ps.setInt(1, userId);
+            ps.setFloat(2, 7.0f);
+            ps.setString(3, "DUE");
+            ps.setString(4, "REGISTRATION FEE");
+            result = ps.executeUpdate();
+            ps.close();
+
+            if (result == 1) {
+                System.out.println("1 row added.");
+            } else {
+                return false;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
     }
 
     public Claim insertClaim(Claim claim) {
