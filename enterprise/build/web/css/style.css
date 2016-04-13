@@ -24,6 +24,22 @@
    margin-bottom: 50px;
 }
 
+.responsetable {
+    width: 100%;
+    table-layout: fixed; 
+}
+.chargetd { 
+    width: 33%; 
+}
+.chargerow {
+    width: 100%;
+    border: 1px solid black;
+}
+
+.chargerowheader {
+    width: 100%;
+}
+
 .user-dashboard {
     height: 80%;
     max-width: 100%;
@@ -266,6 +282,19 @@ li {
     margin: 10px 0px;
     width: calc(50% - 65px);
     background: #4CAF50;
+    text-align: center;
+}
+
+.option-button {
+    font-family: "Roboto", sans-serif;
+    cursor: pointer;
+    color: #000;
+    font-weight: bold;
+    display: inline-block;
+    padding: 20px 30px;
+    margin: 10px 0px;
+    width: 100%;
+    background: #e5edde;
     text-align: center;
 }
 

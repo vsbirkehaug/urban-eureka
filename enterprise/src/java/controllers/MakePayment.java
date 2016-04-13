@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Charge;
 import model.Claim;
 import model.ClaimResponse;
 import model.Payment;
@@ -38,7 +39,7 @@ public class MakePayment extends HttpServlet {
                 break;
             }
             case "submitpayment": {
-               addPayment(request);   
+                addPayment(request);   
               
                 request.getRequestDispatcher("/WEB-INF/makePaymentConf.jsp").forward(request, response);
                 break;
@@ -63,16 +64,19 @@ public class MakePayment extends HttpServlet {
             
         int userId = ((int)request.getSession().getAttribute("id"));
         int chargeId = Integer.valueOf(request.getParameter("chargeId"));
-        float amount = Float.valueOf((String)request.getParameter("amount"));
-        String paymentType = (String)request.getParameter("type");
-
-        Payment payment = new Payment(userId, chargeId, amount, paymentType);
+        String paymentType = (String)request.getParameter("paymenttype");
+        
+        Charge charge = jdbc.getCharge(chargeId);
+        Payment payment = new Payment(userId, charge.getId(), charge.getAmount(), paymentType);  
         
         Payment responsePayment = jdbc.insertPayment(payment);
+        charge = jdbc.getCharge(chargeId);
 
         session.setAttribute("paymentamount", String.valueOf(responsePayment.getAmount()));
+        session.setAttribute("chargenote", charge.getNote());
+        session.setAttribute("chargestatus", charge.getStatus());
         session.setAttribute("paymentid", String.valueOf(responsePayment.getId()));
-        session.setAttribute("paymentmessage", "Payment added successfully");
+        session.setAttribute("paymentmessage", "Payment added successfully!");
         
     }   
 }

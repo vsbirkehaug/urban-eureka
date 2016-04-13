@@ -31,7 +31,7 @@ public class Payment {
     
     public Payment(int userId, int chargeId, float amount, String paymentType) {
         this.userId = userId;
-        this.chargeId = id;
+        this.chargeId = chargeId;
         this.amount = amount;
         this.paymentType = paymentType;    
     }

@@ -32,6 +32,14 @@
         <servlet-name>Logout</servlet-name>
         <servlet-class>controllers.Logout</servlet-class>
     </servlet>
+     <servlet>
+        <servlet-name>MakePayment</servlet-name>
+        <servlet-class>controllers.MakePayment</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MakePayment</servlet-name>
+        <url-pattern>/MakePayment.do</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
         <url-pattern>/Logout.do</url-pattern>
