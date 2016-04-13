@@ -28,6 +28,7 @@ import java.util.List;
 import model.Charge;
 import model.ChargeStatus;
 import model.ClaimStatus;
+import model.MemberStatus;
 import model.Payment;
 
 /**
@@ -322,9 +323,10 @@ public class Jdbc {
 
         List<Charge> resultList = null;
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM charges WHERE user_id = ? AND status = ?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM charges WHERE user_id = ? AND status = ? OR status = ?");
             ps.setInt(1, userId);
             ps.setString(2, ChargeStatus.DUE.toString());
+            ps.setString(2, ChargeStatus.DECLINED.toString());
             ResultSet rs = ps.executeQuery();
             resultList = new ArrayList<>();
             while (rs.next()) {
@@ -337,6 +339,7 @@ public class Jdbc {
 
         return resultList;
     }
+
     public List<Charge> getAllChargesWhereStatus(ChargeStatus status) {
 
         List<Charge> resultList = null;
@@ -346,7 +349,7 @@ public class Jdbc {
             ResultSet rs = ps.executeQuery();
             resultList = new ArrayList<>();
             while (rs.next()) {
-                resultList.add(new Charge(rs.getInt("id"), rs.getString("name"), rs.getInt("payment_id"), rs.getString("payment_type"),  rs.getTimestamp("payment_date"), rs.getFloat("amount"), rs.getString("status"), rs.getString("note")));
+                resultList.add(new Charge(rs.getInt("id"), rs.getString("name"), rs.getInt("payment_id"), rs.getString("payment_type"), rs.getTimestamp("payment_date"), rs.getFloat("amount"), rs.getString("status"), rs.getString("note")));
             }
 
         } catch (SQLException ex) {
@@ -374,8 +377,8 @@ public class Jdbc {
 
         return resultList;
     }
-    
-     public List<Claim> getAllClaimsForUser(int userId) {
+
+    public List<Claim> getAllClaimsForUser(int userId) {
 
         List<Claim> resultList = null;
         try {
@@ -530,15 +533,46 @@ public class Jdbc {
     void changeChargeStatus(int chargeId, ChargeStatus status) {
         PreparedStatement ps;
         try {
-            
+
             ps = connection.prepareStatement("UPDATE charges SET status = ? WHERE id = ?");
             ps.setString(1, status.toString());
             ps.setInt(2, chargeId);
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {
-             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    void updateMemberStatus(int userId, MemberStatus status) {
+        PreparedStatement ps;
+        try {
+            ps = connection.prepareStatement("UPDATE members SET status = ? WHERE id = ?");
+            ps.setString(1, status.toString());
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    int getDueOrDeclinedChargeCount(int userId) {
+        int count = -1;
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT COUNT(id) FROM charges WHERE user_id = ? AND status != ?");
+            ps.setInt(1, userId);
+            ps.setString(2, ChargeStatus.APPROVED.toString());
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            count = rs.getInt(1);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return count;
     }
 
 }

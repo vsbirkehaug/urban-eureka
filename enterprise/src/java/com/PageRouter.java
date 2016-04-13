@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import model.Charge;
 import model.ChargeStatus;
 import model.Claim;
+import model.MemberStatus;
 import model.Payment;
 
 /**
@@ -79,6 +80,11 @@ public class PageRouter extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
                 break;
             }
+            case "handleclaims": {
+                loadPendingCharges(dbBean, request);
+                request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
+                break;
+            }
             case "submitchargechange": {
                 String[] chargeIds = request.getParameterValues("chargeId[]");
                 int[] chargeId = new int[chargeIds.length];
@@ -93,6 +99,8 @@ public class PageRouter extends HttpServlet {
                 int rowschanged = chargeId.length;
                 request.setAttribute("rowschanged", String.valueOf(rowschanged));
                 loadPendingCharges(dbBean, request);
+                updateUserStatus(dbBean, request, status, chargeId);
+
                 request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
                 break;
 
@@ -111,7 +119,7 @@ public class PageRouter extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/claimHistory.jsp").forward(request, response);
                 break;
             }
-            
+
             case "admindashboard": {
                 request.getRequestDispatcher("/WEB-INF/adminDashboard.jsp").forward(request, response);
             }
@@ -134,7 +142,22 @@ public class PageRouter extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    private void updateUserStatus(Jdbc dbBean, HttpServletRequest request, ChargeStatus status, int[] chargeIds) {
+        
+        for (int id : chargeIds) {
+            Charge charge = dbBean.getCharge(id);
+            int unapprovedCharges = dbBean.getDueOrDeclinedChargeCount(charge.getUserId());
+            
+            if (status.equals(ChargeStatus.APPROVED) && unapprovedCharges == 0) {
+                dbBean.updateMemberStatus(charge.getUserId(), MemberStatus.ACTIVE);
+            } else if (status.equals(ChargeStatus.DECLINED)) {
+                dbBean.updateMemberStatus(charge.getUserId(), MemberStatus.SUSPENDED);
+            }
+        }
+
+    }
+
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
