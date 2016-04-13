@@ -87,6 +87,20 @@ public class PageRouter extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/handleClaims.jsp").forward(request, response);
                 break;
             }
+            case "submitclaimchange": {
+                int claimId = Integer.valueOf(request.getParameter("claimId"));             
+                ClaimStatus status = ClaimStatus.valueOf((String) request.getParameter("status"));
+
+                dbBean.updateClaimStatus(claimId, status);
+                
+                int rowschanged = 1;
+                request.setAttribute("rowschanged", String.valueOf(rowschanged));
+                loadPendingClaims(dbBean, request);
+
+                request.getRequestDispatcher("/WEB-INF/handleClaims.jsp").forward(request, response);
+                break;
+                
+            }
             case "submitchargechange": {
                 String[] chargeIds = request.getParameterValues("chargeId[]");
                 int[] chargeId = new int[chargeIds.length];
@@ -96,7 +110,7 @@ public class PageRouter extends HttpServlet {
 
                 ChargeStatus status = ChargeStatus.valueOf((String) request.getParameter("status"));
                 for (int id : chargeId) {
-                    dbBean.changeChargeStatus(id, status);
+                    dbBean.updateChargeStatus(id, status);
                 }
                 int rowschanged = chargeId.length;
                 request.setAttribute("rowschanged", String.valueOf(rowschanged));

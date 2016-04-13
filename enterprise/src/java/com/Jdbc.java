@@ -304,7 +304,7 @@ public class Jdbc {
             int result = key.getInt(1);
             ps.close();
 
-            changeChargeStatus(charge_id, ChargeStatus.PENDING);
+            updateChargeStatus(charge_id, ChargeStatus.PENDING);
 
             //get inserted payment        
             ps = connection.prepareStatement("SELECT * FROM payments WHERE id = ?");
@@ -562,13 +562,27 @@ public class Jdbc {
         }
     }
 
-    void changeChargeStatus(int chargeId, ChargeStatus status) {
+    void updateChargeStatus(int chargeId, ChargeStatus status) {
         PreparedStatement ps;
         try {
 
             ps = connection.prepareStatement("UPDATE charges SET status = ? WHERE id = ?");
             ps.setString(1, status.toString());
             ps.setInt(2, chargeId);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    void updateClaimStatus(int claimId, ClaimStatus status) {
+        PreparedStatement ps;
+        try {
+
+            ps = connection.prepareStatement("UPDATE claims SET status = ? WHERE id = ?");
+            ps.setString(1, status.toString());
+            ps.setInt(2, claimId);
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {
