@@ -44,41 +44,46 @@
                             <th class="chargetd">  Payment id  </th>
                             <th class="chargetd">  Payment type </th>
                             <th class="chargetd">  Payment date </th>
-                            <th class="chargetd">  Note  </th>
-                            <th class="chargetd">  Status  </th>
+                            <th class="chargetd">  Note  </th>              
                         </tr>
 
-                       
+
                         <c:forEach var="charge" items="${list}">
                             <tr class="chargerow">
-                                <td class="chargetd"><div display="inline"><input onclick="check()" display="inline" type="checkbox" name="chargeId" value="${charge.id}" required="true"></div></td>
+                                <td class="chargetd"><div display="inline"><input onclick="check()" display="inline" type="checkbox" name="chargeId[]" value="${charge.id}" required="true"></div></td>
                                 <td class="chargetd">${charge.name}</td>
                                 <td class="chargetd">${charge.amount}</td>
                                 <td class="chargetd">${charge.paymentId}</td>         
                                 <td class="chargetd">${charge.paymentType}</td>
                                 <td class="chargetd">${charge.paymentDate}</td>
-                                <td class="chargetd">${charge.note}</td>
-                                <td class="chargetd">${charge.status}</td>
+                                <td class="chargetd">${charge.note}</td>             
                             </tr>
                         </c:forEach>
-                 
+
                     </table>
 
                     </br>
                     </br>
-    
-                <input type="hidden" name="action" value="submitchargechange" />
-                <input type="hidden" name="status" value="APPROVED" />
-                    </br>
-                                      
-                    
+
+                    <input type="hidden" name="action" value="submitchargechange" />
+                    <input type="hidden" name="status" value="APPROVED" />
+        
+
+
                 </form>
                 <form id="cancel-form" method="POST" action="PageRouter.do">
-                    <input type="hidden" name="action" value="cancel" />
+                    <input type="hidden" name="action" value="admindashboard" />
                 </form>
-
+                <p class="greentext">
+                    <% if (request.getAttribute("rowschanged") != null) {
+                    %>
+                    <%=("Rows changed: " + (String)request.getAttribute("rowschanged"))%> </br></br>
+                    <%
+                        
+                        }%>
+                </p>
                 <ul class="choice">
-                    <li onclick="document.getElementById('cancel-form').submit();" class="user-button cancel">Cancel</li>
+                    <li onclick="document.getElementById('cancel-form').submit();" class="user-button cancel">Dashboard</li>
                     <li id="submitbutton" onclick="submitform();" class="user-button submit">Set status APPROVED</li>
                     <div style="clear:both"></div>
                 </ul>

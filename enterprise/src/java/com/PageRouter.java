@@ -75,25 +75,28 @@ public class PageRouter extends HttpServlet {
             }
 
             case "handlecharges": {
-                List<Charge> charges = dbBean.getAllChargesWhereStatus(ChargeStatus.PENDING_APPROVAL);
-                request.setAttribute("list", charges);
-                if (charges != null) {
-                    request.setAttribute("listcount", charges.size());
-                } else {
-                    request.setAttribute("listcount", 0);
-                }
+                loadPendingCharges(dbBean, request);
                 request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
                 break;
-            }           
+            }
             case "submitchargechange": {
-                int chargeId =  Integer.valueOf(request.getParameter("chargeId"));
-                ChargeStatus status = ChargeStatus.valueOf((String)request.getParameter("status"));
-                
-                dbBean.changeChargeStatus(chargeId, status);
+                String[] chargeIds = request.getParameterValues("chargeId[]");
+                int[] chargeId = new int[chargeIds.length];
+                for (int i = 0; i < chargeIds.length; i++) {
+                    chargeId[i] = Integer.parseInt(chargeIds[i]);
+                }
+
+                ChargeStatus status = ChargeStatus.valueOf((String) request.getParameter("status"));
+                for (int id : chargeId) {
+                    dbBean.changeChargeStatus(id, status);
+                }
+                int rowschanged = chargeId.length;
+                request.setAttribute("rowschanged", String.valueOf(rowschanged));
+                loadPendingCharges(dbBean, request);
                 request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
                 break;
-                
-            }                     
+
+            }
             case "paymenthistory": {
                 List<Payment> payments = dbBean.getAllPaymentsForUser((int) session.getAttribute("id"));
                 request.setAttribute("list", payments);
@@ -108,6 +111,10 @@ public class PageRouter extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/claimHistory.jsp").forward(request, response);
                 break;
             }
+            
+            case "admindashboard": {
+                request.getRequestDispatcher("/WEB-INF/adminDashboard.jsp").forward(request, response);
+            }
             default: {
                 request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
                 break;
@@ -115,6 +122,16 @@ public class PageRouter extends HttpServlet {
 
         }
 
+    }
+
+    private void loadPendingCharges(Jdbc dbBean, HttpServletRequest request) {
+        List<Charge> charges = dbBean.getAllChargesWhereStatus(ChargeStatus.PENDING_APPROVAL);
+        request.setAttribute("list", charges);
+        if (charges != null) {
+            request.setAttribute("listcount", charges.size());
+        } else {
+            request.setAttribute("listcount", 0);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

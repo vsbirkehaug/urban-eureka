@@ -341,7 +341,7 @@ public class Jdbc {
 
         List<Charge> resultList = null;
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT charges.id,members.name,charges.amount, payments.id as payment_id, payments.payment_type, payments.date as payment_date, charges.status,charges.note FROM charges LEFT JOIN members ON charges.user_id = members.id JOIN payments on charges.id = payments.charge_id WHERE charges.status = ?");
+            PreparedStatement ps = connection.prepareStatement("SELECT charges.id,members.name,charges.amount, payments.id as payment_id, payments.payment_type, payments.date as payment_date, charges.status,charges.note FROM charges JOIN members ON charges.user_id = members.id JOIN payments on charges.id = payments.charge_id WHERE charges.status = ?");
             ps.setString(1, status.toString());
             ResultSet rs = ps.executeQuery();
             resultList = new ArrayList<>();
