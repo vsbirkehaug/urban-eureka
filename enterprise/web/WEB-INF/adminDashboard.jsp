@@ -19,11 +19,11 @@
             try {
                 if (request.getSession().getAttribute("username") == null || (String) request.getSession().getAttribute("role") != "admin") {
                     request.setAttribute("message", "Timed out. Please log in again.");
-                    request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
 
         %>
@@ -38,7 +38,7 @@
                 <div>
                     <h2 class="admin" >ADMIN DASHBOARD</h2>
 
-                    <form class="logout" method="POST" action="Logout.do">
+                    <form class="logout" method="POST" action="PageRouter.do">
                         <input class="logout" type="submit" name="action" value="logout"</input>
                     </form>
                     <p class="helloname"><%= "Hello, " + (String) request.getSession().getAttribute("username") + "!"%></p>  
@@ -49,7 +49,7 @@
                     <form id="handleclaim" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminhandleclaims" /></form>
                     <form id="routerform" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminmakecharge" /></form>
                     <form id="routerform2" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminhandlecharges" /></form>
-                         <form id="routerform3" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminclaimhistory" /></form>
+                    <form id="routerform3" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminclaimhistory" /></form>
                     <ul>                      
                         <li onclick="document.getElementById('handleclaim').submit();" class="user-button make-claim">Pending Claims </li>              
                         <li onclick="document.getElementById('routerform').submit();" class="user-button make-payment">Make Charge</li>                    

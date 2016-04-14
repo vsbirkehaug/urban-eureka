@@ -322,7 +322,7 @@ public class Jdbc {
         return responsePayment;
     }
 
-    public List<Charge> getDueChargesForUser(int userId) {
+    public List<Charge> getUnpaidChargesForUser(int userId) {
 
         List<Charge> resultList = null;
         try {

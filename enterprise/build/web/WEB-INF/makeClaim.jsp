@@ -26,17 +26,17 @@
             
             <h2>New claim</h2>
             </br>
-            <form id="make-claim-form" method="POST" action="MakeClaim.do">
+            <form id="make-claim-form" method="POST" action="PageRouter.do">
               <p class="label">Claim date</p>
               <input type="date" name="date" placeholder="date"/>
               <input type="text" name="rationale" placeholder="rationale"/>
               <input type="number" step="0.01" min=0 name="amount" placeholder="amount"/>
-              <input type="hidden" name="action" value="submitclaim" />  
+              <input type="hidden" name="action" value="insertclaim" />  
               </br>         
 
             </form>
-            <form id="cancel-make-claim-form" method="POST" action="MakeClaim.do">
-                <input type="hidden" name="action" value="cancel" />
+            <form id="cancel-make-claim-form" method="POST" action="PageRouter.do">
+                <input type="hidden" name="action" value="dashboard" />
             </form>
             
             <ul class="choice">

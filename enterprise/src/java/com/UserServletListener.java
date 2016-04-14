@@ -41,13 +41,6 @@ public class UserServletListener implements ServletContextListener {
             sc.setAttribute("error", e.toString());
         }
         
-        //testing
-//        if(conn == null) {
-//             sc.setAttribute("error", "No idea");
-//        } else {
-//             sc.setAttribute("error", "Conn is null");
-//        }
-        
         sc.setAttribute("connection", conn);
     }
 

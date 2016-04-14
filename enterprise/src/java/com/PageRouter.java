@@ -8,10 +8,7 @@ package com;
 import java.io.IOException;
 //import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,11 +19,14 @@ import model.Charge;
 import model.ChargeStatus;
 import model.ChargeType;
 import model.Claim;
+import model.ClaimResponse;
 import model.ClaimStatus;
-import model.Member;
 import model.MemberStatus;
 import model.Payment;
 import model.SimpleMember;
+import services.ClaimChecker;
+import services.ValidateAdmin;
+import services.ValidateUser;
 
 /**
  *
@@ -49,8 +49,15 @@ public class PageRouter extends HttpServlet {
         HttpSession session = request.getSession();
 
         response.setContentType("text/html;charset=UTF-8");
-
-        Jdbc dbBean = new Jdbc();
+        Jdbc dbBean = null;
+        try {
+            dbBean = (Jdbc) session.getAttribute("dbbean");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        if (dbBean == null) {
+            dbBean = new Jdbc();
+        }
         Connection connection = (Connection) request.getServletContext().getAttribute("connection");
         dbBean.connect(connection);
         session.setAttribute("dbbean", dbBean);
@@ -59,7 +66,21 @@ public class PageRouter extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
         }
 
-        switch (request.getParameter("action")) {
+        switch (request.getParameter("action").toLowerCase()) {
+            case "login": {
+                login(request, response, connection);
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+                break;
+            }
+            case "logout": {
+                response.setContentType("text/html;charset=UTF-8");
+                logout(request);
+                response.sendRedirect(request.getContextPath() + "/index.jsp");
+                break;
+            }
+            //============================================================================================
+            //MEMBER ACTIONS =============================================================================
+            //
             case "dashboard": {
                 request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
                 break;
@@ -68,20 +89,42 @@ public class PageRouter extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/makeClaim.jsp").forward(request, response);
                 break;
             }
+            case "makepayment": {
+                loadChargesForUser(dbBean, request);
+                request.getRequestDispatcher("/WEB-INF/makePayment.jsp").forward(request, response);
+                break;
+            }
+            case "paymenthistory": {
+                loadAllUserPayments(dbBean, request);
+                request.getRequestDispatcher("/WEB-INF/paymentHistory.jsp").forward(request, response);
+                break;
+            }
+            case "claimhistory": {
+                loadUserClaim(dbBean, request);
+                request.getRequestDispatcher("/WEB-INF/claimHistory.jsp").forward(request, response);
+                break;
+            }
+            case "insertclaim": {
+                insertClaim(dbBean, request);
+                request.getRequestDispatcher("/WEB-INF/makeClaimConf.jsp").forward(request, response);
+                break;
+            }
+            case "insertpayment": {
+                insertPayment(dbBean, request);
+                request.getRequestDispatcher("/WEB-INF/makePaymentConf.jsp").forward(request, response);
+            }
+
+            //============================================================================================
+            //ADMIN ACTIONS ==============================================================================
+            //
+            case "admindashboard": {
+                request.getRequestDispatcher("/WEB-INF/adminDashboard.jsp").forward(request, response);
+                break;
+            }
             case "adminmakecharge": {
                 loadSimpleMembers(dbBean, request);
                 attachChargeTypes(request);
                 request.getRequestDispatcher("/WEB-INF/makeCharge.jsp").forward(request, response);
-                break;
-            }
-            case "login": {
-                request.getRequestDispatcher("index_user_login.jsp").forward(request, response);
-                break;
-            }
-            case "makepayment": {
-                List<Charge> charges = dbBean.getDueChargesForUser((int) session.getAttribute("id"));
-                request.setAttribute("list", charges);
-                request.getRequestDispatcher("/WEB-INF/makePayment.jsp").forward(request, response);
                 break;
             }
 
@@ -95,78 +138,27 @@ public class PageRouter extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/handleClaims.jsp").forward(request, response);
                 break;
             }
-            case "submitclaimchange": {
-                int claimId = Integer.valueOf(request.getParameter("claimId"));
-                ClaimStatus status = ClaimStatus.valueOf((String) request.getParameter("status"));
-
-                dbBean.updateClaimStatus(claimId, status);
-
-                int rowschanged = 1;
-                request.setAttribute("rowschanged", String.valueOf(rowschanged));
-                loadPendingClaims(dbBean, request);
-
+            case "adminupdateclaim": {
+                updateClaim(dbBean, request);
                 request.getRequestDispatcher("/WEB-INF/handleClaims.jsp").forward(request, response);
                 break;
-
             }
-            case "submitcharge": {
-                int userId = Integer.valueOf(request.getParameter("member"));
-                float amount = Float.valueOf(request.getParameter("amount"));
-                String note = (String) request.getParameter("chargetype");
-
-                dbBean.insertCharge(userId, amount, note);
-                loadSimpleMembers(dbBean, request);
-                attachChargeTypes(request);
-                request.setAttribute("rowschanged", String.valueOf(1));
+            case "admininsertcharge": {
+                insertCharge(dbBean, request);
                 request.getRequestDispatcher("/WEB-INF/makeCharge.jsp").forward(request, response);
                 break;
-
             }
-            case "submitchargechange": {
-                String[] chargeIds = request.getParameterValues("chargeId[]");
-                int[] chargeId = new int[chargeIds.length];
-                for (int i = 0; i < chargeIds.length; i++) {
-                    chargeId[i] = Integer.parseInt(chargeIds[i]);
-                }
-
-                ChargeStatus status = ChargeStatus.valueOf((String) request.getParameter("status"));
-                for (int id : chargeId) {
-                    dbBean.updateChargeStatus(id, status);
-                }
-                int rowschanged = chargeId.length;
-                request.setAttribute("rowschanged", String.valueOf(rowschanged));
-                loadPendingCharges(dbBean, request);
-                updateUserStatus(dbBean, request, status, chargeId);
-
+            case "adminupdatecharge": {
+                updateChargeStatus(dbBean, request);
                 request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
-                break;
-
-            }
-            case "paymenthistory": {
-                List<Payment> payments = dbBean.getAllPaymentsForUser((int) session.getAttribute("id"));
-                request.setAttribute("list", payments);
-                request.setAttribute("listcount", payments.size());
-                request.getRequestDispatcher("/WEB-INF/paymentHistory.jsp").forward(request, response);
-                break;
-            }
-            case "claimhistory": {
-                List<Claim> claims = dbBean.getAllClaimsForUser((int) session.getAttribute("id"));
-                request.setAttribute("list", claims);
-                request.setAttribute("listcount", claims.size());
-                request.getRequestDispatcher("/WEB-INF/claimHistory.jsp").forward(request, response);
                 break;
             }
             case "adminclaimhistory": {
-                List<Claim> claims = dbBean.getAllClaims();
-                request.setAttribute("list", claims);
-                request.setAttribute("listcount", claims.size());
+                loadClaims(dbBean, request);
                 request.getRequestDispatcher("/WEB-INF/adminClaimHistory.jsp").forward(request, response);
                 break;
             }
 
-            case "admindashboard": {
-                request.getRequestDispatcher("/WEB-INF/adminDashboard.jsp").forward(request, response);
-            }
             default: {
                 request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
                 break;
@@ -175,6 +167,100 @@ public class PageRouter extends HttpServlet {
         }
     }
 
+    //MEMBER - Adds a payment for the selected charge
+    private void insertPayment(Jdbc dbBean, HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+
+        int userId = ((int) request.getSession().getAttribute("id"));
+        int chargeId = Integer.valueOf(request.getParameter("chargeId"));
+        String paymentType = (String) request.getParameter("paymenttype");
+
+        Charge charge = dbBean.getCharge(chargeId);
+        Payment payment = new Payment(userId, charge.getId(), charge.getAmount(), paymentType);
+
+        Payment responsePayment = dbBean.insertPayment(payment);
+        charge = dbBean.getCharge(chargeId);
+
+        session.setAttribute("paymentamount", String.valueOf(responsePayment.getAmount()));
+        session.setAttribute("chargenote", charge.getNote());
+        session.setAttribute("chargestatus", charge.getStatus());
+        session.setAttribute("paymentid", String.valueOf(responsePayment.getId()));
+        session.setAttribute("paymentmessage", "Payment added successfully!");
+    }
+
+    //MEMBER - Gets and puts all charges for this user into the request
+    private void loadChargesForUser(Jdbc dbBean, HttpServletRequest request) {
+        List<Charge> charges = dbBean.getUnpaidChargesForUser((int) request.getSession().getAttribute("id"));
+        request.setAttribute("list", charges);
+    }
+
+    //ADMIN - Updates the claim with the given status
+    private void updateClaim(Jdbc dbBean, HttpServletRequest request) {
+        int claimId = Integer.valueOf(request.getParameter("claimId"));
+        ClaimStatus status = ClaimStatus.valueOf((String) request.getParameter("status"));
+
+        dbBean.updateClaimStatus(claimId, status);
+
+        int rowschanged = 1;
+        request.setAttribute("rowschanged", String.valueOf(rowschanged));
+        loadPendingClaims(dbBean, request);
+
+    }
+
+    //ADMIN - Inserts a new charge
+    private void insertCharge(Jdbc dbBean, HttpServletRequest request) {
+        int userId = Integer.valueOf(request.getParameter("member"));
+        float amount = Float.valueOf(request.getParameter("amount"));
+        String note = (String) request.getParameter("chargetype");
+
+        dbBean.insertCharge(userId, amount, note);
+        loadSimpleMembers(dbBean, request);
+        attachChargeTypes(request);
+        request.setAttribute("rowschanged", String.valueOf(1));
+    }
+
+    //ADMIN - Updates the status of the selected charges
+    private void updateChargeStatus(Jdbc dbBean, HttpServletRequest request) {
+        String[] chargeIds = request.getParameterValues("chargeId[]");
+        int[] chargeId = new int[chargeIds.length];
+        for (int i = 0; i < chargeIds.length; i++) {
+            chargeId[i] = Integer.parseInt(chargeIds[i]);
+        }
+
+        ChargeStatus status = ChargeStatus.valueOf((String) request.getParameter("status"));
+        for (int id : chargeId) {
+            dbBean.updateChargeStatus(id, status);
+        }
+        int rowschanged = chargeId.length;
+        request.setAttribute("rowschanged", String.valueOf(rowschanged));
+        loadPendingCharges(dbBean, request);
+        updateUserStatus(dbBean, request, status, chargeId);
+
+    }
+
+    //Gets and puts all payments for this user into the request
+    private void loadAllUserPayments(Jdbc dbBean, HttpServletRequest request) {
+        List<Payment> payments = dbBean.getAllPaymentsForUser((int) request.getSession().getAttribute("id"));
+        request.setAttribute("list", payments);
+        request.setAttribute("listcount", payments.size());
+    }
+
+    //Gets and puts all claims for this user into the request
+    private void loadUserClaim(Jdbc dbBean, HttpServletRequest request) {
+        List<Claim> claims = dbBean.getAllClaimsForUser((int) request.getSession().getAttribute("id"));
+        request.setAttribute("list", claims);
+        request.setAttribute("listcount", claims.size());
+    }
+
+    //ADMIN - Gets and puts all claims into the request
+    private void loadClaims(Jdbc dbBean, HttpServletRequest request) {
+        List<Claim> claims = dbBean.getAllClaims();
+        request.setAttribute("list", claims);
+        request.setAttribute("listcount", claims.size());
+    }
+
+    //ADMIN - Gets user ID and name and puts them into the request
     private void loadSimpleMembers(Jdbc dbBean, HttpServletRequest request) {
         List<SimpleMember> members = dbBean.getMembers();
         request.setAttribute("list", members);
@@ -185,6 +271,7 @@ public class PageRouter extends HttpServlet {
         }
     }
 
+//ADMIN - Puts the ChargeType enum into the request
     private void attachChargeTypes(HttpServletRequest request) {
         ChargeType[] ct = ChargeType.values();
         String[] cts = new String[ct.length];
@@ -194,6 +281,7 @@ public class PageRouter extends HttpServlet {
         request.setAttribute("chargelist", cts);
     }
 
+    //ADMIN - Loads all charges that are pending and puts them in the request
     private void loadPendingCharges(Jdbc dbBean, HttpServletRequest request) {
         List<Charge> charges = dbBean.getAllChargesWhereStatus(ChargeStatus.PENDING);
         request.setAttribute("list", charges);
@@ -204,6 +292,7 @@ public class PageRouter extends HttpServlet {
         }
     }
 
+    //ADMIN - Loads all claims that are pending and puts them in the request
     private void loadPendingClaims(Jdbc dbBean, HttpServletRequest request) {
         List<AdminClaim> claims = dbBean.getAllClaimsWhereStatus(ClaimStatus.PENDING);
         request.setAttribute("list", claims);
@@ -214,8 +303,8 @@ public class PageRouter extends HttpServlet {
         }
     }
 
+    //ADMIN - Updates user status after admin has changed the status of charges
     private void updateUserStatus(Jdbc dbBean, HttpServletRequest request, ChargeStatus status, int[] chargeIds) {
-
         for (int id : chargeIds) {
             Charge charge = dbBean.getCharge(id);
             int unapprovedCharges = dbBean.getDueOrDeclinedChargeCount(charge.getUserId());
@@ -226,7 +315,85 @@ public class PageRouter extends HttpServlet {
                 dbBean.updateMemberStatus(charge.getUserId(), MemberStatus.SUSPENDED);
             }
         }
+    }
 
+    //Inserts a new claim
+    private void insertClaim(Jdbc dbBean, HttpServletRequest request) {
+
+        int userId = ((int) request.getSession().getAttribute("id"));
+        float amount = Float.valueOf((String) request.getParameter("amount"));
+        java.sql.Date date = java.sql.Date.valueOf((String) request.getParameter("date"));
+        String rationale = (String) request.getParameter(((String) "rationale").trim());
+        Claim claim = new Claim(userId, amount, date, rationale);
+
+        ClaimChecker cc = new ClaimChecker(dbBean, userId, claim);
+        ClaimResponse cr = cc.isValid();
+
+        Claim responseClaim = null;
+        if (!cr.isValid()) {
+            claim.setStatus("DECLINED");
+        }
+        responseClaim = dbBean.insertClaim(claim);
+
+        request.getSession().setAttribute("claimamount", String.valueOf(responseClaim.getAmount()));
+        request.getSession().setAttribute("claimid", String.valueOf(responseClaim.getId()));
+        request.getSession().setAttribute("claimstatus", String.valueOf(responseClaim.getStatus()));
+        request.getSession().setAttribute("claimmessage", cr.getReason());
+
+    }
+
+    //Logs the user out
+    private void logout(HttpServletRequest request) {
+        request.getSession().invalidate();
+        request.setAttribute("message", "You were successfully logged out.");
+    }
+
+    //Logs the user in
+    private void login(HttpServletRequest request, HttpServletResponse response, Connection connection) {
+        HttpSession session = request.getSession();
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String admin = "no";
+        try {
+            admin = request.getParameter("admin");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+
+            int id = -1;
+            String name = "";
+
+            if (admin != null && admin.equals("yes")) {
+                id = ValidateAdmin.getAdmin(username, password, connection);
+            } else {
+                String[] details = ValidateUser.getUser(username, password, connection);
+                name = null;
+                if (details != null) {
+                    id = Integer.valueOf(details[0]);
+                    name = details[1];
+                }
+            }
+
+            if (id >= 0 && admin != null && admin.equals("yes")) {
+                session.setAttribute("username", username);
+                session.setAttribute("id", id);
+                session.setAttribute("role", "admin");
+                request.getRequestDispatcher("/WEB-INF/adminDashboard.jsp").forward(request, response);
+            } else if (id >= 0) {
+                session.setAttribute("username", username);
+                session.setAttribute("name", name);
+                session.setAttribute("id", id);
+                session.setAttribute("role", "member");
+                request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
+            } else {
+                request.setAttribute("message", "Incorrect username or password.");
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

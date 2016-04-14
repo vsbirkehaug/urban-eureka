@@ -429,7 +429,6 @@ select option {
 }
 
 .fullwidth {
-    background: #C4576E;
     width: calc(100% - 65px);
     position:relative;
     margin: 20px 0 0 0;

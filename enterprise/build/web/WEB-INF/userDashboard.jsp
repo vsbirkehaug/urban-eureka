@@ -22,7 +22,7 @@
 
         <% if (request.getSession().getAttribute("username") == null) {
                 request.setAttribute("message", "Timed out. Please log in again.");
-                request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
         %>
 
@@ -33,7 +33,7 @@
 
                 <div>
 
-                    <form class="logout" method="POST" action="Logout.do">
+                    <form class="logout" method="POST" action="PageRouter.do">
                         <input class="logout" type="submit" name="action" value="logout"</input>
                     </form>
                     <p class="helloname"><%= "Hello, " + (String) request.getSession().getAttribute("name") + "!"%></p>  

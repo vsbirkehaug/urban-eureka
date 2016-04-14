@@ -36,8 +36,8 @@
 
                     </br>
 
-                    <form id="cancel-make-claim-form" method="POST" action="MakePayment.do">
-                        <input type="hidden" name="action" value="cancel" />
+                    <form id="cancel-make-claim-form" method="POST" action="PageRouter.do">
+                        <input type="hidden" name="action" value="dashboard" />
                     </form>
 
                     <form id="routerform" method="POST" action="PageRouter.do">  

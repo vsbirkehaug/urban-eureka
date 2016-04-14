@@ -33,9 +33,7 @@ public class MakeClaim extends HttpServlet {
                 break;
             }
             case "submitclaim": {
-               addClaim(request);   
-              
-                request.getRequestDispatcher("/WEB-INF/makeClaimConf.jsp").forward(request, response);
+             
                 break;
             }
             

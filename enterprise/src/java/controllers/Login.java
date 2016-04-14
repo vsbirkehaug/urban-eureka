@@ -72,7 +72,7 @@ public class Login extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
             } else {
                 request.setAttribute("message", "Incorrect username or password.");
-                request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

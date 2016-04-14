@@ -21,11 +21,11 @@
           try {
                 if (request.getSession().getAttribute("username") == null || (String) request.getSession().getAttribute("role") != "admin") {
                     request.setAttribute("message", "Timed out. Please log in again.");
-                    request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
         %>
     </head>
@@ -65,7 +65,7 @@
                         }%>
                         </p>
 
-                        <input type="hidden" name="action" value="submitcharge" />  
+                        <input type="hidden" name="action" value="admininsertcharge" />  
                         </br>         
 
                     </form>

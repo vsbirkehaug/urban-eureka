@@ -44,7 +44,7 @@
                     <h2>New payment</h2>
                     </br>
 
-                    <form id="make-payment-form" method="POST" action="MakePayment.do">
+                    <form id="make-payment-form" method="POST" action="PageRouter.do">
                         <p>Outstanding charges</p>
                         <table class="responsetable">
                             <tr class="chargerowheader">
@@ -70,11 +70,11 @@
                             <option value="CASH">CASH</option>
                         </select>
 
-                        <input type="hidden" name="action" value="submitpayment" />
+                        <input type="hidden" name="action" value="insertpayment" />
                         </br>
                     </form>
-                    <form id="cancel-make-payment-form" method="POST" action="MakePayment.do">
-                        <input type="hidden" name="action" value="cancel" />
+                    <form id="cancel-make-payment-form" method="POST" action="PageRouter.do">
+                        <input type="hidden" name="action" value="dashboard" />
                     </form>
 
                     <ul class="choice">
