@@ -39,13 +39,28 @@
                     </tr>
 
                     <c:forEach var="payment" items="${list}">
-                        <tr class="paymenttr">
-                            <td class="paymenttdsmall">${payment.id}</td>
-                            <td class="paymenttdsmall">${payment.amount}</td>
-                            <td class="paymenttdsmall">${payment.paymentType}</td>
-                            <td class="paymenttd">${payment.note}</td>
-                            <td class="paymenttd">${payment.date}</td>
-                            <td class="paymenttd">${payment.status}</td>
+                        <script type="text/javascript">
+                            var claims = "${payment.status}";
+
+                            var mycolour = "F3B9C5";
+
+                            if (claims === "DECLINED") {
+                                mycolour = "#F3B9C5";
+                            }
+                            if (claims === "APPROVED") {
+                                mycolour = "#C6EBB2";
+                            }
+                            if (claims === "PENDING") {
+                                mycolour = "#FFE6C2";
+                            }
+                            document.writeln("<tr class=\"paymenttr\" bgcolor=\"" + mycolour + "\">");
+                        </script>  
+                        <td class="paymenttdsmall">${payment.id}</td>
+                        <td class="paymenttdsmall">${payment.amount}</td>
+                        <td class="paymenttdsmall">${payment.paymentType}</td>
+                        <td class="paymenttd">${payment.note}</td>
+                        <td class="paymenttd">${payment.date}</td>
+                        <td class="paymenttd">${payment.status}</td>
                         </tr>
                     </c:forEach>
                 </table>
