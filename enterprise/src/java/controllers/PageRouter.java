@@ -26,6 +26,7 @@ import model.Payment;
 import model.BaseMember;
 import model.Member;
 import model.enums.PaymentType;
+import services.AddressLookup;
 import services.ClaimChecker;
 import services.ValidateAdmin;
 import services.ValidateUser;
@@ -70,6 +71,17 @@ public class PageRouter extends HttpServlet {
         String role = (String) request.getSession().getAttribute("role");
 
         switch (request.getParameter("action").toLowerCase()) {
+            case "getaddress": {
+                String postcode = request.getParameter("postcode");
+                String houseno = request.getParameter("houseno");
+                AddressLookup lookup = new AddressLookup();
+                String url = lookup.getUrl("postcode".replace(" ", ""), houseno.trim());
+                String address = lookup.getAddress(url);
+                request.setAttribute("message", address);
+                request.setAttribute("lookupaddress", address);
+                request.setAttribute("registrationState", "true");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+            }
             case "login": {
                 login(request, response, connection);
                 request.getRequestDispatcher("index.jsp").forward(request, response);

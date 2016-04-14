@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="services.AddressLookup" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -30,9 +31,34 @@
                 toggling(s);
             }
         </script> 
-
+        <script language="javascript">
+            function getAddress() {
+                <%
+                  String lookupaddress = "32";
+                  if (request.getAttribute("lookupaddress") != null) {
+                      lookupaddress = (String)request.getAttribute("lookupaddress");
+                     } else {
+                      lookupaddress = "";
+                  }
+                out.println(lookupaddress);
+                %>
+                var s =<%=lookupaddress%>;
+                if(lookupaddress !== null) {
+                    document.getElementById('fulladdress').placeholder = s;
+                    document.getElementById('fulladdress').value = s;
+                } else {
+                    document.getElementById('fulladdress').placeholder = "could not find address";
+                    document.getElementById('fulladdress').value =  "could not find address";
+            }
+        </script> 
+   <script language="javascript">
+            function getAddressFirst() {
+                    document.getElementById('registersubmit').value =  "getaddress";
+                    document.getElementById('register-form').submit();
+            }
+        </script> 
     </head>
-    <body onload="checkReg()">
+    <body onload="checkReg(); getAddress();">
 
         <div class="wrapper">
             <h1>XYZ Drivers Association</h1>
@@ -46,19 +72,29 @@
                                 out.println("");
                             }
                         %>
-                    </p>         
+                    </p>       
+                    
 
                     <form class="register-form" method="POST" action="PageRouter.do">
                         <input type="text" name="name" placeholder="name"/>
-                        <input type="text" name="address" placeholder="address"/>
+                        
+                        <input id="postcode" type="text" name="postcode" placeholder="postcode"/>
+                        <input id="houseno" type="text" name="houseno" placeholder="house no"/>
+                        
+                        <input onclick="getAddressFirst();" type="button" value="Search"/>
+                        
+                        <input id="fulladdress" type="text" name="address" placeholder="full address"/>
+                                           
                         <p class="label">Date of birth</p>
                         <input type="date" name="dob" placeholder="date of birth"/>
                         <p class="label">Registration date</p>
                         <input type="date" name="registrationdate" placeholder="registration date"/>
-                        <input class="button" type="submit" name="action" value="Register"/>
+                        <input id="registersubmit" class="button" type="submit" name="action" value="Register"/>
                         </br>         
                         <p class="message">Already registered? <a href="#">Sign In</a></p>
                     </form>
+                    
+                    
                     <form class="login-form" method="POST" action="PageRouter.do">
                         <input type="text" name="username" placeholder="username"/>
                         <input type="password" name="password" placeholder="password"/>
@@ -69,6 +105,9 @@
                 </div>
             </div>
         </div>
+                    
+                    <form id="getaddress" method="POST" action="PageRouter.do"><input name="action" value="getaddress"/></form>
+                    
         <script src="js/login_helper.js"></script>
         <script src="js/login.js"></script>
     </body>
