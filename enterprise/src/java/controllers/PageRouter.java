@@ -9,6 +9,8 @@ import java.io.IOException;
 //import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +28,9 @@ import model.Payment;
 import model.BaseMember;
 import model.Member;
 import model.enums.PaymentType;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import services.AddressLookup;
 import services.ClaimChecker;
 import services.ValidateAdmin;
@@ -75,10 +80,12 @@ public class PageRouter extends HttpServlet {
                 String postcode = request.getParameter("postcode");
                 String houseno = request.getParameter("houseno");
                 AddressLookup lookup = new AddressLookup();
-                String url = lookup.getUrl("postcode".replace(" ", ""), houseno.trim());
+                String url = lookup.getUrl(postcode.replace(" ", ""), houseno.trim());
                 String address = lookup.getAddress(url);
-                request.setAttribute("message", address);
+
+                //request.setAttribute("message", address);
                 request.setAttribute("lookupaddress", address);
+
                 request.setAttribute("registrationState", "true");
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }

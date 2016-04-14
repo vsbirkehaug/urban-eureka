@@ -34,31 +34,30 @@
         <script language="javascript">
             function getAddress() {
                 <%
-                  String lookupaddress = "32";
+                  String lookupaddress = "";
                   if (request.getAttribute("lookupaddress") != null) {
                       lookupaddress = (String)request.getAttribute("lookupaddress");
                      } else {
                       lookupaddress = "";
-                  }
-                out.println(lookupaddress);
+                  }             
                 %>
-                var s =<%=lookupaddress%>;
-                if(lookupaddress !== null) {
-                    document.getElementById('fulladdress').placeholder = s;
-                    document.getElementById('fulladdress').value = s;
-                } else {
-                    document.getElementById('fulladdress').placeholder = "could not find address";
-                    document.getElementById('fulladdress').value =  "could not find address";
+
             }
         </script> 
    <script language="javascript">
             function getAddressFirst() {
-                    document.getElementById('registersubmit').value =  "getaddress";
                     document.getElementById('register-form').submit();
             }
         </script> 
+        
+          <script language="javascript">
+            function start() {
+                    checkReg(); 
+                    getAddress();
+            }
+        </script> 
     </head>
-    <body onload="checkReg(); getAddress();">
+    <body onload="start();">
 
         <div class="wrapper">
             <h1>XYZ Drivers Association</h1>
@@ -75,21 +74,21 @@
                     </p>       
                     
 
-                    <form class="register-form" method="POST" action="PageRouter.do">
+                    <form id="register-form" class="register-form" method="POST" action="PageRouter.do">
                         <input type="text" name="name" placeholder="name"/>
                         
                         <input id="postcode" type="text" name="postcode" placeholder="postcode"/>
                         <input id="houseno" type="text" name="houseno" placeholder="house no"/>
                         
-                        <input onclick="getAddressFirst();" type="button" value="Search"/>
+                        <input type="submit" name="action" value="getaddress"/>
                         
-                        <input id="fulladdress" type="text" name="address" placeholder="full address"/>
+                        <input id="fulladdress" type="text" name="address" value="<%=lookupaddress%>"/>
                                            
                         <p class="label">Date of birth</p>
                         <input type="date" name="dob" placeholder="date of birth"/>
                         <p class="label">Registration date</p>
                         <input type="date" name="registrationdate" placeholder="registration date"/>
-                        <input id="registersubmit" class="button" type="submit" name="action" value="Register"/>
+                        <input id="registersubmit" class="button" type="submit" name="action" value="register"/>
                         </br>         
                         <p class="message">Already registered? <a href="#">Sign In</a></p>
                     </form>

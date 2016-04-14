@@ -5,11 +5,16 @@
  */
 package services;
 
+import controllers.PageRouter;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -38,17 +43,22 @@ public class AddressLookup {
                 recvbuff += recv;
             }
             buffread.close();
-            
-            String[] address = recvbuff.split(",");
-            String output = "";
-            for(String s : address) {
-                if(!s.trim().isEmpty()) {
-                    output += s.trim() + ", ";                 
+
+            try {
+                String output = "";
+                JSONParser parser = new JSONParser();
+                JSONObject json = (JSONObject) parser.parse(recvbuff);
+                String[] address = json.get("Addresses").toString().split(", ");
+                for (String s : address) {
+                    if (!s.trim().isEmpty()) {
+                        output += s.trim() + ", ";
+                    }
                 }
+                output = output.substring(0, output.length() - 2).replace("[", "").replace("]", "").replace("\"", "");
+                return output;
+            } catch (ParseException ex) {
+                Logger.getLogger(PageRouter.class.getName()).log(Level.SEVERE, null, ex);
             }
-            output = output.substring(0, output.length()-2);
-            
-            return output;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
