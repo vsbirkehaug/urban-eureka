@@ -322,7 +322,7 @@ public class Jdbc {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM charges WHERE user_id = ? AND status = ? OR status = ?");
             ps.setInt(1, userId);
             ps.setString(2, ChargeStatus.DUE.toString());
-            ps.setString(2, ChargeStatus.DECLINED.toString());
+            ps.setString(3, ChargeStatus.DECLINED.toString());
             ResultSet rs = ps.executeQuery();
             resultList = new ArrayList<>();
             while (rs.next()) {
@@ -336,7 +336,7 @@ public class Jdbc {
         return resultList;
     }
 
-    public List<Charge> getAllChargesWhereStatus(ChargeStatus status) {
+    public List<Charge> getChargesWhereStatus(ChargeStatus status) {
 
         List<Charge> resultList = null;
         try {
@@ -355,7 +355,7 @@ public class Jdbc {
         return resultList;
     }
 
-    public List<AdminClaim> getAllClaimsWhereStatus(ClaimStatus status) {
+    public List<AdminClaim> getClaimsWhereStatus(ClaimStatus status) {
 
 //SELECT claims.id, members.name, claims.amount, claims.date as record_date, claims.rationale, claims.status, 
 //(SELECT COUNT(*) FROM claims c WHERE claims.mem_id = 8 AND claims.status = "PENDING" AND YEAR(c.date) = YEAR(record_date)) as userPendingClaims,
@@ -405,7 +405,7 @@ public class Jdbc {
         return resultList;
     }
 
-    public List<Claim> getAllClaimsForUser(int userId) {
+    public List<Claim> getClaimsForUser(int userId) {
 
         List<Claim> resultList = null;
         try {
@@ -518,45 +518,6 @@ public class Jdbc {
         return null;
     }
 
-    public void update(String[] str) {
-        PreparedStatement ps = null;
-        try {
-            ps = connection.prepareStatement("Update members Set password=? where username=?", PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setString(1, str[1].trim());
-            ps.setString(2, str[0].trim());
-            ps.executeUpdate();
-
-            ps.close();
-            System.out.println("1 rows updated.");
-        } catch (SQLException ex) {
-            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void delete(String user) {
-
-        String query = "DELETE FROM members "
-                + "WHERE username = '" + user.trim() + "'";
-
-        try {
-            statement = connection.createStatement();
-            statement.executeUpdate(query);
-        } catch (SQLException e) {
-            System.out.println("way way" + e);
-            //results = e.toString();
-        }
-    }
-
-    public void closeAll() {
-        try {
-            rs.close();
-            statement.close();
-            //connection.close();                                         
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-    }
-
     void updateChargeStatus(int chargeId, ChargeStatus status) {
         PreparedStatement ps;
         try {
@@ -596,7 +557,6 @@ public class Jdbc {
         } catch (SQLException ex) {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     int getDueOrDeclinedChargeCount(int userId) {
@@ -654,7 +614,7 @@ public class Jdbc {
         }
     }
 
-    public List<Claim> getAllClaims() {
+    public List<Claim> getClaims() {
         List<Claim> resultList = null;
         PreparedStatement ps = null;
         try {
@@ -667,7 +627,6 @@ public class Jdbc {
         } catch (SQLException ex) {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return resultList;
     }
 

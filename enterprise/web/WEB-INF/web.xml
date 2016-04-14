@@ -5,68 +5,12 @@
         <param-value>xyz_assoc</param-value>
     </context-param>
     <servlet>
-        <servlet-name>UserServLet</servlet-name>
-        <servlet-class>com.UserServLet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Register</servlet-name>
-        <servlet-class>controllers.Register</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Update</servlet-name>
-        <servlet-class>pages.Update</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Login</servlet-name>
-        <servlet-class>controllers.Login</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>PageRouter</servlet-name>
         <servlet-class>controllers.PageRouter</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>MakeClaim</servlet-name>
-        <servlet-class>controllers.MakeClaim</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Logout</servlet-name>
-        <servlet-class>controllers.Logout</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>MakePayment</servlet-name>
-        <servlet-class>controllers.MakePayment</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>MakePayment</servlet-name>
-        <url-pattern>/MakePayment.do</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Logout</servlet-name>
-        <url-pattern>/Logout.do</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>MakeClaim</servlet-name>
-        <url-pattern>/MakeClaim.do</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>PageRouter</servlet-name>
         <url-pattern>/PageRouter.do</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UserServLet</servlet-name>
-        <url-pattern>/UserService.do</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Register</servlet-name>
-        <url-pattern>/Register.do</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Update</servlet-name>
-        <url-pattern>/Update.do</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Login</servlet-name>
-        <url-pattern>/Login.do</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

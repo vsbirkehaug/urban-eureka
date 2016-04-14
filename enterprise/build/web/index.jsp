@@ -48,21 +48,21 @@
                         %>
                     </p>         
 
-                    <form class="register-form" method="POST" action="Register.do">
+                    <form class="register-form" method="POST" action="PageRouter.do">
                         <input type="text" name="name" placeholder="name"/>
                         <input type="text" name="address" placeholder="address"/>
                         <p class="label">Date of birth</p>
                         <input type="date" name="dob" placeholder="date of birth"/>
                         <p class="label">Registration date</p>
                         <input type="date" name="registrationdate" placeholder="registration date"/>
-                        <input class="button" type="submit" name="tbl" value="Register"/>
+                        <input class="button" type="submit" name="action" value="Register"/>
                         </br>         
                         <p class="message">Already registered? <a href="#">Sign In</a></p>
                     </form>
-                    <form class="login-form" method="POST" action="Login.do">
+                    <form class="login-form" method="POST" action="PageRouter.do">
                         <input type="text" name="username" placeholder="username"/>
                         <input type="password" name="password" placeholder="password"/>
-                        <input class="button" type="submit" name="tbl" value="Log in"/>
+                        <input class="button" type="submit" name="action" value="Login"/>
                         <label><input type="checkbox" name="admin" value="yes">Admin</label>
                         <p class="message">Not registered? <a href="#">Create an account</a></p>
                     </form>

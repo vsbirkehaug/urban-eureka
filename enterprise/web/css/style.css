@@ -360,11 +360,12 @@ li {
     color: #000;
     font-weight: bold;
     display: inline-block;
-    padding: 20px 30px;
+    padding: 15px 30px;
     margin: 10px 0px;
     width: 100%;
-    background: #e5edde;
+    background: #f2f2f2;
     text-align: center;
+    font-size: 16px;
 }
 
 label {
@@ -387,7 +388,7 @@ input[type=checkbox] {
 
 select option {
     padding: 15px;
-    height:50px;
+    font-size: 16px;
 }
 
 .make-claim-page {

@@ -251,14 +251,14 @@ public class PageRouter extends HttpServlet {
 
     //Gets and puts all claims for this user into the request
     private void loadUserClaim(Jdbc dbBean, HttpServletRequest request) {
-        List<Claim> claims = dbBean.getAllClaimsForUser((int) request.getSession().getAttribute("id"));
+        List<Claim> claims = dbBean.getClaimsForUser((int) request.getSession().getAttribute("id"));
         request.setAttribute("list", claims);
         request.setAttribute("listcount", claims.size());
     }
 
     //ADMIN - Gets and puts all claims into the request
     private void loadClaims(Jdbc dbBean, HttpServletRequest request) {
-        List<Claim> claims = dbBean.getAllClaims();
+        List<Claim> claims = dbBean.getClaims();
         request.setAttribute("list", claims);
         request.setAttribute("listcount", claims.size());
     }
@@ -286,7 +286,7 @@ public class PageRouter extends HttpServlet {
 
     //ADMIN - Loads all charges that are pending and puts them in the request
     private void loadPendingCharges(Jdbc dbBean, HttpServletRequest request) {
-        List<Charge> charges = dbBean.getAllChargesWhereStatus(ChargeStatus.PENDING);
+        List<Charge> charges = dbBean.getChargesWhereStatus(ChargeStatus.PENDING);
         request.setAttribute("list", charges);
         if (charges != null) {
             request.setAttribute("listcount", charges.size());
@@ -297,7 +297,7 @@ public class PageRouter extends HttpServlet {
 
     //ADMIN - Loads all claims that are pending and puts them in the request
     private void loadPendingClaims(Jdbc dbBean, HttpServletRequest request) {
-        List<AdminClaim> claims = dbBean.getAllClaimsWhereStatus(ClaimStatus.PENDING);
+        List<AdminClaim> claims = dbBean.getClaimsWhereStatus(ClaimStatus.PENDING);
         request.setAttribute("list", claims);
         if (claims != null) {
             request.setAttribute("listcount", String.valueOf(claims.size()));
