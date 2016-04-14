@@ -24,6 +24,7 @@ import model.enums.ClaimStatus;
 import model.enums.MemberStatus;
 import model.Payment;
 import model.BaseMember;
+import model.enums.PaymentType;
 import services.ClaimChecker;
 import services.ValidateAdmin;
 import services.ValidateUser;
@@ -94,6 +95,7 @@ public class PageRouter extends HttpServlet {
             }
             case "makepayment": {
                 loadChargesForUser(dbBean, request);
+                attachPaymentTypes(request);
                 request.getRequestDispatcher("/WEB-INF/makePayment.jsp").forward(request, response);
                 break;
             }
@@ -186,6 +188,7 @@ public class PageRouter extends HttpServlet {
         charge = dbBean.getCharge(chargeId);
 
         session.setAttribute("paymentamount", String.valueOf(responsePayment.getAmount()));
+        session.setAttribute("paymenttype", String.valueOf(responsePayment.getPaymentType()));
         session.setAttribute("chargenote", charge.getNote());
         session.setAttribute("chargestatus", charge.getStatus());
         session.setAttribute("paymentid", String.valueOf(responsePayment.getId()));
@@ -282,6 +285,15 @@ public class PageRouter extends HttpServlet {
             cts[i] = ct[i].toString();
         }
         request.setAttribute("chargelist", cts);
+    }
+
+    private void attachPaymentTypes(HttpServletRequest request) {
+        PaymentType[] pt = PaymentType.values();
+        String[] cts = new String[pt.length];
+        for (int i = 0; i < cts.length; i++) {
+            cts[i] = pt[i].toString();
+        }
+        request.setAttribute("paymentlist", cts);
     }
 
     //ADMIN - Loads all charges that are pending and puts them in the request

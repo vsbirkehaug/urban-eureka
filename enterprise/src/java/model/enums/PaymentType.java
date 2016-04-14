@@ -9,12 +9,12 @@ package model.enums;
  *
  * @author Vilde
  */
-public enum ChargeType {
-    MEMBERSHIP_FEE("MEMBERSHIP_FEE"), ANNUAL_CLAIM_FEE("ANNUAL_CLAIM_FEE");
+public enum PaymentType {
+    CARD("CARD"), CASH("CASH");
 
     private final String name;
 
-    private ChargeType(String s) {
+    private PaymentType(String s) {
         this.name = s;
     }
 
@@ -22,4 +22,5 @@ public enum ChargeType {
     public String toString() {
         return this.name();
     }
+
 }

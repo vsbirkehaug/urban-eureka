@@ -26,15 +26,6 @@
     </head>
     <body onload="initialiseflag();">
 
-        <%!
-            public void executeTest() {
-
-                java.util.Date d = new java.util.Date();
-                System.out.println(d.toString());
-            }
-        %>
-
-
         <div class="wrapper">
             <h1>XYZ Drivers Association</h1>
 
@@ -65,12 +56,15 @@
                         </br>
                         </br>
 
+
                         <select class="option-button" name="paymenttype">
-                            <option value="CARD">CARD</option>
-                            <option value="CASH">CASH</option>
+                            <c:forEach var="paymenttype" items="${paymentlist}">
+                                <option value="${paymenttype}">${paymenttype}</option>
+                            </c:forEach> 
                         </select>
 
                         <input type="hidden" name="action" value="insertpayment" />
+                        </br>
                         </br>
                     </form>
                     <form id="cancel-make-payment-form" method="POST" action="PageRouter.do">
@@ -79,7 +73,7 @@
 
                     <ul class="choice">
                         <li onclick="document.getElementById('cancel-make-payment-form').submit();" class="user-button dashboard">Dashboard</li>
-                        <li id="submitbutton" onclick="submitform();" class="user-button submit">Submit Payment</li>
+                        <li id="submitbutton" onclick="submitform();" class="user-button submit">Submit</li>
                         <div style="clear:both"></div>
                     </ul>
 

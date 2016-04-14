@@ -30,6 +30,7 @@
                     </br>
                     <p>Your payment id: <%= session.getAttribute("paymentid")%></p
                     <p>Payment amount: £<%= session.getAttribute("paymentamount")%></p>
+                    <p>Payment type: <%= session.getAttribute("paymenttype")%></p>
                     </br>
                     <p>Note: <%= session.getAttribute("chargenote")%></p>
                     <p>Charge status: <%= session.getAttribute("chargestatus")%></p>

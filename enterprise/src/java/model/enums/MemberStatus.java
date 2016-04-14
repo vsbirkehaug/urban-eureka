@@ -11,15 +11,16 @@ package model.enums;
  */
 public enum MemberStatus {
     REGISTERED("REGISTERED"), ACTIVE("ACTIVE"), SUSPENDED("SUSPENDED");
-    
-    private final String name;  
+
+    private final String name;
+
     private MemberStatus(String s) {
         this.name = s;
     }
-    
+
     @Override
     public String toString() {
         return this.name();
     }
-    
+
 }

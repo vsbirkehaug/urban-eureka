@@ -10,13 +10,14 @@ package model.enums;
  * @author Vilde
  */
 public enum ClaimStatus {
-    DECLINED ("DECLINED"), APPROVED ("APPROVED"), PENDING ("PENDING");
-    
-    private final String name;  
+    DECLINED("DECLINED"), APPROVED("APPROVED"), PENDING("PENDING");
+
+    private final String name;
+
     private ClaimStatus(String s) {
         this.name = s;
     }
-    
+
     @Override
     public String toString() {
         return this.name();

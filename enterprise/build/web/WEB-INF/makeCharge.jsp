@@ -53,7 +53,7 @@
 
                         <select class="option-button" name="chargetype">   
                             <c:forEach var="chargetype" items="${chargelist}">
-                                <option >${chargetype}</option>
+                                <option value="${chargetype}">${chargetype}</option>
                             </c:forEach> 
                         </select>
 
