@@ -66,6 +66,7 @@ public class PageRouter extends HttpServlet {
         if (connection == null) {
             request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
         }
+        String role = (String) request.getSession().getAttribute("role");
 
         switch (request.getParameter("action").toLowerCase()) {
             case "login": {
@@ -124,49 +125,67 @@ public class PageRouter extends HttpServlet {
             //ADMIN ACTIONS ==============================================================================
             //
             case "admindashboard": {
-                request.getRequestDispatcher("/WEB-INF/adminDashboard.jsp").forward(request, response);
+                if (isAdmin(role)) {
+                    request.getRequestDispatcher("/WEB-INF/adminDashboard.jsp").forward(request, response);
+                }
                 break;
             }
             case "adminmakecharge": {
-                loadSimpleMembers(dbBean, request);
-                attachChargeTypes(request);
-                request.getRequestDispatcher("/WEB-INF/makeCharge.jsp").forward(request, response);
+                if (isAdmin(role)) {
+                    loadSimpleMembers(dbBean, request);
+                    attachChargeTypes(request);
+                    request.getRequestDispatcher("/WEB-INF/makeCharge.jsp").forward(request, response);
+                }
                 break;
             }
 
             case "adminhandlecharges": {
-                loadPendingCharges(dbBean, request);
-                request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
+                if (isAdmin(role)) {
+                    loadPendingCharges(dbBean, request);
+                    request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
+                }
                 break;
             }
             case "adminhandleclaims": {
-                loadPendingClaims(dbBean, request);
-                request.getRequestDispatcher("/WEB-INF/handleClaims.jsp").forward(request, response);
+                if (isAdmin(role)) {
+                    loadPendingClaims(dbBean, request);
+                    request.getRequestDispatcher("/WEB-INF/handleClaims.jsp").forward(request, response);
+                }
                 break;
             }
             case "adminupdateclaim": {
-                updateClaim(dbBean, request);
-                request.getRequestDispatcher("/WEB-INF/handleClaims.jsp").forward(request, response);
+                if (isAdmin(role)) {
+                    updateClaim(dbBean, request);
+                    request.getRequestDispatcher("/WEB-INF/handleClaims.jsp").forward(request, response);
+                }
                 break;
             }
             case "admininsertcharge": {
-                insertCharge(dbBean, request);
-                request.getRequestDispatcher("/WEB-INF/makeCharge.jsp").forward(request, response);
+                if (isAdmin(role)) {
+                    insertCharge(dbBean, request);
+                    request.getRequestDispatcher("/WEB-INF/makeCharge.jsp").forward(request, response);
+                }
                 break;
             }
             case "adminupdatecharge": {
-                updateChargeStatus(dbBean, request);
-                request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
+                if (isAdmin(role)) {
+                    updateChargeStatus(dbBean, request);
+                    request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
+                }
                 break;
             }
             case "adminclaimhistory": {
-                loadClaims(dbBean, request);
-                request.getRequestDispatcher("/WEB-INF/adminClaimHistory.jsp").forward(request, response);
+                if (isAdmin(role)) {
+                    loadClaims(dbBean, request);
+                    request.getRequestDispatcher("/WEB-INF/adminClaimHistory.jsp").forward(request, response);
+                }
                 break;
             }
             case "adminpaymenthistory": {
-                loadPayments(dbBean, request);
-                request.getRequestDispatcher("/WEB-INF/adminPaymentHistory.jsp").forward(request, response);
+                if (isAdmin(role)) {
+                    loadPayments(dbBean, request);
+                    request.getRequestDispatcher("/WEB-INF/adminPaymentHistory.jsp").forward(request, response);
+                }
                 break;
             }
             default: {
@@ -175,6 +194,10 @@ public class PageRouter extends HttpServlet {
             }
 
         }
+    }
+
+    private boolean isAdmin(String role) {
+        return (role.equalsIgnoreCase("admin"));
     }
 
     //MEMBER - Adds a payment for the selected charge
@@ -270,8 +293,8 @@ public class PageRouter extends HttpServlet {
         request.setAttribute("list", claims);
         request.setAttribute("listcount", claims.size());
     }
-    
-       //ADMIN - Gets and puts all payments into the request
+
+    //ADMIN - Gets and puts all payments into the request
     private void loadPayments(Jdbc dbBean, HttpServletRequest request) {
         List<Payment> payments = dbBean.getPayments();
         request.setAttribute("list", payments);
