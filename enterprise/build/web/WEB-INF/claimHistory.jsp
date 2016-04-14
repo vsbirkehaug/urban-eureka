@@ -28,8 +28,8 @@
                 <h2>Claim history</h2>
                 </br>
 
-                <table class="claimtable">
-                    <tr class="claimtr">
+                <table class="responsetable">
+                    <tr class="claimth">
                         <th class="claimtdsmall">  Claim id  </th>
                         <th class="claimtdsmall">  Amount  </th>
                         <th class="claimtd">  Rationale  </th>
@@ -39,12 +39,27 @@
                     </tr>
 
                     <c:forEach var="claim" items="${list}">
-                        <tr class="claimtr">
-                            <td class="claimtdsmall">${claim.id}</td>
-                            <td class="claimtdsmall">${claim.amount}</td>
-                            <td class="claimtd">${claim.rationale}</td>
-                            <td class="claimtd">${claim.status}</td>
-                            <td class="claimtd">${claim.date}</td>
+                        <script type="text/javascript">
+                            var claims = "${claim.status}";
+
+                            var mycolour = "F3B9C5";
+
+                            if (claims === "DECLINED") {
+                                mycolour = "#F3B9C5";
+                            }
+                            if (claims === "APPROVED") {
+                                mycolour = "#C6EBB2";
+                            }
+                            if (claims === "PENDING") {
+                                mycolour = "#FFE6C2";
+                            }
+                            document.writeln("<tr class=\"claimtr\" bgcolor=\"" + mycolour + "\">");
+                        </script>  
+                        <td class="claimtdsmall">${claim.id}</td>
+                        <td class="claimtdsmall">${claim.amount}</td>
+                        <td class="claimtd">${claim.rationale}</td>
+                        <td class="claimtd">${claim.status}</td>
+                        <td class="claimtd">${claim.date}</td>
                         </tr>
                     </c:forEach>
                 </table>

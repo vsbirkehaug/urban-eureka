@@ -10,13 +10,14 @@ package model.enums;
  * @author Vilde
  */
 public enum ChargeStatus {
-    DUE("DUE"), DECLINED ("DECLINED"), APPROVED ("APPROVED"), PENDING ("PENDING");
-    
-    private final String name;  
+    DUE("DUE"), DECLINED("DECLINED"), APPROVED("APPROVED"), PENDING("PENDING");
+
+    private final String name;
+
     private ChargeStatus(String s) {
         this.name = s;
     }
-    
+
     @Override
     public String toString() {
         return this.name();

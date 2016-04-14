@@ -59,7 +59,6 @@
 
                         </tr>
 
-
                         <c:forEach var="claim" items="${list}">
                             <script type="text/javascript">
                                 var claims = ${claim.userApprovedClaims};
@@ -67,9 +66,8 @@
                                 if (claims >= 2) mycolour = "#F3B9C5";
                                 if (claims < 2) mycolour = "#C6EBB2";
                                                               
-                                document.writeln("<tr id=\"claimrow\" class=\"claimtr\" bgcolor=\""+mycolour+"\"\/tr>");
-                            </script>
-                                                     
+                                document.writeln("<tr id=\"claimrow\" class=\"claimtr\" bgcolor=\""+mycolour+"\">");
+                            </script>                                               
                                 <td class="claimtd"><div display="inline"><input onclick="check()" display="inline" type="radio" name="claimId" value="${claim.id}" required="true"></div></td>
                                 <td class="claimtd">${claim.name}</td>
                                 <td class="claimtd">${claim.amount}</td>
