@@ -47,7 +47,7 @@
 .chargerow {
     width: 100%;
     border-bottom: 1px solid #b3b3b3 !important;
-      height: 35px;
+    height: 35px;
 }
 
 .chargerowheader {
@@ -349,7 +349,7 @@ li {
     display: inline-block;
     padding: 20px 30px;
     margin: 10px 0px;
-    width: calc(50% - 65px);
+    width: calc(48% - 65px);
     background: #4CAF50;
     text-align: center;
 }
@@ -412,9 +412,12 @@ select option {
 .payment-history { background: #AF7D35; }
 .payment-history:hover {}
 
+.threebuttons {
+    width: calc(30% - 60px) !important;
+}
+
 .dashboard {
     background: #D4A45E;
-    width: calc(18% - 30px);
     float: left;
     margin-right: 12px;
 }
@@ -422,7 +425,7 @@ select option {
 .cancel {
     background: #C4576E;
     width: calc(35% - 30px);
-    float: left;
+    float: center;
 }
 
 .fullwidth {
@@ -432,7 +435,7 @@ select option {
     margin: 20px 0 0 0;
 }
 .submit {
-    width: calc(35% - 30px);
+    width: calc(48% - 65px);
     float: right;
 }
 

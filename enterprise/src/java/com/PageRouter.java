@@ -81,7 +81,6 @@ public class PageRouter extends HttpServlet {
             case "makepayment": {
                 List<Charge> charges = dbBean.getDueChargesForUser((int) session.getAttribute("id"));
                 request.setAttribute("list", charges);
-                request.setAttribute("listcount", charges.size());
                 request.getRequestDispatcher("/WEB-INF/makePayment.jsp").forward(request, response);
                 break;
             }

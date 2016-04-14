@@ -95,9 +95,9 @@
                         }%>
                 </p>
                 <ul class="choice">
-                    <li onclick="document.getElementById('cancel-form').submit();" class="user-button dashboard">Dashboard</li>
-                    <li id="submitbutton" onclick="submitformDeclined();" class="user-button cancel">Set status DECLINED</li>
-                    <li id="submitbutton2" onclick="submitformApproved();" class="user-button submit">Set status APPROVED</li>
+                    <li onclick="document.getElementById('cancel-form').submit();" class="user-button dashboard threebuttons">Dashboard</li>
+                    <li id="submitbutton" onclick="submitformDeclined();" class="user-button cancel threebuttons">Set status DECLINED</li>
+                    <li id="submitbutton2" onclick="submitformApproved();" class="user-button submit threebuttons">Set status APPROVED</li>
 
                     <div style="clear:both"></div>
                 </ul>

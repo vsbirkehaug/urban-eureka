@@ -60,7 +60,7 @@
 
                     </form>
                     <form id="cancel-make-charge-form" method="POST" action="PageRouter.do">
-                        <input type="hidden" name="action" value="dashboard" />
+                        <input type="hidden" name="action" value="admindashboard" />
                     </form>
 
                     <ul class="choice">
