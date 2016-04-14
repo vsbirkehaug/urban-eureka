@@ -68,7 +68,7 @@
                 </br>
                 </br>
                 <form id="routerform" method="POST" action="PageRouter.do">  
-                    <input type="hidden" name="action" value="dashboard" />
+                    <input type="hidden" name="action" value="admindashboard" />
                     <ul class="choice">
                         <li onclick="document.getElementById('routerform').submit();" class="user-button dashboard fullwidth">Dashboard</li>  
                         <div style="clear:both"></div>
