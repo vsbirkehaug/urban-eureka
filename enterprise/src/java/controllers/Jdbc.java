@@ -630,4 +630,20 @@ public class Jdbc {
         return resultList;
     }
 
+    public List<Payment> getPayments() {
+        List<Payment> resultList = null;
+        PreparedStatement ps = null;
+        try {
+            ps = connection.prepareStatement("SELECT payments.id,payments.mem_id,payments.charge_id,payments.payment_type,payments.amount,payments.date,charges.note,charges.status FROM payments JOIN charges ON payments.charge_id = charges.id");
+            ResultSet rs = ps.executeQuery();
+            resultList = new ArrayList<>();
+            while (rs.next()) {
+                 resultList.add(new Payment(rs.getInt("id"), rs.getInt("mem_id"), rs.getInt("charge_id"), rs.getFloat("amount"), rs.getString("payment_type"), rs.getTimestamp("date"), rs.getString("note"), rs.getString("status")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resultList;
+    }
+
 }

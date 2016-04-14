@@ -25,22 +25,22 @@
             <div class="list-page">
 
 
-                <h2>Claim history</h2>
+                <h2>Payment history</h2>
                 </br>
 
-                <table class="claimtable">
-                    <tr class="claimtr">
-                        <th class="claimtdsmall">  Claim id  </th>
-                        <th class="claimtdsmall">  Amount  </th>
-                        <th class="claimtd">  Rationale  </th>
-                        <th class="claimtd">  Status  </th>
-                        <th class="claimtd">  Date  </th>
-
+                <table class="paymenttable">
+                    <tr class="paymenttr">
+                        <th class="paymenttdsmall">  Payment id  </th>
+                        <th class="paymenttdsmall">  Amount  </th>
+                        <th class="paymenttdsmall">  Payment type  </th>
+                        <th class="paymenttd">  Note  </th>
+                        <th class="paymenttd">  Date  </th>
+                        <th class="paymenttd">  Status  </th>
                     </tr>
 
-                    <c:forEach var="claim" items="${list}">
+                    <c:forEach var="payment" items="${list}">
                         <script type="text/javascript">
-                            var claims = "${claim.status}";
+                            var claims = "${payment.status}";
 
                             var mycolour = "F3B9C5";
 
@@ -53,13 +53,14 @@
                             if (claims === "PENDING") {
                                 mycolour = "#FFE6C2";
                             }
-                            document.writeln("<tr class=\"claimtr\" bgcolor=\"" + mycolour + "\">");
+                            document.writeln("<tr class=\"paymenttr\" bgcolor=\"" + mycolour + "\">");
                         </script>  
-                        <td class="claimtdsmall">${claim.id}</td>
-                        <td class="claimtdsmall">${claim.amount}</td>
-                        <td class="claimtd">${claim.rationale}</td>
-                        <td class="claimtd">${claim.status}</td>
-                        <td class="claimtd">${claim.date}</td>
+                        <td class="paymenttdsmall">${payment.id}</td>
+                        <td class="paymenttdsmall">${payment.amount}</td>
+                        <td class="paymenttdsmall">${payment.paymentType}</td>
+                        <td class="paymenttd">${payment.note}</td>
+                        <td class="paymenttd">${payment.date}</td>
+                        <td class="paymenttd">${payment.status}</td>
                         </tr>
                     </c:forEach>
                 </table>
@@ -67,7 +68,7 @@
                 </br>
                 </br>
                 <form id="routerform" method="POST" action="PageRouter.do">  
-                    <input type="hidden" name="action" value="admindashboard" />
+                    <input type="hidden" name="action" value="dashboard" />
                     <ul class="choice">
                         <li onclick="document.getElementById('routerform').submit();" class="user-button dashboard fullwidth">Dashboard</li>  
                         <div style="clear:both"></div>

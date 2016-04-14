@@ -117,6 +117,7 @@ public class PageRouter extends HttpServlet {
             case "insertpayment": {
                 insertPayment(dbBean, request);
                 request.getRequestDispatcher("/WEB-INF/makePaymentConf.jsp").forward(request, response);
+                break;
             }
 
             //============================================================================================
@@ -163,7 +164,11 @@ public class PageRouter extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/adminClaimHistory.jsp").forward(request, response);
                 break;
             }
-
+            case "adminpaymenthistory": {
+                loadPayments(dbBean, request);
+                request.getRequestDispatcher("/WEB-INF/adminPaymentHistory.jsp").forward(request, response);
+                break;
+            }
             default: {
                 request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
                 break;
@@ -264,6 +269,13 @@ public class PageRouter extends HttpServlet {
         List<Claim> claims = dbBean.getClaims();
         request.setAttribute("list", claims);
         request.setAttribute("listcount", claims.size());
+    }
+    
+       //ADMIN - Gets and puts all payments into the request
+    private void loadPayments(Jdbc dbBean, HttpServletRequest request) {
+        List<Payment> payments = dbBean.getPayments();
+        request.setAttribute("list", payments);
+        request.setAttribute("listcount", payments.size());
     }
 
     //ADMIN - Gets user ID and name and puts them into the request
