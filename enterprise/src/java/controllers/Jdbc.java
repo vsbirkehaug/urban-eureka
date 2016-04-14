@@ -26,6 +26,7 @@ import model.enums.ClaimStatus;
 import model.enums.MemberStatus;
 import model.Payment;
 import model.BaseMember;
+import model.Member;
 
 /**
  *
@@ -244,34 +245,42 @@ public class Jdbc {
             status = claim.getStatus();
         }
 
-        try {
-            if (status != null) {
-                ps = connection.prepareStatement("INSERT INTO claims (`mem_id`, `amount`, `date`, `rationale`, `status`) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                ps.setString(5, status);
-            } else {
-                ps = connection.prepareStatement("INSERT INTO claims (`mem_id`, `amount`, `date`, `rationale`) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+        Member member = getMember(claim.getUserId());
+
+        if (member.getStatus().equalsIgnoreCase(MemberStatus.ACTIVE.toString())) {
+
+            try {
+                if (status != null) {
+                    ps = connection.prepareStatement("INSERT INTO claims (`mem_id`, `amount`, `date`, `rationale`, `status`) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                    ps.setString(5, status);
+                } else {
+                    ps = connection.prepareStatement("INSERT INTO claims (`mem_id`, `amount`, `date`, `rationale`) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                }
+                ps.setInt(1, member_id);
+                ps.setFloat(2, amount);
+                ps.setDate(3, date);
+                ps.setString(4, rationale);
+                ps.executeUpdate();
+                ResultSet key = ps.getGeneratedKeys();
+                key.next();
+                int result = key.getInt(1);
+                ps.close();
+
+                ps = connection.prepareStatement("SELECT * FROM claims WHERE id = ?");
+                ps.setInt(1, result);
+                ResultSet rs = ps.executeQuery();
+                rs.next();
+                newClaim = new Claim(rs.getInt("id"), rs.getInt("mem_id"), rs.getFloat("amount"), rs.getDate("date"), rs.getString("rationale"), rs.getString("status"));
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
             }
-            ps.setInt(1, member_id);
-            ps.setFloat(2, amount);
-            ps.setDate(3, date);
-            ps.setString(4, rationale);
-            ps.executeUpdate();
-            ResultSet key = ps.getGeneratedKeys();
-            key.next();
-            int result = key.getInt(1);
-            ps.close();
-
-            ps = connection.prepareStatement("SELECT * FROM claims WHERE id = ?");
-            ps.setInt(1, result);
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-            newClaim = new Claim(rs.getInt("id"), rs.getInt("mem_id"), rs.getFloat("amount"), rs.getDate("date"), rs.getString("rationale"), rs.getString("status"));
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+            
+            return newClaim;
+        } else {
+            return null;
         }
-
-        return newClaim;
+        
     }
 
     public Payment insertPayment(Payment payment) {
@@ -434,6 +443,22 @@ public class Jdbc {
             rs.next();
             result = new Charge(rs.getInt("id"), rs.getInt("user_id"), rs.getFloat("amount"), rs.getString("status"), rs.getString("note"));
 
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
+    }
+
+    public Member getMember(int user_id) {
+
+        Member result = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM members WHERE id = ?");
+            ps.setInt(1, user_id);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            result = new Member(rs.getInt("id"), rs.getString("username"), rs.getString("password"), rs.getString("name"), rs.getString("address"), rs.getDate("dob"), rs.getDate("dor"), rs.getString("status"));
         } catch (SQLException ex) {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -638,7 +663,7 @@ public class Jdbc {
             ResultSet rs = ps.executeQuery();
             resultList = new ArrayList<>();
             while (rs.next()) {
-                 resultList.add(new Payment(rs.getInt("id"), rs.getInt("mem_id"), rs.getInt("charge_id"), rs.getFloat("amount"), rs.getString("payment_type"), rs.getTimestamp("date"), rs.getString("note"), rs.getString("status")));
+                resultList.add(new Payment(rs.getInt("id"), rs.getInt("mem_id"), rs.getInt("charge_id"), rs.getFloat("amount"), rs.getString("payment_type"), rs.getTimestamp("date"), rs.getString("note"), rs.getString("status")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);

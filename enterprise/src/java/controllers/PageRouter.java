@@ -385,10 +385,17 @@ public class PageRouter extends HttpServlet {
         }
         responseClaim = dbBean.insertClaim(claim);
 
-        request.getSession().setAttribute("claimamount", String.valueOf(responseClaim.getAmount()));
-        request.getSession().setAttribute("claimid", String.valueOf(responseClaim.getId()));
-        request.getSession().setAttribute("claimstatus", String.valueOf(responseClaim.getStatus()));
-        request.getSession().setAttribute("claimmessage", cr.getReason());
+        if (responseClaim != null) {
+            request.getSession().setAttribute("claimamount", String.valueOf(responseClaim.getAmount()));
+            request.getSession().setAttribute("claimid", String.valueOf(responseClaim.getId()));
+            request.getSession().setAttribute("claimstatus", String.valueOf(responseClaim.getStatus()));
+            request.getSession().setAttribute("claimmessage", cr.getReason());
+        } else {
+            request.getSession().setAttribute("claimmessage", "You need to pay outstanding charges before you can register claims.");
+             request.getSession().setAttribute("claimamount", null);
+            request.getSession().setAttribute("claimid", null);
+            request.getSession().setAttribute("claimstatus", null);
+        }
 
     }
 
