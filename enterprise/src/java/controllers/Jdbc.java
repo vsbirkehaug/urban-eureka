@@ -275,12 +275,12 @@ public class Jdbc {
             } catch (SQLException ex) {
                 Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             return newClaim;
         } else {
             return null;
         }
-        
+
     }
 
     public Payment insertPayment(Payment payment) {
@@ -450,6 +450,21 @@ public class Jdbc {
         return result;
     }
 
+    public List<Member> getMembers() {
+        List<Member> results = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT id, username, name, address, dob, dor, status FROM members");
+            ResultSet rs = ps.executeQuery();
+            results = new ArrayList<>();
+            while (rs.next()) {
+                results.add(new Member(rs.getInt("id"), rs.getString("username"), rs.getString("name"), rs.getString("address"), rs.getDate("dob"), rs.getDate("dor"), rs.getString("status")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return results;
+    }
+
     public Member getMember(int user_id) {
 
         Member result = null;
@@ -602,7 +617,7 @@ public class Jdbc {
         return count;
     }
 
-    public List<BaseMember> getMembers() {
+    public List<BaseMember> getBaseMembers() {
         PreparedStatement ps = null;
         List<BaseMember> resultList = null;
         try {

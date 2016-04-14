@@ -51,18 +51,22 @@
                     <form id="routerform2" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminhandlecharges" /></form>
                     <form id="routerform3" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminclaimhistory" /></form>
                     <form id="routerform4" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminpaymenthistory" /></form>
+                    <form id="routerform5" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminmemberlist" /></form>
                     <ul>                      
                         <li onclick="document.getElementById('handleclaim').submit();" class="user-button make-claim">Pending Claims </li>              
                         <li onclick="document.getElementById('routerform').submit();" class="user-button make-payment">Make Charge</li>                    
                     </ul>
-                    <ul>
-                        <li onclick="document.getElementById('routerform3').submit();" class="user-button claim-history">Claim History</li>                
+                    <ul> 
                         <li onclick="document.getElementById('routerform2').submit();" class="user-button make-claim">Pending Charge Payments </li>         
                     </ul>
                     <ul>
                         <li onclick="document.getElementById('routerform4').submit();" class="user-button payment-history">Payment History</li>                
-     
+                        <li onclick="document.getElementById('routerform3').submit();" class="user-button claim-history">Claim History</li>       
                     </ul>
+                     <ul>
+                        <li onclick="document.getElementById('routerform5').submit();" class="user-button claim-history">Member List</li>                   
+                    </ul>
+                    
                 </div>
             </div>
         </div> 

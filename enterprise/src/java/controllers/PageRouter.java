@@ -24,6 +24,7 @@ import model.enums.ClaimStatus;
 import model.enums.MemberStatus;
 import model.Payment;
 import model.BaseMember;
+import model.Member;
 import model.enums.PaymentType;
 import services.ClaimChecker;
 import services.ValidateAdmin;
@@ -188,6 +189,13 @@ public class PageRouter extends HttpServlet {
                 }
                 break;
             }
+            case "adminmemberlist": {
+                if (isAdmin(role)) {
+                    loadMembers(dbBean, request);
+                    request.getRequestDispatcher("/WEB-INF/adminMemberList.jsp").forward(request, response);
+                }
+                break;
+            }
             default: {
                 request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
                 break;
@@ -227,6 +235,12 @@ public class PageRouter extends HttpServlet {
     private void loadChargesForUser(Jdbc dbBean, HttpServletRequest request) {
         List<Charge> charges = dbBean.getUnpaidChargesForUser((int) request.getSession().getAttribute("id"));
         request.setAttribute("list", charges);
+    }
+
+    //ADMIN - Gets and puts all members (without passwords) into the request
+    private void loadMembers(Jdbc dbBean, HttpServletRequest request) {
+        List<Member> members = dbBean.getMembers();
+        request.setAttribute("list", members);
     }
 
     //ADMIN - Updates the claim with the given status
@@ -303,7 +317,7 @@ public class PageRouter extends HttpServlet {
 
     //ADMIN - Gets user ID and name and puts them into the request
     private void loadSimpleMembers(Jdbc dbBean, HttpServletRequest request) {
-        List<BaseMember> members = dbBean.getMembers();
+        List<BaseMember> members = dbBean.getBaseMembers();
         request.setAttribute("list", members);
         if (members != null) {
             request.setAttribute("listcount", members.size());
@@ -392,7 +406,7 @@ public class PageRouter extends HttpServlet {
             request.getSession().setAttribute("claimmessage", cr.getReason());
         } else {
             request.getSession().setAttribute("claimmessage", "You need to pay outstanding charges before you can register claims.");
-             request.getSession().setAttribute("claimamount", null);
+            request.getSession().setAttribute("claimamount", null);
             request.getSession().setAttribute("claimid", null);
             request.getSession().setAttribute("claimstatus", null);
         }

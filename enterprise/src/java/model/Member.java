@@ -13,39 +13,30 @@ import java.sql.Date;
  */
 public class Member extends BaseMember {
     
-    private int id;
-    private String username;
-    private String password;
-    private String name;
-    private String address;
-    private Date dob;
-    private Date dor;
-    private String status;
+    protected String password;
+    protected String address;
+    protected Date dob;
+    protected Date dor;
+    protected String status;
+    protected String username;
 
     public Member(int id, String username, String password, String name, String address, Date dob, Date dor, String status) {
-        super(id, username);
+        super(id, name);
         this.password = password;
-        this.name = name;
+        this.username = username;
         this.address = address;
         this.dob = dob;
         this.dor = dor;
         this.status = status;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
+    
+        public Member(int id, String username, String name, String address, Date dob, Date dor, String status) {
+        super(id, name);
         this.username = username;
+        this.address = address;
+        this.dob = dob;
+        this.dor = dor;
+        this.status = status;
     }
 
     public String getPassword() {
@@ -56,14 +47,9 @@ public class Member extends BaseMember {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getAddress() {
         return address;
     }
