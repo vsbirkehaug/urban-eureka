@@ -15,15 +15,20 @@
         <%  response.addHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
             response.addHeader("Pragma", "no-cache");
             response.addDateHeader("Expires", 0);
+
+            try {
+                if (request.getSession().getAttribute("username") == null || (String) request.getSession().getAttribute("role") != "admin") {
+                    request.setAttribute("message", "Timed out. Please log in again.");
+                    request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
+            }
+
         %>
     </head>
     <body>
-
-        <% if (request.getSession().getAttribute("username") == null) {
-                request.setAttribute("message", "Timed out. Please log in again.");
-                request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
-            }
-        %>
 
         <div class="wrapper">
             <h1>XYZ Drivers Association</h1>
@@ -41,15 +46,16 @@
                 <div style="clear:both"></div>
 
                 <div class="user-dashboard">
-                    <form id="handleclaim" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="handleclaims" /></form>
-                    <form id="routerform" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="makecharge" /></form>
-                    <form id="routerform2" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="handlecharges" /></form>
+                    <form id="handleclaim" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminhandleclaims" /></form>
+                    <form id="routerform" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminmakecharge" /></form>
+                    <form id="routerform2" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminhandlecharges" /></form>
+                         <form id="routerform3" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminclaimhistory" /></form>
                     <ul>                      
                         <li onclick="document.getElementById('handleclaim').submit();" class="user-button make-claim">Pending Claims </li>              
                         <li onclick="document.getElementById('routerform').submit();" class="user-button make-payment">Make Charge</li>                    
                     </ul>
                     <ul>
-                        <li class="user-button claim-history">Claim History</li>                
+                        <li onclick="document.getElementById('routerform3').submit();" class="user-button claim-history">Claim History</li>                
                         <li onclick="document.getElementById('routerform2').submit();" class="user-button make-claim">Pending Charge Payments </li>         
                     </ul>
                 </div>

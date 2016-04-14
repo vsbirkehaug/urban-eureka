@@ -661,4 +661,21 @@ public class Jdbc {
         }
     }
 
+    public List<Claim> getAllClaims() {
+        List<Claim> resultList = null;
+        PreparedStatement ps = null;
+        try {
+            ps = connection.prepareStatement("SELECT * FROM claims");
+            ResultSet rs = ps.executeQuery();
+            resultList = new ArrayList<>();
+            while (rs.next()) {
+                resultList.add(new Claim(rs.getInt("id"), rs.getInt("mem_id"), rs.getFloat("amount"), rs.getDate("date"), rs.getString("rationale"), rs.getString("status")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return resultList;
+    }
+
 }

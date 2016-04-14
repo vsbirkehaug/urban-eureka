@@ -44,10 +44,10 @@ public class Login extends HttpServlet {
         }
 
         try {
-            
+
             int id = -1;
             String name = "";
-            
+
             if (admin != null && admin.equals("yes")) {
                 id = ValidateAdmin.getAdmin(username, password, connection);
             } else {
@@ -58,16 +58,17 @@ public class Login extends HttpServlet {
                     name = details[1];
                 }
             }
-            
-            if(id >= 0 && admin != null && admin.equals("yes")) {
+
+            if (id >= 0 && admin != null && admin.equals("yes")) {
                 session.setAttribute("username", username);
                 session.setAttribute("id", id);
+                session.setAttribute("role", "admin");
                 request.getRequestDispatcher("/WEB-INF/adminDashboard.jsp").forward(request, response);
-            }
-            else if (id >= 0) {
+            } else if (id >= 0) {
                 session.setAttribute("username", username);
                 session.setAttribute("name", name);
                 session.setAttribute("id", id);
+                session.setAttribute("role", "member");
                 request.getRequestDispatcher("/WEB-INF/userDashboard.jsp").forward(request, response);
             } else {
                 request.setAttribute("message", "Incorrect username or password.");

@@ -17,6 +17,16 @@
         <%  response.addHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
             response.addHeader("Pragma", "no-cache");
             response.addDateHeader("Expires", 0);
+            
+          try {
+                if (request.getSession().getAttribute("username") == null || (String) request.getSession().getAttribute("role") != "admin") {
+                    request.setAttribute("message", "Timed out. Please log in again.");
+                    request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                request.getRequestDispatcher("/index_user_login.jsp").forward(request, response);
+            }
         %>
     </head>
     <body>

@@ -68,7 +68,7 @@ public class PageRouter extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/makeClaim.jsp").forward(request, response);
                 break;
             }
-            case "makecharge": {
+            case "adminmakecharge": {
                 loadSimpleMembers(dbBean, request);
                 attachChargeTypes(request);
                 request.getRequestDispatcher("/WEB-INF/makeCharge.jsp").forward(request, response);
@@ -85,12 +85,12 @@ public class PageRouter extends HttpServlet {
                 break;
             }
 
-            case "handlecharges": {
+            case "adminhandlecharges": {
                 loadPendingCharges(dbBean, request);
                 request.getRequestDispatcher("/WEB-INF/handleCharges.jsp").forward(request, response);
                 break;
             }
-            case "handleclaims": {
+            case "adminhandleclaims": {
                 loadPendingClaims(dbBean, request);
                 request.getRequestDispatcher("/WEB-INF/handleClaims.jsp").forward(request, response);
                 break;
@@ -154,6 +154,13 @@ public class PageRouter extends HttpServlet {
                 request.setAttribute("list", claims);
                 request.setAttribute("listcount", claims.size());
                 request.getRequestDispatcher("/WEB-INF/claimHistory.jsp").forward(request, response);
+                break;
+            }
+            case "adminclaimhistory": {
+                List<Claim> claims = dbBean.getAllClaims();
+                request.setAttribute("list", claims);
+                request.setAttribute("listcount", claims.size());
+                request.getRequestDispatcher("/WEB-INF/adminClaimHistory.jsp").forward(request, response);
                 break;
             }
 
