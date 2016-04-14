@@ -11,13 +11,13 @@ import java.sql.Date;
  *
  * @author Vilde
  */
-public class SimpleMember {
+public class BaseMember {
     
     private int id;
     private String name;
 
 
-    public SimpleMember(int id, String name) {
+    public BaseMember(int id, String name) {
         this.id = id;
         this.name = name;
     }

@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package model.enums;
 
 /**
  *
  * @author Vilde
  */
-public enum ChargeStatus {
-    DUE("DUE"), DECLINED ("DECLINED"), APPROVED ("APPROVED"), PENDING ("PENDING");
+public enum ChargeType {
+    MEMBERSHIP_FEE("MEMBERSHIP_FEE"), ANNUAL_CLAIM_FEE ("ANNUAL_CLAIM_FEE");
     
     private final String name;  
-    private ChargeStatus(String s) {
+    private ChargeType(String s) {
         this.name = s;
     }
     

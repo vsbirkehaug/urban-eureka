@@ -11,7 +11,7 @@ import java.sql.Date;
  *
  * @author Vilde
  */
-public class Member {
+public class Member extends BaseMember {
     
     private int id;
     private String username;
@@ -21,18 +21,15 @@ public class Member {
     private Date dob;
     private Date dor;
     private String status;
-    private float balance;
 
-    public Member(int id, String username, String password, String name, String address, Date dob, Date dor, String status, float balance) {
-        this.id = id;
-        this.username = username;
+    public Member(int id, String username, String password, String name, String address, Date dob, Date dor, String status) {
+        super(id, username);
         this.password = password;
         this.name = name;
         this.address = address;
         this.dob = dob;
         this.dor = dor;
         this.status = status;
-        this.balance = balance;
     }
 
     public int getId() {
@@ -97,15 +94,5 @@ public class Member {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public float getBalance() {
-        return balance;
-    }
-
-    public void setBalance(float balance) {
-        this.balance = balance;
-    }
-    
-        
+    }        
 }

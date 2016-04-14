@@ -16,14 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.AdminClaim;
 import model.Charge;
-import model.ChargeStatus;
-import model.ChargeType;
+import model.enums.ChargeStatus;
+import model.enums.ChargeType;
 import model.Claim;
 import model.ClaimResponse;
-import model.ClaimStatus;
-import model.MemberStatus;
+import model.enums.ClaimStatus;
+import model.enums.MemberStatus;
 import model.Payment;
-import model.SimpleMember;
+import model.BaseMember;
 import services.ClaimChecker;
 import services.ValidateAdmin;
 import services.ValidateUser;
@@ -265,7 +265,7 @@ public class PageRouter extends HttpServlet {
 
     //ADMIN - Gets user ID and name and puts them into the request
     private void loadSimpleMembers(Jdbc dbBean, HttpServletRequest request) {
-        List<SimpleMember> members = dbBean.getMembers();
+        List<BaseMember> members = dbBean.getMembers();
         request.setAttribute("list", members);
         if (members != null) {
             request.setAttribute("listcount", members.size());

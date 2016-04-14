@@ -5,10 +5,7 @@
  */
 package services;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import javax.servlet.http.HttpSession;
 import model.Claim;
 import model.ClaimResponse;
 import controllers.Jdbc;

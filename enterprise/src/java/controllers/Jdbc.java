@@ -21,11 +21,11 @@ import model.Claim;
 import java.util.List;
 import model.AdminClaim;
 import model.Charge;
-import model.ChargeStatus;
-import model.ClaimStatus;
-import model.MemberStatus;
+import model.enums.ChargeStatus;
+import model.enums.ClaimStatus;
+import model.enums.MemberStatus;
 import model.Payment;
-import model.SimpleMember;
+import model.BaseMember;
 
 /**
  *
@@ -577,15 +577,15 @@ public class Jdbc {
         return count;
     }
 
-    public List<SimpleMember> getMembers() {
+    public List<BaseMember> getMembers() {
         PreparedStatement ps = null;
-        List<SimpleMember> resultList = null;
+        List<BaseMember> resultList = null;
         try {
             ps = connection.prepareStatement("SELECT id, name FROM members");
             ResultSet rs = ps.executeQuery();
             resultList = new ArrayList<>();
             while (rs.next()) {
-                resultList.add(new SimpleMember(rs.getInt("id"), rs.getString("name")));
+                resultList.add(new BaseMember(rs.getInt("id"), rs.getString("name")));
             }
             rs.close();
             ps.close();

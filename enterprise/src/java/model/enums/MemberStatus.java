@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package model.enums;
 
 /**
  *
  * @author Vilde
  */
-public enum ChargeType {
-    MEMBERSHIP_FEE("MEMBERSHIP_FEE"), ANNUAL_CLAIM_FEE ("ANNUAL_CLAIM_FEE");
+public enum MemberStatus {
+    REGISTERED("REGISTERED"), ACTIVE("ACTIVE"), SUSPENDED("SUSPENDED");
     
     private final String name;  
-    private ChargeType(String s) {
+    private MemberStatus(String s) {
         this.name = s;
     }
     
@@ -21,4 +21,5 @@ public enum ChargeType {
     public String toString() {
         return this.name();
     }
+    
 }
