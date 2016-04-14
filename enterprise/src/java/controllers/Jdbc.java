@@ -3,18 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com;
+package controllers;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
-import static java.sql.Types.NULL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,13 +18,11 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Claim;
-import controllers.Register;
 import java.util.List;
 import model.AdminClaim;
 import model.Charge;
 import model.ChargeStatus;
 import model.ClaimStatus;
-import model.Member;
 import model.MemberStatus;
 import model.Payment;
 import model.SimpleMember;
@@ -173,7 +166,7 @@ public class Jdbc {
             return pwformat.format(parsed);
 
         } catch (ParseException ex) {
-            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

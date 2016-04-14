@@ -22,7 +22,7 @@
     </servlet>
     <servlet>
         <servlet-name>PageRouter</servlet-name>
-        <servlet-class>com.PageRouter</servlet-class>
+        <servlet-class>controllers.PageRouter</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>MakeClaim</servlet-name>
@@ -32,7 +32,7 @@
         <servlet-name>Logout</servlet-name>
         <servlet-class>controllers.Logout</servlet-class>
     </servlet>
-     <servlet>
+    <servlet>
         <servlet-name>MakePayment</servlet-name>
         <servlet-class>controllers.MakePayment</servlet-class>
     </servlet>

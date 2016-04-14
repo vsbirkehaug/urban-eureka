@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com;
+package controllers;
 
 import java.io.IOException;
 //import java.io.PrintWriter;
@@ -77,6 +77,9 @@ public class PageRouter extends HttpServlet {
                 logout(request);
                 response.sendRedirect(request.getContextPath() + "/index.jsp");
                 break;
+            }
+            case "register": {
+                registerUser(dbBean, request, response);
             }
             //============================================================================================
             //MEMBER ACTIONS =============================================================================
@@ -396,6 +399,55 @@ public class PageRouter extends HttpServlet {
         }
     }
 
+    private void registerUser(Jdbc dbBean, HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        String[] query = new String[4];
+        query[0] = (String) request.getParameter("name");
+        query[1] = (String) request.getParameter("address");
+        query[2] = (String) request.getParameter("dob");
+        query[3] = (String) request.getParameter("registrationdate");
+
+        Jdbc jdbc = (Jdbc) session.getAttribute("dbbean");
+        if (jdbc == null) {
+            jdbc = new Jdbc();
+            session.setAttribute("dbbean", jdbc);
+        }
+        Connection connection = (Connection) request.getServletContext().getAttribute("connection");
+        jdbc.connect(connection);
+
+        try {
+            if (jdbc == null) {
+                request.getRequestDispatcher("/WEB-INF/conErr.jsp").forward(request, response);
+            }
+
+            for (String q : query) {
+                if (q.length() == 0) {
+                    request.setAttribute("registrationState", "true");
+                    request.setAttribute("message", "Fields cannot be empty");
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                }
+            }
+            if (query[0] == null) {
+                request.setAttribute("registrationState", "true");
+                request.setAttribute("message", "Name cannot be empty");
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+            } else {
+                String[] userDetails = jdbc.insertUser(query);
+                if (userDetails != null) {
+                    request.setAttribute("username", userDetails[0]);
+                    request.setAttribute("password", userDetails[1]);
+                    request.getRequestDispatcher("/WEB-INF/userRegConf.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("registrationState", "true");
+                    request.setAttribute("message", "An error occured whilst creating user, please try register again.");
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -433,6 +485,5 @@ public class PageRouter extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }// </editor-fold>  
 }
