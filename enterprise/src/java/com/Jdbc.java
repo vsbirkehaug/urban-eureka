@@ -29,8 +29,10 @@ import model.AdminClaim;
 import model.Charge;
 import model.ChargeStatus;
 import model.ClaimStatus;
+import model.Member;
 import model.MemberStatus;
 import model.Payment;
+import model.SimpleMember;
 
 /**
  *
@@ -613,12 +615,50 @@ public class Jdbc {
             ResultSet rs = ps.executeQuery();
             rs.next();
             count = rs.getInt(1);
-
+            rs.close();
+            ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return count;
+    }
+
+    public List<SimpleMember> getMembers() {
+        PreparedStatement ps = null;
+        List<SimpleMember> resultList = null;
+        try {
+            ps = connection.prepareStatement("SELECT id, name FROM members");
+            ResultSet rs = ps.executeQuery();
+            resultList = new ArrayList<>();
+            while (rs.next()) {
+                resultList.add(new SimpleMember(rs.getInt("id"), rs.getString("name")));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resultList;
+    }
+
+    void insertCharge(int userId, float amount, String note) {
+        PreparedStatement ps = null;
+
+        try {
+            //insert charge
+            ps = connection.prepareStatement("INSERT INTO charges (`user_id`, `amount`, `note`, `status`) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, userId);
+            ps.setFloat(2, amount);
+            ps.setString(3, note);
+            ps.setString(4, ChargeStatus.DUE.toString());
+            ps.executeUpdate();
+
+            ps.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Jdbc.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

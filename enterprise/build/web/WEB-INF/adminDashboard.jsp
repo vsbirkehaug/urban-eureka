@@ -42,11 +42,11 @@
 
                 <div class="user-dashboard">
                     <form id="handleclaim" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="handleclaims" /></form>
-                    <form id="routerform" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="addcharge" /></form>
+                    <form id="routerform" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="makecharge" /></form>
                     <form id="routerform2" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="handlecharges" /></form>
                     <ul>                      
                         <li onclick="document.getElementById('handleclaim').submit();" class="user-button make-claim">Pending Claims </li>              
-                        <li onclick="document.getElementById('paymentform').submit();" class="user-button make-payment">Add Charge</li>                    
+                        <li onclick="document.getElementById('routerform').submit();" class="user-button make-payment">Make Charge</li>                    
                     </ul>
                     <ul>
                         <li class="user-button claim-history">Claim History</li>                

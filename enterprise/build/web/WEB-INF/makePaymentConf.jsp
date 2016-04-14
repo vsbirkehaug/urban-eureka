@@ -45,7 +45,7 @@
                     </form>
 
                     <ul class="choice">
-                        <li onclick="document.getElementById('cancel-make-claim-form').submit();" class="user-button cancel">Dashboard</li>  
+                        <li onclick="document.getElementById('cancel-make-claim-form').submit();" class="user-button dashboard">Dashboard</li>  
                         <li onclick="document.getElementById('routerform').submit();" class="user-button submit">Make payment</li>
                         <div style="clear:both"></div>
                     </ul>

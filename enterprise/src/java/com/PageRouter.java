@@ -20,10 +20,13 @@ import javax.servlet.http.HttpSession;
 import model.AdminClaim;
 import model.Charge;
 import model.ChargeStatus;
+import model.ChargeType;
 import model.Claim;
 import model.ClaimStatus;
+import model.Member;
 import model.MemberStatus;
 import model.Payment;
+import model.SimpleMember;
 
 /**
  *
@@ -65,6 +68,12 @@ public class PageRouter extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/makeClaim.jsp").forward(request, response);
                 break;
             }
+            case "makecharge": {
+                loadSimpleMembers(dbBean, request);
+                attachChargeTypes(request);
+                request.getRequestDispatcher("/WEB-INF/makeCharge.jsp").forward(request, response);
+                break;
+            }
             case "login": {
                 request.getRequestDispatcher("index_user_login.jsp").forward(request, response);
                 break;
@@ -88,18 +97,31 @@ public class PageRouter extends HttpServlet {
                 break;
             }
             case "submitclaimchange": {
-                int claimId = Integer.valueOf(request.getParameter("claimId"));             
+                int claimId = Integer.valueOf(request.getParameter("claimId"));
                 ClaimStatus status = ClaimStatus.valueOf((String) request.getParameter("status"));
 
                 dbBean.updateClaimStatus(claimId, status);
-                
+
                 int rowschanged = 1;
                 request.setAttribute("rowschanged", String.valueOf(rowschanged));
                 loadPendingClaims(dbBean, request);
 
                 request.getRequestDispatcher("/WEB-INF/handleClaims.jsp").forward(request, response);
                 break;
-                
+
+            }
+            case "submitcharge": {
+                int userId = Integer.valueOf(request.getParameter("member"));
+                float amount = Float.valueOf(request.getParameter("amount"));
+                String note = (String) request.getParameter("chargetype");
+
+                dbBean.insertCharge(userId, amount, note);
+                loadSimpleMembers(dbBean, request);
+                attachChargeTypes(request);
+                request.setAttribute("rowschanged", String.valueOf(1));
+                request.getRequestDispatcher("/WEB-INF/makeCharge.jsp").forward(request, response);
+                break;
+
             }
             case "submitchargechange": {
                 String[] chargeIds = request.getParameterValues("chargeId[]");
@@ -145,7 +167,25 @@ public class PageRouter extends HttpServlet {
             }
 
         }
+    }
 
+    private void loadSimpleMembers(Jdbc dbBean, HttpServletRequest request) {
+        List<SimpleMember> members = dbBean.getMembers();
+        request.setAttribute("list", members);
+        if (members != null) {
+            request.setAttribute("listcount", members.size());
+        } else {
+            request.setAttribute("listcount", 0);
+        }
+    }
+
+    private void attachChargeTypes(HttpServletRequest request) {
+        ChargeType[] ct = ChargeType.values();
+        String[] cts = new String[ct.length];
+        for (int i = 0; i < cts.length; i++) {
+            cts[i] = ct[i].toString();
+        }
+        request.setAttribute("chargelist", cts);
     }
 
     private void loadPendingCharges(Jdbc dbBean, HttpServletRequest request) {
@@ -157,7 +197,7 @@ public class PageRouter extends HttpServlet {
             request.setAttribute("listcount", 0);
         }
     }
-    
+
     private void loadPendingClaims(Jdbc dbBean, HttpServletRequest request) {
         List<AdminClaim> claims = dbBean.getAllClaimsWhereStatus(ClaimStatus.PENDING);
         request.setAttribute("list", claims);
@@ -169,11 +209,11 @@ public class PageRouter extends HttpServlet {
     }
 
     private void updateUserStatus(Jdbc dbBean, HttpServletRequest request, ChargeStatus status, int[] chargeIds) {
-        
+
         for (int id : chargeIds) {
             Charge charge = dbBean.getCharge(id);
             int unapprovedCharges = dbBean.getDueOrDeclinedChargeCount(charge.getUserId());
-            
+
             if (status.equals(ChargeStatus.APPROVED) && unapprovedCharges == 0) {
                 dbBean.updateMemberStatus(charge.getUserId(), MemberStatus.ACTIVE);
             } else if (status.equals(ChargeStatus.DECLINED)) {

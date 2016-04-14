@@ -78,7 +78,7 @@
                     </form>
 
                     <ul class="choice">
-                        <li onclick="document.getElementById('cancel-make-payment-form').submit();" class="user-button cancel">Cancel</li>
+                        <li onclick="document.getElementById('cancel-make-payment-form').submit();" class="user-button dashboard">Dashboard</li>
                         <li id="submitbutton" onclick="submitform();" class="user-button submit">Submit Payment</li>
                         <div style="clear:both"></div>
                     </ul>
