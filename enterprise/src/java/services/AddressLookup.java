@@ -22,10 +22,10 @@ import org.json.simple.parser.ParseException;
  */
 public class AddressLookup {
 
-    String apibase = "https://api.getaddress.io/v2/uk/";
-    String apikey = "?api-key=aEeWLfHZ30KZvofp8FmPQQ3887";
-    String pc = "/";
-    String no = "/";
+    private String apibase = "https://api.getaddress.io/v2/uk/";
+    private String apikey = "?api-key=aEeWLfHZ30KZvofp8FmPQQ3887";
+    private String pc = "/";
+    private String no = "/";
 
     public String getUrl(String pc, String no) {
         return apibase + pc + this.pc + no + this.no + apikey;

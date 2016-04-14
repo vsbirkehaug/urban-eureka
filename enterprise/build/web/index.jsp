@@ -105,7 +105,7 @@
             </div>
         </div>
                     
-                    <form id="getaddress" method="POST" action="PageRouter.do"><input name="action" value="getaddress"/></form>
+                    <form id="getaddress" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="getaddress"/></form>
                     
         <script src="js/login_helper.js"></script>
         <script src="js/login.js"></script>

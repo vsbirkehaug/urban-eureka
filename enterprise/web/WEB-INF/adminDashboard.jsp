@@ -25,7 +25,6 @@
                 ex.printStackTrace();
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
-
         %>
     </head>
     <body>
@@ -46,6 +45,13 @@
                 <div style="clear:both"></div>
 
                 <div class="user-dashboard">
+                    <p class="error">
+                        <% if (request.getAttribute("message") != null) {
+                                out.println(request.getAttribute("message"));
+                                out.println("");
+                            }
+                        %>
+                    </p>     
                     <form id="handleclaim" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminhandleclaims" /></form>
                     <form id="routerform" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminmakecharge" /></form>
                     <form id="routerform2" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="adminhandlecharges" /></form>
@@ -63,10 +69,10 @@
                         <li onclick="document.getElementById('routerform4').submit();" class="user-button payment-history">Payment History</li>                
                         <li onclick="document.getElementById('routerform3').submit();" class="user-button claim-history">Claim History</li>       
                     </ul>
-                     <ul>
+                    <ul>
                         <li onclick="document.getElementById('routerform5').submit();" class="user-button claim-history">Member List</li>                   
                     </ul>
-                    
+
                 </div>
             </div>
         </div> 

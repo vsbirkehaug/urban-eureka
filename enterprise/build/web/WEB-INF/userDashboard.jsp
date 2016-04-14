@@ -15,7 +15,7 @@
         <%  response.addHeader("Cache-Control", "no-cache,no-store,private,must-revalidate,max-stale=0,post-check=0,pre-check=0");
             response.addHeader("Pragma", "no-cache");
             response.addDateHeader("Expires", 0);
-            
+
         %>
     </head>
     <body>
@@ -41,6 +41,10 @@
                 <div style="clear:both"></div>
 
                 <div class="user-dashboard">
+                    <p class="error"><% if (request.getAttribute("message") != null) {
+                            out.println(request.getAttribute("message"));
+                        }
+                        %></p>     
                     <form id="paymentform" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="makepayment" /></form>
                     <form id="routerform" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="makeclaim" /></form>
                     <form id="routerform2" method="POST" action="PageRouter.do"><input type="hidden" name="action" value="paymenthistory" /></form>
